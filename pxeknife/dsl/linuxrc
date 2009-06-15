@@ -59,6 +59,8 @@ return 1
 FOUND_SCSI=""
 FOUND_KNOPPIX=""
 INTERACTIVE=""
+SRV_IP=""
+ISO_URL=""
 
 # Clean input/output
 exec >/dev/console </dev/console 2>&1
@@ -130,6 +132,8 @@ KNOPPIX_DIR="KNOPPIX"
 KNOPPIX_NAME="KNOPPIX"
 case "$CMDLINE" in *knoppix_dir=*) KNOPPIX_DIR="$knoppix_dir"; ;; esac
 case "$CMDLINE" in *knoppix_name=*) KNOPPIX_NAME="$knoppix_name"; ;; esac
+
+case "$CMDLINE" in *srv_ip=*) SRV_IP="$srv_ip"; ;; esac
 
 # Check for IDE-SCSI capable CD-Rom(s) first
 test -n "$IDECD" || $INSMOD /modules/scsi/ide-scsi.o >/dev/null 2>&1 
@@ -333,7 +337,7 @@ done
 ;;
 esac
 
-echo "Trying for HTTPFS"
+echo "HTTP Boot: inserting network modules"
 insmod /modules/crc32.o >/dev/null 2>&1  
 insmod /modules/8390.o  >/dev/null 2>&1 
 insmod /modules/mii.o  >/dev/null 2>&1 
@@ -350,16 +354,18 @@ ifconfig lo 127.0.0.1 up
 ifconfig eth0 up
 udhcpc -s /static/udhcpc.sh  >/dev/null 2>&1 
 insmod /modules/fuse.o >/dev/null 2>&1 
+
+echo "server IP address is $SRV_IP"
 echo "testing networking"
 mkdir /ntest
-httpfs http://140.211.167.171/share/pravin/reach /ntest
+httpfs http://$SRV_IP/share/pravin/reach /ntest
 echo "checking content"
 cat /ntest/reach
 
 
 echo "mounting KNOPPIX"
 mkdir /cdrom/KNOPPIX
-httpfs http://140.211.167.171/share/pravin/KNOPPIX /cdrom/KNOPPIX
+httpfs http://$SRV_IP/share/pravin/KNOPPIX /cdrom/KNOPPIX
 if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME
 then
 echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}HTTPFS{GREEN}...${NORMAL}"
