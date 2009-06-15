@@ -20,6 +20,7 @@ cp httpfs/server/httpfs mpoint/static/
 cp httpfs/server/fusermount mpoint/static/
 cp linuxrc mpoint/
 chmod 0777 mpoint/linuxrc 
+mknod mpoint/dev/fuse c 10 229
 
 echo "creating environment, creating links..."
 cd mpoint/static
