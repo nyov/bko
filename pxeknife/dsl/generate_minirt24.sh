@@ -14,7 +14,9 @@ mount minirt24 -o loop mpoint/
 
 echo "coping the needed files..."
 cp modules/* mpoint/modules/
-cp httpfs/static/* mpoint/static/
+cp httpfs/static/udhcpc mpoint/static/
+cp httpfs/static/udhcpc.sh mpoint/static/
+cp busybox mpoint/static/
 
 cp httpfs/server/httpfs mpoint/static/
 cp httpfs/server/fusermount mpoint/static/
@@ -25,9 +27,27 @@ mknod mpoint/dev/fuse c 10 229
 echo "creating environment, creating links..."
 cd mpoint/static
 chmod 0777 *
-ln -s reboot halt
-ln -s reboot poweroff
-ln -s ifconfig route
+ln -s busybox halt
+ln -s busybox poweroff
+ln -s busybox route
+ln -s busybox ifconfig
+ln -s busybox ls
+ln -s busybox ln
+ln -s busybox chmod
+ln -s busybox reboot 
+ln -s busybox mkdir
+ln -s busybox cp
+ln -s busybox ps 
+ln -s busybox nc 
+ln -s busybox rm
+ln -s busybox wget
+ln -s busybox ping
+ln -s busybox mount
+ln -s busybox umount
+
+
+
+
 cd ..
 cd ..
 
