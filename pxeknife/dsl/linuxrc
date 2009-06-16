@@ -355,17 +355,12 @@ ifconfig eth0 up
 udhcpc -s /static/udhcpc.sh  >/dev/null 2>&1 
 insmod /modules/fuse.o >/dev/null 2>&1 
 
-echo "server IP address is $SRV_IP"
-echo "testing networking"
-mkdir /ntest
-httpfs http://$SRV_IP/share/pravin/reach /ntest
-echo "checking content"
-cat /ntest/reach
+echo "The location of dsl.iso is $SRV_IP"
 
 
 echo "mounting KNOPPIX"
 mkdir /cdrom/KNOPPIX
-httpfs http://$SRV_IP/share/pravin/KNOPPIX /cdrom/KNOPPIX
+httpfs $SRV_IP /cdrom/KNOPPIX
 if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME
 then
 echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}HTTPFS{GREEN}...${NORMAL}"
