@@ -21,7 +21,9 @@ cp busybox mpoint/static/
 cp httpfs/server/httpfs mpoint/static/
 cp httpfs/server/fusermount mpoint/static/
 cp linuxrc mpoint/
+cp mount_http_iso.sh mpoint/
 chmod 0777 mpoint/linuxrc 
+chmod 0777 mpoint/mount_http_iso.sh 
 mknod mpoint/dev/fuse c 10 229
 
 echo "creating environment, creating links..."
