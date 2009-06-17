@@ -1,5 +1,11 @@
 #!/static/sh
 
+# objectives: 
+# Enable networking.
+# Setup networking.
+# Find the location from which we need to get the ISO.
+# Mount the ISO.
+
 echo "HTTP Boot: inserting network modules"
 insmod /modules/crc32.o >/dev/null 2>&1  
 insmod /modules/8390.o  >/dev/null 2>&1 
@@ -20,16 +26,13 @@ ifconfig eth0 up
 udhcpc -s /static/udhcpc.sh  >/dev/null 2>&1 
 insmod /modules/fuse.o >/dev/null 2>&1 
 
-echo "The location of dsl.iso is $1"
+ISO_PATH=$1
+echo "The location of dsl.iso is $ISO_PATH"
 echo "mounting CDROM"
 mkdir /iso
-httpfs $1 /iso
+httpfs $ISO_PATH /iso
 busybox mount -t iso9660 /iso/dsl.iso /cdrom -o loop -o ro
 
-
-#echo "mounting KNOPPIX"
-#mkdir /cdrom/KNOPPIX
-#httpfs $SRV_IP /cdrom/KNOPPIX
 
 # test if knoppix is there
 if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME

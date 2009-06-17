@@ -59,8 +59,7 @@ return 1
 FOUND_SCSI=""
 FOUND_KNOPPIX=""
 INTERACTIVE=""
-SRV_IP=""
-ISO_URL=""
+HTTPFS=""
 
 # Clean input/output
 exec >/dev/console </dev/console 2>&1
@@ -133,7 +132,7 @@ KNOPPIX_NAME="KNOPPIX"
 case "$CMDLINE" in *knoppix_dir=*) KNOPPIX_DIR="$knoppix_dir"; ;; esac
 case "$CMDLINE" in *knoppix_name=*) KNOPPIX_NAME="$knoppix_name"; ;; esac
 
-case "$CMDLINE" in *srv_ip=*) SRV_IP="$srv_ip"; ;; esac
+case "$CMDLINE" in *httpfs=*) HTTPFS="$httpfs"; ;; esac
 
 # Check for IDE-SCSI capable CD-Rom(s) first
 test -n "$IDECD" || $INSMOD /modules/scsi/ide-scsi.o >/dev/null 2>&1 
@@ -338,12 +337,12 @@ done
 esac
 
 #mounting iso image over HTTP.
-/mount_http_iso.sh $SRV_IP
+/mount_http_iso.sh $HTTPFS
 
 # test if knoppix is there
 if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME
 then
-echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}HTTPFS{GREEN}...${NORMAL}"
+echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}$HTTPFS{GREEN}...${NORMAL}"
 FOUND_KNOPPIX="HTTPFS"
 fi
 
