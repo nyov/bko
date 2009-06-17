@@ -350,17 +350,27 @@ insmod /modules/sis900.o  >/dev/null 2>&1
 insmod /modules/via-rhine.o  >/dev/null 2>&1 
 insmod /modules/8139too.o  >/dev/null 2>&1 
 insmod /modules/af_packet.o >/dev/null 2>&1 
+insmod /modules/loop.o >/dev/null 2>&1 
+
 ifconfig lo 127.0.0.1 up
 ifconfig eth0 up
 udhcpc -s /static/udhcpc.sh  >/dev/null 2>&1 
 insmod /modules/fuse.o >/dev/null 2>&1 
 
 echo "The location of dsl.iso is $SRV_IP"
+echo "mounting CDROM"
+mkdir /iso
+httpfs $SRV_IP /iso
+dd if=/iso/dsl.iso of=/dsl.iso_copy count=1000
+chmod 0777 /dsl.iso_copy
+busybox mount -t iso9660 /dsl.iso_copy /cdrom -o loop
 
 
-echo "mounting KNOPPIX"
-mkdir /cdrom/KNOPPIX
-httpfs $SRV_IP /cdrom/KNOPPIX
+#echo "mounting KNOPPIX"
+#mkdir /cdrom/KNOPPIX
+#httpfs $SRV_IP /cdrom/KNOPPIX
+
+# test if knoppix is there
 if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME
 then
 echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}HTTPFS{GREEN}...${NORMAL}"

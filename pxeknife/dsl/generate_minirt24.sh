@@ -42,6 +42,8 @@ ln -s busybox nc
 ln -s busybox rm
 ln -s busybox wget
 ln -s busybox ping
+ln -s busybox dmesg 
+ln -s busybox dd 
 ln -s busybox mount
 ln -s busybox umount
 
