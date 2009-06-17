@@ -361,9 +361,7 @@ echo "The location of dsl.iso is $SRV_IP"
 echo "mounting CDROM"
 mkdir /iso
 httpfs $SRV_IP /iso
-dd if=/iso/dsl.iso of=/dsl.iso_copy count=1000
-chmod 0777 /dsl.iso_copy
-busybox mount -t iso9660 /dsl.iso_copy /cdrom -o loop
+busybox mount -t iso9660 /iso/dsl.iso /cdrom -o loop -o ro
 
 
 #echo "mounting KNOPPIX"
