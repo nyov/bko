@@ -31,7 +31,9 @@ echo "The location of dsl.iso is $ISO_PATH"
 echo "mounting CDROM"
 mkdir /iso
 httpfs $ISO_PATH /iso
-busybox mount -t iso9660 /iso/dsl.iso /cdrom -o loop -o ro
+FILEPATH=`ls /iso/*.iso`
+echo "filepath is $FILEPATH"
+busybox mount -t iso9660 $FILEPATH /cdrom -o loop -o ro
 
 
 # test if knoppix is there
