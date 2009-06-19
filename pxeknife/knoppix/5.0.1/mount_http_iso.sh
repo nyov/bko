@@ -30,7 +30,7 @@ echo "The location of dsl.iso is $ISO_PATH"
 echo "mounting CDROM"
 mkdir /iso
 httpfs $ISO_PATH /iso
-FILEPATH=/iso/`ls /iso/*.iso`
+FILEPATH=`ls /iso/*.iso`
 busybox mount -t iso9660 $FILEPATH /cdrom -o loop -o ro
 
 
