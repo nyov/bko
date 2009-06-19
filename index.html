@@ -1,58 +1,66 @@
 <html>
-<head>
-<title>boot.kernel.org(BKO): Booting your machine over HTTP </title>
-</head>
-<body>
-<h1>boot.kernel.org(BKO):Booting your machie over HTTP</h1>
-<p>Our objective is to let users boot their machines with bare minimal requirements on their side,
-and we will handle most of the problem that you may face in booting. All that user needs is Internet
-connectivity and a small program (gpxe) to boot the machine. This gpxe program provides network booting facility.
-You can download these program from our site (available at download section).
-</p>
-<p>
-We will also give users choices between various destributions of linux to choose from. User also may choose from
-various rescue tools which can help in data recovary and in other situations. The list of existing choices is available here, 
-and we assure you that this list will grow over time :-)  
-</p>
-<hr/>
-<p>
-<h3>How to use it?</h3>
-<ol>
-<li>Download the gpxe image</li>
-<li>copy it in floppy, USB or in CDROM (exactly how?)</li>
-<li>Make sure that you know what kind of network you have (Which entries will be needed) </li>
-<li>Boot from the media in which you had copied the gpxe Image</li>
-<li>In case of Static networking, you need to provide information about your connection,
-but if you are having DHCP, it should work out of the box.</li>
-<li>You will be presented with menu showing available options to boot from, select one of them.</li>
-<li>Your system should boot in the sytem you select</li>
-<li>Once you are done with it, reboot the system and remvoe the media, you should get back your old system</li>
-</ol>
-</p>
+  <head>
+    <title>boot.kernel.org(BKO): Booting your machine over HTTP </title>
+  </head>
+  <body>
+    <h1>boot.kernel.org(BKO):Booting your machie over HTTP</h1>
+    <p>
+      Our objective is to let users boot their machines with bare minimal requirements on their side,
+      and we will handle most of the problem that you may face in booting. All that user needs is Internet
+      connectivity and a small program (gpxe) to boot the machine. This gpxe program provides network booting facility.
+      You can download these program from our site (available at download section).
+    </p>
+    <p>
+      We will also give users choices between various destributions of linux to choose from. User also may choose from
+      various rescue tools which can help in data recovary and in other situations. The list of existing choices is available here, 
+      and we assure you that this list will grow over time :-)  
+    </p>
+    <hr/>
+    <p>
+      <h3>How to use it?</h3>
+      <ol> 
+        <li>Download the gpxe image</li>
+        <li>copy it in floppy, USB or in CDROM (check download section for instructions)</li>
+        <li>Make sure that you know what kind of network you have (Which entries will be needed) </li>
+        <li>Boot from the media in which you had copied the gpxe Image</li>
+        <li>In case of Static networking, you need to provide information about your connection,
+          but if you are having DHCP, it should work out of the box.</li>
+        <li>You will be presented with menu showing available options to boot from, select one of them.</li>
+        <li>Your system should boot in the sytem you select</li>
+        <li>Once you are done with it, reboot the system and remvoe the media, you should get back your old system</li>
+      </ol>
+    </p>
 
-<hr/>
-<h2>Downloads</h2>
-<p><a href="gpxe_images/gpxe.dsk">gpxe image for floppy</a><br/> 
-Once downloaded, you need to copy this image to floppy with command
-<pre>
+    <hr/>
+    <h2>Downloads</h2>
+    <p><a href="gpxe_images/gpxe.dsk">gpxe image for floppy</a><br/> 
+      Once downloaded, you need to copy this image to floppy or USB with command
+      <pre>
 cat gpxe.dsk > /dev/fda
-</pre>
-If you just want to test it, or get feel of it, then you can use it with qemu with following command.
-<pre>
+      </pre>
+      Make sure that you backup any data that you have in your USB before using above command.<br/>
+      If you want to use your normal data-USB for BKO booting, and for data carrying as well, 
+      then follow <strong> <a href="USBBKO.html">HOWTO create BKO bootable USB</a> </strong> for more details.<br/>
+    </p>
+    <hr/>
+    <p><a href="gpxe_images/gpxe.iso">gpxe image for CD-ROM</a><br/></p>
+    <p><a href="gpxe_images/gpxe.usb">gpxe image for USB</a></p>
+    <p>
+      If you just want to test it, or get feel of it, then you can use it with qemu with following command.
+      <pre>
 qemu -fda gpxe.dsk
-</pre>
-</p>
-<hr/>
-<p><a href="gpxe_images/gpxe.iso">gpxe image for CD-ROM</a>
-</p>
-<p><a href="gpxe_images/gpxe.usb">gpxe image for USB</a></p>
-<p>You can also try out PXE-Knife over HTTP with your existing pxe, following
-is the example of using standard pxe with qemu for booting with PXE-Knife over
-HTTP<pre>
+      </pre>
+    </p>
+    <p>You can also try out PXE-Knife over HTTP with your existing pxe, following
+       is the example of using standard pxe with qemu for booting with PXE-Knife over
+       HTTP
+      <pre>
 qemu -fda gpxe.dsk -net nic -net user -bootp http://alien.doesntexist.org/pxeknife/pxelinux.0
-</pre></p>
-<p>Refer <a href="http://etherboot.org/wiki/wiki/pxeknifeoverhttp">Etherboot
-wiki</a> for more details</p>
-<p>Using <a href="http://pxeknife.erebor.org/">PXE-Knife</a> over HTTP</p>
-</body>
+      </pre>
+    </p>
+    <hr/>
+    <a href="FAQ.html">FAQ</a> about BKO.
+    <p>Refer <a href="http://etherboot.org/wiki/wiki/pxeknifeoverhttp">Etherboot wiki</a> for more details</p>
+    <p>This system is based on <a href="http://pxeknife.erebor.org/">PXE-Knife</a></p>
+  </body>
 </html>
