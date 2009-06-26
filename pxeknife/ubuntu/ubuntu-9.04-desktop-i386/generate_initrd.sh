@@ -37,12 +37,6 @@ cp casper mpoint/scripts/
 chmod 0777 mpoint/scripts/casper
 
 
-cp mount_http_iso.sh mpoint/
-chmod 0777 mpoint/mount_http_iso.sh 
-
-#mknod mpoint/dev/fuse c 10 229
-
-
 cd mpoint
 echo "creating initrd from new system filesystem"
 
