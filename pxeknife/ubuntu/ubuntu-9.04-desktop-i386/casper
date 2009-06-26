@@ -224,7 +224,7 @@ do_httpfsmount() {
     # Mount the ISO.
     rc=1
 
-    echo "HTTP Boot: inserting network modules"
+    echo "HTTP Boot: inserting network modules" >> /status
 #    insmod /modules/crc32c.ko >/dev/null 2>&1  
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/8390.ko  
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/mii.ko   
@@ -242,21 +242,25 @@ do_httpfsmount() {
 	ifconfig lo 127.0.0.1 up
 	ifconfig eth0 up
 	udhcpc -s /bin/udhcpc.sh  >/dev/null 2>&1 
-	echo "passed on path is ${HTTPFS}"
-	ISO_PATH="http://192.168.0.2/ubuntu-9.04-desktop-i386.iso"
-	echo "The location of ubuntu iso  is $ISO_PATH"
-	echo "mounting CDROM"
+	echo  "passed on path is ${HTTPFS}" >> status
+	ISO_PATH="${HTTPFS}"
+#	ISO_PATH="http://192.168.0.1/ubuntu-9.04-desktop-i386.iso"
+	echo "The location of ubuntu iso  is $ISO_PATH" >> status
+	echo "mounting CDROM" >> status
 	mkdir /iso
 	httpfs $ISO_PATH /iso
 	FILEPATH=`ls /iso/*.iso`
+#	FILEPATH="/iso/ubuntu-9.04-desktop-i386.iso"
+	echo  "File path is $FILEPATH" >> status
+	losetup -r /dev/loop0 $FILEPATH
 	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
 	
 	
 	# test if knoppix is there
-	if test -f /cdrom/casper
+	if test -d /cdrom/casper
 	then
-		echo -n "successfully mounted the Image"
-		rc=0
+		echo "successfully mounted the Image" >> success
+		return 0
 	fi
 	return ${rc}
 
