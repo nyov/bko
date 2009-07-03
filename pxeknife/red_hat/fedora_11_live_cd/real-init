@@ -1,0 +1,633 @@
+#!/bin/bash
+
+emergency_shell()
+{
+    plymouth --hide-splash || :
+    echo "Bug in initramfs /init detected. Dropping to a shell. Good luck!"
+    echo
+    bash < /dev/console
+}
+trap "emergency_shell" 0 2
+
+# exit immediately if a command fails
+set -e
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export TERM=linux
+
+exec > /dev/console 2>&1
+
+echo "" > /proc/sys/kernel/hotplug
+
+# Declare all variables here.. mostly for housekeeping
+#
+init="/sbin/init"
+root_ro=0
+root_rw=0
+root=""
+rootflags=""
+rootfstype=""
+quiet=0
+shell=0
+eshell=0
+live_ram=0
+check_iso=0
+live_locale=""
+live_dir="LiveOS"
+overlay="off"
+HTTPFS=""
+
+# Parse kernel commandline options
+#
+for o in `cat /proc/cmdline` ; do
+    case $o in
+    init=*)
+        init=${o#init=}
+        ;;
+    ro)
+        root_ro=1
+        ;;
+    rw)
+        root_rw=1
+        ;;
+    quiet)
+        quiet=1
+        ;;
+    shell)
+        shell=1
+        ;;
+    eshell)
+        eshell=1
+        ;;
+    live_ram)
+        live_ram=1
+        ;;
+    live_locale=*)
+        live_locale=${o#live_locale=}
+        ;;
+    live_keytable=*)
+        live_keytable=${o#live_keytable=}
+        ;;
+    live_dir=*)
+        live_dir=${o#live_dir=}
+        ;;
+    overlay)
+        overlay=auto
+        ;;
+    overlay=*)
+        overlay=${o#overlay=}
+        ;;
+    reset_overlay)
+        reset_overlay=1
+        ;;
+    check)
+        check_iso=1
+        ;;
+    httpfs=*)
+        HTTPFS=${o#httpfs=}
+        ;;
+    blacklist=*)
+        blacklist=${o#blacklist=}
+        echo "blacklist $blacklist" >> /etc/modprobe.conf
+        ;;
+    *)
+        m=$(echo $o |cut -s -d . -f 1)
+        opt=$(echo $o |cut -s -d . -f 2-)
+        if [ -z "$m" -o -z "$opt" ]; then
+          continue
+        fi
+        p=$(echo $opt |cut -s -d = -f 1)
+        v=$(echo $opt |cut -s -d = -f 2-)
+        if [ -z "$p" -o -z "$v" ]; then
+          continue
+        fi
+        echo "options $m $p=$v" >> /etc/modprobe.conf
+        ;;
+    esac
+done
+
+if [ "$quiet" != "1" ] ; then
+    echo "kernel commandline: `cat /proc/cmdline`"
+fi
+
+# Users can override rootfs target on the kernel commandline
+#
+for o in `cat /proc/cmdline` ; do
+    case $o in
+    root=*)
+        root=${o#root=}
+        ;;
+    rootflags=*)
+        rootflags=${o#rootflags=}
+        ;;
+    rootfstype=*)
+        rootfstype=${o#rootfstype=}
+        ;;
+    esac
+done
+
+# Print out what we are going to do
+#
+if [ "$quiet" != "1" ] ; then
+    echo "init=$init"
+    echo "root=$root"
+    echo "rootflags=$rootflags"
+    echo "rootfstype=$rootfstype"
+    echo "root_ro=$root_ro"
+    echo "root_rw=$root_rw"
+fi
+
+waitforsymlink=0
+# generate udev rules to generate /dev/root symlink
+if [ -z $root ] ; then
+    root=/dev/something
+else
+    case $root in
+        /dev/disk/by-label/*)
+            LABEL=${root#/dev/disk/by-label/}
+            echo "SUBSYSTEM==\"block\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"root\"" > /etc/udev/rules.d/00-label.rules
+            if [ "$quiet" != "1" ] ; then
+                echo "Added udev rule 00-label.rules:"
+                cat /etc/udev/rules.d/00-label.rules
+            fi
+            waitforsymlink=1
+            thingtomount=/dev/root
+            ;;
+        CDLABEL=*)
+            CDLABEL=${root#CDLABEL=}
+            echo "KERNEL==\"hd[a-z]\", BUS==\"ide\", SYSFS{removable}==\"1\", ATTRS{media}==\"cdrom\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"root\"" > /etc/udev/rules.d/00-cdlabel.rules
+            echo "KERNEL==\"sr[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"root\"" >> /etc/udev/rules.d/00-cdlabel.rules
+            echo "KERNEL==\"scd[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"root\"" >> /etc/udev/rules.d/00-cdlabel.rules
+            echo "KERNEL==\"pcd[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"root\"" >> /etc/udev/rules.d/00-cdlabel.rules
+            if [ "$quiet" != "1" ] ; then
+                echo "Added udev rule 00-cdlabel.rules:"
+                cat /etc/udev/rules.d/00-cdlabel.rules
+            fi
+            waitforsymlink=1
+            thingtomount=/dev/root
+            ;;
+        LABEL=*)
+            LABEL=${root#LABEL=}
+            echo "SUBSYSTEM==\"block\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"root\"" > /etc/udev/rules.d/00-label.rules
+            if [ "$quiet" != "1" ] ; then
+                echo "Added udev rule 00-label.rules:"
+                cat /etc/udev/rules.d/00-label.rules
+            fi
+            waitforsymlink=1
+            thingtomount=/dev/root
+            ;;
+        /dev/disk/by-id/*)
+            UUID=${root#/dev/disk/by-id/}
+            echo "SUBSYSTEM==\"block\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"root\"" > /etc/udev/rules.d/01-uuid.rules
+            if [ "$quiet" != "1" ] ; then
+                echo "Added udev rule 01-uuid.rules:"
+                cat /etc/udev/rules.d/01-uuid.rules
+            fi
+            waitforsymlink=1
+            thingtomount=/dev/root
+            ;;
+        UUID=*)
+            UUID=${root#UUID=}
+            echo "SUBSYSTEM==\"block\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"root\"" > /etc/udev/rules.d/01-uuid.rules
+            if [ "$quiet" != "1" ] ; then
+                echo "Added udev rule 01-uuid.rules:"
+                cat /etc/udev/rules.d/01-uuid.rules
+            fi
+            waitforsymlink=1
+            thingtomount=/dev/root
+            ;;
+        /dev/*)
+            ln -s $root /dev/root
+            thingtomount=$root
+            ;;
+        *)
+            thingtomount=$root
+            ;;
+    esac
+fi
+
+echo "udev_log=\"error\"" >> /etc/udev/udev.conf
+
+# rules for loading modules
+#
+echo -n "ACTION==\"add\", SUBSYSTEM==\"?*\", ENV{MODALIAS}==\"?*\", RUN+=\"/sbin/modprobe $" >> /etc/udev/rules.d/10-modprobe.rules
+echo "env{MODALIAS}\"" >> /etc/udev/rules.d/10-modprobe.rules
+echo "ACTION==\"add\", SUBSYSTEM==\"scsi_device\" RUN+=\"/sbin/modprobe sg\"" >> /etc/udev/rules.d/10-modprobe.rules
+echo "ACTION==\"add\", SUBSYSTEM==\"scsi_device\", SYSFS{type}==\"0|7|14\", RUN+=\"/sbin/modprobe sd_mod\"" >> /etc/udev/rules.d/10-modprobe.rules
+echo "ACTION==\"add\", SUBSYSTEM==\"scsi_device\", SYSFS{type}==\"[45]\", RUN+=\"/sbin/modprobe sr_mod\"" >> /etc/udev/rules.d/10-modprobe.rules
+echo "SUBSYSTEM==\"mmc\", RUN+=\"/sbin/modprobe mmc_block\"" >> /etc/udev/rules.d/10-modprobe.rules
+
+echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb[0-9]*\", RUN+=\"/bin/plymouth --show-splash\"" > /etc/udev/rules.d/20-show-plymouth.rules
+
+# FIXME: hack since sr_mod seems to fail to get loaded sometimes (#239657)
+/sbin/modprobe sr_mod 2>/dev/null || :
+
+/sbin/modprobe loop max_loop=16 2>/dev/null || :
+
+if [ "$quiet" != "1" ] ; then
+    echo "starting udevd"
+fi
+/sbin/udevd --daemon
+
+if [ "$quiet" != "1" ] ; then
+    echo "creating devices"
+fi
+/sbin/udevadm trigger
+
+if [ "$shell" == "1" ] ; then
+    plymouth --hide-splash || :
+    echo "Shell requested on kernel commandline. Exit to continue booting."
+    echo
+    bash < /dev/console
+    plymouth --show-splash || :
+fi
+
+# don't wait for "mtd0" as no device file will appear
+# and don't worry about this if $thingtomount is a regular file
+if [ "$root" != "mtd0" -a ! -f "$thingtomount" ] ; then
+
+    # If we don't have the /dev/root link.. ask the user to create..
+    if [ "$waitforsymlink" != "1" ] ; then
+        if [ ! -L /dev/root ] ; then
+            plymouth --hide-splash || :
+            echo
+            echo "--------------------------------------"
+            echo "WARNING: Cannot find root file system!"
+            echo "--------------------------------------"
+            echo
+            echo "Create symlink /dev/root and then exit this shell to continue"
+            echo "the boot sequence."
+            echo
+            bash < /dev/console
+            plymouth --show-splash || :
+        fi
+    fi
+
+    if [ ! -b /dev/root ] ; then
+        if [ "$quiet" != "1" ] ; then
+            echo "Waiting for root to appear"
+        fi
+        COUNTDOWN=90
+        while [ "x$COUNTDOWN" != "x0" ] ; do
+            if [ "$quiet" != "1" ] ; then
+                echo -n "."
+            fi
+            COUNTDOWN=$(($COUNTDOWN - 1))
+            /bin/sleep 1
+            if [ -e /dev/root ] ; then
+	        COUNTDOWN=0
+                continue
+            fi
+            # this is kind of lame, but we could have had a situation
+            # where we were unable to read the volume id.  so trigger
+            # another run through the block devs
+            if [ "x$COUNTDOWN" = "x30" ]; then
+                /sbin/udevadm trigger --subsystem-match=block
+            fi
+        done
+    fi
+
+    if [ ! -b /dev/root ] ; then
+        plymouth --hide-splash || :
+        echo
+        echo "--------------------------------------"
+        echo "WARNING: Cannot find root file system!"
+        echo "--------------------------------------"
+        echo
+        echo "Create symlink /dev/root and then exit this shell to continue"
+        echo "the boot sequence."
+        echo
+        bash < /dev/console
+        plymouth --show-splash || :
+    fi
+
+    if [ "$quiet" != "1" ] ; then
+        echo "mounting /dev/root"
+        ls -l /dev/root
+    fi
+
+    if [ -z $rootfstype ] ; then
+        rootfstype=auto
+    fi
+
+fi
+
+[ -e /dev/root ] && fs=$(/lib/udev/vol_id -t /dev/root)
+if [ "x$fs" == "xiso9660" -o "x$fs" == "xudf" ]; then checkfs=1 ; fi
+if [ "x$check_iso" == "x1" -a -x /bin/checkisomd5 -a "x$checkfs" == "x1" ]; then
+   plymouth --hide-splash || :
+   echo "Verifying ISO image..."
+   /bin/checkisomd5 --verbose /dev/root
+   if [ $? -ne 0 ]; then
+       echo "Are you SURE you want to continue?"
+       echo "Press Enter to continue or ctrl-alt-del to reboot."
+       read < /dev/console
+   fi
+   plymouth --show-splash || :
+fi
+
+if [ "x$root_ro" == "x1" ] ; then
+   if [ -z $rootflags ] ; then
+       rootflags="ro"
+   else
+       rootflags="$rootflags,ro"
+   fi
+fi
+
+if [ "x$root_rw" == "x1" ] ; then
+   if [ -z $rootflags ] ; then
+       rootflags="rw"
+   else
+       rootflags="$rootflags,rw"
+   fi
+fi
+
+if [ -z $rootflags ] ; then
+    mountoptions=""
+else
+    mountoptions=" -o$rootflags"
+fi
+
+if [ -z ${HTTPFS} ] ; then
+    echo " mounting httpfs filesystem from ${HTTPFS}"
+    mount_http_iso.sh ${HTTPFS}
+    RES=$?
+else
+    echo " no httpfs provided, booting normal filesystem"
+    mount -n -t $rootfstype $mountoptions $thingtomount /sysroot
+    RES=$?
+fi
+
+
+if [ "$RES" != "0" ] ; then
+    plymouth --hide-splash || :
+    echo "---------------------------------"
+    echo "WARNING: Cannot mount rootfs!"
+    echo "---------------------------------"
+    echo
+    echo "Dropping to a shell. "
+    echo "Mount rootfs at /sysroot and exit shell to continue. Good luck!"
+    echo
+    bash < /dev/console
+    plymouth --hide-splash || :
+fi
+
+# Now get ready to leave the initramfs
+#
+
+# only pass kernel command line if we're launching /sbin/init
+if [ "$init" == "/sbin/init" ] ; then
+    initargs=$(cat /proc/cmdline)
+else
+    initargs=""
+fi
+
+# overlay setup helper function
+do_live_overlay() {
+    # create a sparse file for the overlay
+    # overlay: if non-ram overlay searching is desired, do it,
+    #              otherwise, create traditional overlay in ram
+    OVERLAY_LOOPDEV=$( losetup -f )
+
+    l=$(/lib/udev/vol_id -l /dev/root) || l=""
+    u=$(/lib/udev/vol_id -u /dev/root) || u=""
+
+    if ( echo $overlay | grep -q ":" ); then
+        # pathspec specified, extract
+        pathspec=$( echo $overlay | sed -e 's/^.*://' )
+    elif [ "x${overlay}" != "xoff" ]; then
+        pathspec="/${live_dir}/overlay-$l-$u"
+    fi
+
+    if [ -z "$pathspec" -o "$pathspec" == "auto" ]; then
+        pathspec="/${live_dir}/overlay-$l-$u"
+    fi
+    devspec=$( echo $overlay | sed -e 's/:.*$//' )
+
+    # need to know where to look for the overlay
+    setup=""
+    if [ -n "$devspec" -a -n "$pathspec" -a "${overlay}" != "off" ]; then
+        mkdir /overlayfs
+        mount -n -t auto $devspec /overlayfs || :
+        if [ -f /overlayfs$pathspec -a -w /overlayfs$pathspec ]; then
+            losetup $OVERLAY_LOOPDEV /overlayfs$pathspec
+            if [ -n "$reset_overlay" ]; then
+               dd if=/dev/zero of=$OVERLAY_LOOPDEV bs=64k count=1 2>/dev/null
+            fi
+            setup="yes"
+        fi
+        umount -l /overlayfs || :
+    fi
+
+    if [ -z "$setup" ]; then
+        if [ -n "$devspec" -a -n "$pathspec" ]; then
+           echo "Unable to find persistent overlay; using temporary"
+           sleep 5
+        fi
+
+        dd if=/dev/null of=/overlay bs=1024 count=1 seek=$((512*1024)) 2> /dev/null
+        losetup $OVERLAY_LOOPDEV /overlay
+    fi
+
+    # set up the snapshot
+    echo 0 `blockdev --getsize $BASE_LOOPDEV` snapshot $BASE_LOOPDEV $OVERLAY_LOOPDEV p 8 | dmsetup create live-rw
+}
+
+# live cd helper function
+do_live_from_base_loop() {
+    do_live_overlay
+
+    # set up new /dev/root symlink
+    rm -f /dev/root
+    ln -s /dev/mapper/live-rw /dev/root
+
+    mount -n  /dev/mapper/live-rw /sysroot
+    # here you can modify the rw ext3 fs for testing if you don't want to
+    # respin the entire rootfs (which takes ages). Example
+    #
+    #  echo foo > /sysroot/etc/bar.conf
+    #
+    # We also use it to dynamically set the system locale from the boot
+    # menu on live cd's.
+    #
+    if [ "$live_locale" != "" ] ; then
+        echo "LANG=$live_locale" > /sysroot/etc/sysconfig/i18n
+    fi
+    if [ "$live_keytable" != "" ] ; then
+        echo "KEYTABLE=$live_keytable" > /sysroot/etc/sysconfig/keyboard
+    fi
+
+    # copy over module options
+    [ -f /etc/modprobe.conf ] && cat /etc/modprobe.conf >> /sysroot/etc/modprobe.conf
+
+    # create rule so udev creates /dev/live symlink on real rootfs
+    if [ -d /sysroot/lib/udev/rules.d ] ;then
+      udevrulefn=$(ls /sysroot/lib/udev/rules.d/50-udev* |grep -v rpmsave |grep -v rpmnew)
+    else
+      udevrulefn=$(ls /sysroot/etc/udev/rules.d/50-udev* |grep -v rpmsave |grep -v rpmnew)
+    fi
+    if [ -n "$CDLABEL" ]; then
+       echo "KERNEL==\"hd[a-z]\", BUS==\"ide\", SYSFS{removable}==\"1\", ATTRS{media}==\"cdrom\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"sr[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"scd[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"pcd[0-9]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$CDLABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+    elif [ -n "$LABEL" ]; then
+       echo "KERNEL==\"hd[a-z]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"hd[a-z][0-9]*\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"sd[a-z]\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"sd[a-z][0-9]*\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"mmcblk[0-9]*\", PROGRAM=\"/lib/udev/vol_id -l %N\", RESULT==\"$LABEL\", SYMLINK+=\"live\"" >> $udevrulefn
+    elif [ -n "$UUID" ]; then
+       echo "KERNEL==\"hd[a-z]\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"hd[a-z][0-9]*\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"sd[a-z]\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"sd[a-z][0-9]*\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"live\"" >> $udevrulefn
+       echo "KERNEL==\"mmcblk[0-9]*\", PROGRAM=\"/lib/udev/vol_id -u %N\", RESULT==\"$UUID\", SYMLINK+=\"live\"" >> $udevrulefn
+    fi
+
+    # add rules for loop devices created by this mayflower generated init
+    # i.e. /dev/live-osimg, /dev/live-osmin, /dev/live-overlay,
+    #      and /dev/live-squashed
+    if [ -b "$SQUASHED_LOOPDEV" ]; then
+        echo "KERNEL==\"${SQUASHED_LOOPDEV#/dev/}\", SYMLINK+=\"live-squashed\"" >> $udevrulefn
+    fi
+    if [ -b "$OSMIN_SQUASHED_LOOPDEV" ]; then
+        echo "KERNEL==\"${OSMIN_SQUASHED_LOOPDEV#/dev/}\", SYMLINK+=\"live-squashed-osmin\"" >> $udevrulefn
+    fi
+    if [ -b "$OSMIN_LOOPDEV" ]; then
+        echo "KERNEL==\"${OSMIN_LOOPDEV#/dev/}\", SYMLINK+=\"live-osmin\"" >> $udevrulefn
+        echo "ENV{DM_NAME}==\"live-osimg-min\", ENV{DKD_PRESENTATION_HIDE}=\"1\"" >> $udevrulefn
+    fi
+    echo "KERNEL==\"${BASE_LOOPDEV#/dev/}\", SYMLINK+=\"live-osimg\"" >> $udevrulefn
+    echo "KERNEL==\"${OVERLAY_LOOPDEV#/dev/}\", SYMLINK+=\"live-overlay\"" >> $udevrulefn
+
+    mount -n -o ro,remount /dev/mapper/live-rw /sysroot
+}
+
+# we might have a genMinInstDelta delta file for anaconda to take advantage of
+if [ -e /sysroot/${live_dir}/osmin.img ]; then
+    OSMINSQFS=/sysroot/${live_dir}/osmin.img
+fi
+
+if [ -n "$OSMINSQFS" ]; then
+    # decompress the delta data
+    dd if=$OSMINSQFS of=/osmin.img 2> /dev/null
+    OSMIN_SQUASHED_LOOPDEV=$( losetup -f )
+    losetup -r $OSMIN_SQUASHED_LOOPDEV /osmin.img
+    mkdir -p /squashfs.osmin
+    mount -n -t squashfs -o ro $OSMIN_SQUASHED_LOOPDEV /squashfs.osmin
+    OSMIN_LOOPDEV=$( losetup -f )
+    losetup -r $OSMIN_LOOPDEV /squashfs.osmin/osmin
+    umount -l /squashfs.osmin
+fi
+
+# we might have an uncompressed embedded ext3  to use as rootfs (uncompressed live)
+#
+if [ -e /sysroot/${live_dir}/ext3fs.img ]; then
+  EXT3FS="/sysroot/${live_dir}/ext3fs.img"
+fi
+
+if [ -n "$EXT3FS" ] ; then
+    if [ "$quiet" != "1" ] ; then
+        echo "setting up embedded ext3 fs "
+    fi
+
+    mkdir -p /dev/mapper
+    mknod /dev/mapper/control c 10 63
+    modprobe dm_snapshot 2>/dev/null || :
+
+    BASE_LOOPDEV=$( losetup -f )
+    losetup -r $BASE_LOOPDEV $EXT3FS
+    umount -l /sysroot
+
+    do_live_from_base_loop
+fi
+
+# we might have an embedded ext3 on squashfs to use as rootfs (compressed live)
+#
+if [ -e /sysroot/${live_dir}/squashfs.img ]; then
+  SQUASHED="/sysroot/${live_dir}/squashfs.img"
+fi
+
+if [ -e "$SQUASHED" ] ; then
+
+    if [ "$quiet" != "1" ] ; then
+        echo "setting up embedded squash -> ext3 fs "
+    fi
+
+    mkdir -p /dev/mapper
+    mknod /dev/mapper/control c 10 63
+    modprobe dm_snapshot 2>/dev/null || :
+
+    if [ "$live_ram" == "1" ] ; then
+        echo "Copying live image to RAM..."
+        echo "(this may take a few minutes)"
+        dd if=$SQUASHED of=/squashed.img bs=512 2> /dev/null
+        umount -n /sysroot
+        echo "Done copying live image to RAM."
+        eject -p /dev/root || :
+        SQUASHED="/squashed.img"
+    fi
+
+    SQUASHED_LOOPDEV=$( losetup -f )
+    losetup -r $SQUASHED_LOOPDEV $SQUASHED
+    mkdir -p /squashfs
+    mount -n -t squashfs -o ro $SQUASHED_LOOPDEV /squashfs
+
+    BASE_LOOPDEV=$( losetup -f )
+    losetup -r $BASE_LOOPDEV /squashfs/LiveOS/ext3fs.img
+
+    umount -l /squashfs
+    if [ "$live_ram" == "0" ] ; then
+        umount -l /sysroot
+    fi
+
+    do_live_from_base_loop
+fi
+
+if [ -b "$OSMIN_LOOPDEV" ]; then
+    # set up the devicemapper snapshot device, which will merge
+    # the normal live fs image, and the delta, into a minimzied fs image
+    echo "0 $( blockdev --getsize $BASE_LOOPDEV ) snapshot $BASE_LOOPDEV $OSMIN_LOOPDEV p 8" | dmsetup create --readonly live-osimg-min
+fi
+
+if [ "$eshell" == "1" ] ; then
+    plymouth --hide-splash || :
+    echo "Shell requested on kernel commandline."
+    echo "Rootfs is mounted ro on /sysroot. Exit to continue booting."
+    echo
+    bash < /dev/console
+    plymouth --show-splash || :
+fi
+
+if [ -x /sysroot$init ] ; then
+
+    # Leave initramfs and transition to rootfs
+    kill `pidof udevd`
+    if [ "$quiet" != "1" ] ; then
+        echo "transfering control to $init"
+    fi
+
+    # If the udev rule doesn't get triggered make sure to
+    # show a splash
+    plymouth --show-splash
+    exec /sbin/run-init
+    plymouth --hide-splash || :
+    echo "---------------------------------"
+    echo "WARNING: Error switching to real rootfs!"
+    echo "---------------------------------"
+    echo
+    echo "Dropping to a shell. Good luck!"
+    echo
+    bash < /dev/console
+else
+    plymouth --hide-splash || :
+    echo "---------------------------------------------------------"
+    echo "WARNING: Requested $init binary does not exist on rootfs."
+    echo "---------------------------------------------------------"
+    echo
+    echo "Dropping to a shell. Good luck!"
+    echo
+    bash < /dev/console
+fi
+
