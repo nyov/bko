@@ -37,6 +37,7 @@ live_dir="LiveOS"
 overlay="off"
 HTTPFS=""
 
+echo "here in 40"
 # Parse kernel commandline options
 #
 for o in `cat /proc/cmdline` ; do
@@ -110,6 +111,7 @@ if [ "$quiet" != "1" ] ; then
     echo "kernel commandline: `cat /proc/cmdline`"
 fi
 
+echo "here in 113"
 # Users can override rootfs target on the kernel commandline
 #
 for o in `cat /proc/cmdline` ; do

@@ -12,7 +12,6 @@ gunzip initrd0.gz
 mkdir mpoint
 
 echo "extracting filesystem filesystem"
-mkdir mpoint
 cd mpoint 
 cpio -ivu --no-absolute-filename  < ../initrd0
 cd ..
