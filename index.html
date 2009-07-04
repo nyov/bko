@@ -1,37 +1,288 @@
 <html>
   <head>
-    <title>boot.kernel.org(BKO): Booting your machine over HTTP </title>
+    <style type="text/css">
+
+    #download3 {
+      background: #fff;
+      padding: 3px;
+      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
+      font-size: large;
+      font-variant: small-caps;
+      border: 1px solid #000000;
+      
+    }
+    #download4 {
+      color: #ffffff;
+      background: #3300FF;
+      padding: 0px 6px 0px 6px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+    }
+    #download5 {
+      /* color: #660000; */
+      color: #FFFFFF;
+      /* background: #cccccc; */
+      background: #0000FF;
+      /* padding: 0px 24px 0px 6px; */
+      padding: 8px 24px 8px 24px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+    }
+
+    #logo {
+      font-size: x-large;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    #logotext {
+      /* padding: 0px 0px 32px 32px; */
+      font-weight: bold;
+    }
+
+    .vertmid {
+      vertical-align: middle;
+      display: table-cell;
+    }
+
+    #menubox {
+      background: #ffffff;
+      padding: 3px;
+      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
+      font-size: large;
+      font-variant: small-caps;
+      border: 1px solid #000000;
+    }
+
+    #menuact {
+      color: #ffffff;
+      background: #3300FF;
+      padding: 0px 6px 0px 6px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+
+    #menulink {
+      color: #660000;
+      background: #cccccc;
+      padding: 0px 24px 0px 6px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      margin: 3px 3px 3px 3px;
+    }
+
+    div.screenshot {
+      position: relative;
+      float: left;
+      width: 33.33333333%;
+      height: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    div.screenshot_all {
+      float: left;
+      width: 100%;
+      height: auto;
+      margin-left: auto;
+      margin-right: auto;
+      clear: both;
+      text-align: center;
+    }
+    </style> 
+    <title>boot.kernel.org(BKO)</title>
   </head>
   <body>
-    <h1>boot.kernel.org(BKO):Booting your machie over HTTP</h1>
+    <div id="logo">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td valign="middle" align="center">
+        <img src="boot.png" width="367" height="261">
+      </td>
+      <td valign="middle" align="left">
+        <span id="logotext">
+        <p>
+        boot.kernel.org(BKO):Booting your machie over HTTP
+        </p>
+        </span>
+      </td>
+    </tr>
+    </table>
+    </div>
+    <div id="menubox">
+      <span id="menuact">
+        Home
+      </span>
+      <span id="menulink">
+        <a href="#download">Download</a>
+      </span>
+      <span id="menulink">
+        <a href="#screenshots">Screenshots</a>
+      </span>
+      <span id="menulink">
+        <a href="#howtouse">How to Use</a>
+      </span>
+      <span id="menulink">
+        Developer
+      </span>
+      <span id="menulink">
+        FAQ
+      </span>
+      <span id="menulink">
+        Troubleshooting
+      </span>
+      <span id="menulink">
+        <a href="#contactus">Contact US</a>
+      </span>
+    </div>
     <p>
       Our objective is to let users boot their machines with bare minimal requirements on their side,
       and we will handle most of the problem that you may face in booting. All that user needs is Internet
       connectivity and a small program (gpxe) to boot the machine. This gpxe program provides network booting facility.
       You can download these program from our site (available at download section).
     </p>
-    <p>
-      We will also give users choices between various destributions of linux to choose from. User also may choose from
-      various rescue tools which can help in data recovary and in other situations. The list of existing choices is available here, 
-      and we assure you that this list will grow over time :-)  
-    </p>
-    <hr/>
-    <p>
-      <h3>How to use it?</h3>
-      <ol> 
-        <li>Download the gpxe image</li>
-        <li>copy it in floppy, USB or in CDROM (check download section for instructions)</li>
-        <li>Make sure that you know what kind of network you have (Which entries will be needed) </li>
-        <li>Boot from the media in which you had copied the gpxe Image</li>
-        <li>In case of Static networking, you need to provide information about your connection,
-          but if you are having DHCP, it should work out of the box.</li>
-        <li>You will be presented with menu showing available options to boot from, select one of them.</li>
-        <li>Your system should boot in the sytem you select</li>
-        <li>Once you are done with it, reboot the system and remvoe the media, you should get back your old system</li>
-      </ol>
-    </p>
 
     <hr/>
+    <a name="download">
+    <p>
+      <h3>Download:</h3>
+    </p>
+    <center>
+    <!-- <div id="download3"> -->
+      <!-- <span id="download4">Download:</span> -->
+      <span id="download5">USB Image</span>
+      <span id="download5">Floppy Image</span>
+      <span id="download5">CD ISO</span>
+    <!-- </div> -->
+    </center>
+
+    <hr/>
+    <a name="screenshots">
+    <p>
+      <h3>Screenshots:</h3>
+    </p>
+    <hr/>
+
+    <div class="screenshot_all">
+      <div class="screenshot">
+        Screenshot 1
+      </div>
+
+      <div class="screenshot">
+        Screenshot 2
+      </div>
+
+      <div class="screenshot">
+        Screenshot 3
+      </div>
+
+      <div class="screenshot">
+        Screenshot 4
+      </div>
+
+      <div class="screenshot">
+        Screenshot 5
+      </div>
+    </div>
+
+    <div style="width: 100%;">
+    &nbsp;
+    </div>
+
+    <hr/>
+    <a name="howtouse">
+    <h3>How to use it?</h3>
+    <table border="1" width="90%" cellpadding="0" cellspacing="0" bgcolor="#DDDDDD">
+      <tr>
+        <th>Floppy Image</th>
+        <th>CD ISO</th>
+        <th>USB Image</th>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <ul> 
+            <li>Download an image file (see <a href="#download">above</a>)</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li>Make a bootable floppy:
+            <ul>
+              <li>
+                <b>Linux:</b> Insert a floppy disk into a drive, use something like:<br>
+                dd if=gpxe.dsk of=&lt;/dev entry coresponding to your floppy drive&gt;
+              </li>
+              <li>
+                <b>Windows:</b> Insert a floppy into your drive, Use rawrite, do something similar to dd
+              </li>
+              <li>
+                <b>Mac:</b> Mac has floppy drives?!
+              </li>
+            </ul>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Make a bootable CD:
+            <ul>
+              <li>
+                <b>Linux:</b> Insert a blank cd into a CD/DVD drive, use something like:<br>
+                cdrecord -sao 
+              </li>
+              <li>
+                <b>Windows:</b> Excitingly complicated instructions for windows goes here
+              </li>
+              <li>
+                <b>Mac:</b> Just use the Finder to burn the ISO
+              </li>
+            </ul>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Make a bootable CD:
+            <ul>
+              <li>
+                <b>Linux:</b> Insert a blank cd into a CD/DVD drive, use something like:<br>
+                cdrecord -sao 
+              </li>
+              <li>
+                <b>Windows:</b> Excitingly complicated instructions for windows goes here
+              </li>
+              <li>
+                <b>Mac:</b> Just use the Finder to burn the ISO
+              </li>
+            </ul>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <ul>
+            <li>copy it in floppy, USB or in CDROM (check download section for instructions)</li>
+            <li>Make sure that you know what kind of network you have (Which entries will be needed) </li>
+            <li>Boot from the media in which you had copied the gpxe Image</li>
+            <li>In case of Static networking, you need to provide information about your connection,
+                but if you are having DHCP, it should work out of the box.</li>
+            <li>You will be presented with menu showing available options to boot from, select one of them.</li>
+            <li>Your system should boot in the sytem you select</li>
+            <li>Once you are done with it, reboot the system and remvoe the media, you should get back your old system</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+
+    <hr/>
+    <a name="contactus">
+    <p>
+      <h3>Contact US:</h3>
+    </p>
     <h2>Downloads</h2>
     <p><a href="gpxe_images/gpxe.dsk">gpxe image for floppy</a><br/> 
       Once downloaded, you need to copy this image to floppy or USB with command
