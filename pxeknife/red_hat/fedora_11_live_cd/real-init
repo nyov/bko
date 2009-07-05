@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "ok, inside real init"
 emergency_shell()
 {
     plymouth --hide-splash || :
@@ -14,7 +15,6 @@ set -e
 
 export PATH=/sbin:/bin:/usr/sbin:/usr/bin
 export TERM=linux
-
 exec > /dev/console 2>&1
 
 echo "" > /proc/sys/kernel/hotplug
@@ -37,7 +37,6 @@ live_dir="LiveOS"
 overlay="off"
 HTTPFS=""
 
-echo "here in 40"
 # Parse kernel commandline options
 #
 for o in `cat /proc/cmdline` ; do
@@ -111,7 +110,6 @@ if [ "$quiet" != "1" ] ; then
     echo "kernel commandline: `cat /proc/cmdline`"
 fi
 
-echo "here in 113"
 # Users can override rootfs target on the kernel commandline
 #
 for o in `cat /proc/cmdline` ; do
@@ -138,6 +136,7 @@ if [ "$quiet" != "1" ] ; then
     echo "root_ro=$root_ro"
     echo "root_rw=$root_rw"
 fi
+
 
 waitforsymlink=0
 # generate udev rules to generate /dev/root symlink
@@ -246,7 +245,7 @@ fi
 
 # don't wait for "mtd0" as no device file will appear
 # and don't worry about this if $thingtomount is a regular file
-if [ "$root" != "mtd0" -a ! -f "$thingtomount" ] ; then
+if [ "$root" != "mtd0" -a -z ${HTTPFS} -a ! -f "$thingtomount" ] ; then
 
     # If we don't have the /dev/root link.. ask the user to create..
     if [ "$waitforsymlink" != "1" ] ; then
@@ -314,6 +313,7 @@ if [ "$root" != "mtd0" -a ! -f "$thingtomount" ] ; then
 
 fi
 
+
 [ -e /dev/root ] && fs=$(/lib/udev/vol_id -t /dev/root)
 if [ "x$fs" == "xiso9660" -o "x$fs" == "xudf" ]; then checkfs=1 ; fi
 if [ "x$check_iso" == "x1" -a -x /bin/checkisomd5 -a "x$checkfs" == "x1" ]; then
@@ -327,6 +327,7 @@ if [ "x$check_iso" == "x1" -a -x /bin/checkisomd5 -a "x$checkfs" == "x1" ]; then
    fi
    plymouth --show-splash || :
 fi
+
 
 if [ "x$root_ro" == "x1" ] ; then
    if [ -z $rootflags ] ; then
@@ -351,12 +352,12 @@ else
 fi
 
 if [ -z ${HTTPFS} ] ; then
-    echo " mounting httpfs filesystem from ${HTTPFS}"
-    mount_http_iso.sh ${HTTPFS}
-    RES=$?
-else
     echo " no httpfs provided, booting normal filesystem"
     mount -n -t $rootfstype $mountoptions $thingtomount /sysroot
+    RES=$?
+else
+    echo " mounting httpfs filesystem from ${HTTPFS}"
+    mount_http_iso.sh ${HTTPFS}
     RES=$?
 fi
 
@@ -391,8 +392,13 @@ do_live_overlay() {
     #              otherwise, create traditional overlay in ram
     OVERLAY_LOOPDEV=$( losetup -f )
 
-    l=$(/lib/udev/vol_id -l /dev/root) || l=""
-    u=$(/lib/udev/vol_id -u /dev/root) || u=""
+    if [ -z ${HTTPFS} ] ; then
+        l=$(/lib/udev/vol_id -l /dev/root) || l=""
+        u=$(/lib/udev/vol_id -u /dev/root) || u=""
+    else
+        l=""
+        u=""
+    fi
 
     if ( echo $overlay | grep -q ":" ); then
         # pathspec specified, extract
@@ -438,9 +444,10 @@ do_live_overlay() {
 # live cd helper function
 do_live_from_base_loop() {
     do_live_overlay
-
     # set up new /dev/root symlink
-    rm -f /dev/root
+    if [ -z ${HTTPFS} ] ; then
+        rm -f /dev/root
+    fi
     ln -s /dev/mapper/live-rw /dev/root
 
     mount -n  /dev/mapper/live-rw /sysroot
@@ -502,7 +509,7 @@ do_live_from_base_loop() {
     fi
     echo "KERNEL==\"${BASE_LOOPDEV#/dev/}\", SYMLINK+=\"live-osimg\"" >> $udevrulefn
     echo "KERNEL==\"${OVERLAY_LOOPDEV#/dev/}\", SYMLINK+=\"live-overlay\"" >> $udevrulefn
-
+    
     mount -n -o ro,remount /dev/mapper/live-rw /sysroot
 }
 
@@ -567,8 +574,13 @@ if [ -e "$SQUASHED" ] ; then
         dd if=$SQUASHED of=/squashed.img bs=512 2> /dev/null
         umount -n /sysroot
         echo "Done copying live image to RAM."
-        eject -p /dev/root || :
-        SQUASHED="/squashed.img"
+        if [ -z ${HTTPFS} ] ; then
+            eject -p /dev/root || :
+            SQUASHED="/squashed.img"
+        else
+            SQUASHED="/squashed.img"
+        fi
+            
     fi
 
     SQUASHED_LOOPDEV=$( losetup -f )
@@ -583,7 +595,6 @@ if [ -e "$SQUASHED" ] ; then
     if [ "$live_ram" == "0" ] ; then
         umount -l /sysroot
     fi
-
     do_live_from_base_loop
 fi
 
@@ -612,8 +623,9 @@ if [ -x /sysroot$init ] ; then
 
     # If the udev rule doesn't get triggered make sure to
     # show a splash
-    plymouth --show-splash
+#    plymouth --show-splash
     exec /sbin/run-init
+
     plymouth --hide-splash || :
     echo "---------------------------------"
     echo "WARNING: Error switching to real rootfs!"

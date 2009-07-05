@@ -16,7 +16,7 @@ cd mpoint
 cpio -ivu --no-absolute-filename  < ../initrd0
 cd ..
 
-echo "coping the needed files..."
+echo "coping the needed tools..."
 
 cp httpfs/static/udhcpc mpoint/bin/
 chmod 777 mpoint/bin/udhcpc
@@ -33,13 +33,29 @@ chmod 777 mpoint/bin/httpfs
 cp httpfs/server/fusermount mpoint/bin/
 chmod 777 mpoint/bin/fusermount
 
-mkdir mpoint/modules
-cp modules/* mpoint/modules/
+cp busybox mpoint/bin/
+chmod 777 mpoint/bin/busybox
 
+cp init mpoint/
+chmod 0777 mpoint/init 
 
 cp real-init mpoint/sbin/
 chmod 0777 mpoint/sbin/real-init 
 
+echo "Creating soft links"
+cd mpoint/bin
+ln -s busybox ifconfig
+ln -s busybox route 
+ln -s busybox vi 
+ln -s busybox ping
+ln -s busybox wget 
+
+cd ../..
+
+
+echo "copying kernel modules"
+mkdir mpoint/modules
+cp modules/* mpoint/modules/
 
 
 cd mpoint

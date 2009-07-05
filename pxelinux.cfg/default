@@ -3,24 +3,15 @@ DEFAULT menu.c32
     TIMEOUT 100 #this is optional - will start the default after 10 seconds
     MENU TITLE --== Main Menu ==--
 
-
-    #load pxe knife
-    LABEL pxeknife
-        MENU LABEL PXE Knife --->
-        kernel menu.c32
-        append pxeknife/pxeknife.conf
-
-
     #this allows you to exit the pxe stack and pass booting to the local system
     LABEL bootlocal
-        MENU DEFAULT
-        MENU LABEL Local Boot
+        MENU LABEL Local Boot (Boot your existing OS)
         localboot 0
 
-
-    #load pxe knife
-    LABEL pxeknife
-        MENU LABEL PXE Knife --->
+    #load BKO 
+    LABEL bko 
+        MENU DEFAULT
+        MENU LABEL BKO (boot.kernel.org) --->
         kernel menu.c32
         append pxeknife/pxeknife.conf
 

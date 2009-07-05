@@ -1,0 +1,32 @@
+#!/sbin/nash
+mount -t proc proc /proc
+setquiet
+echo "Mounting proc filesystem"
+echo "Mounting sysfs filesystem"
+mount -t sysfs /sys /sys
+
+echo "Creating initial /dev"
+mount -t tmpfs -o mode=0755 udev /dev
+mknod /dev/console c 5 1
+mknod /dev/null c 1 3
+mknod /dev/kmsg c 1 11
+mknod /dev/ptmx c 5 2
+mknod /dev/fb c 29 0
+mkdir /dev/pts
+mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
+mkdir -m 1777 /dev/shm
+ln -s /proc/self/fd /dev/fd
+ln -s fd/0 /dev/stdin
+ln -s fd/1 /dev/stdout
+ln -s fd/2 /dev/stderr
+mknod /dev/systty c 4 0
+mknod /dev/tty0 c 4 0
+mknod /dev/tty1 c 4 1
+mknod /dev/tty2 c 4 2
+
+echo "Running plymouthd"
+#daemonize --ignore-missing /bin/plymouthd
+
+echo "executing real init now"
+exec sbin/real-init
+echo "execution of real init is failed :-("
