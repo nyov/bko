@@ -1,0 +1,106 @@
+   
+   download3 {
+      background: #fff;
+      padding: 3px;
+      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
+      font-size: large;
+      font-variant: small-caps;
+      border: 1px solid #000000;
+      
+    }
+   
+   download4 {
+      color: #ffffff;
+      background: #3300FF;
+      padding: 0px 6px 0px 6px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+    }
+    #download5 {
+      /* color: #660000; */
+      color: #FFFFFF;
+      /* background: #cccccc; */
+      background: #0000FF;
+      /* padding: 0px 24px 0px 6px; */
+      padding: 8px 24px 8px 24px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+    }
+
+
+    #download6 {
+      /* color: #660000; */
+      color: #FFFFFF;
+      /* background: #cccccc; */
+      background:  #0000FF;
+      /* padding: 0px 24px 0px 6px; */
+      padding: 8px 24px 8px 24px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+    }
+
+    #logo {
+      font-size: x-large;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    #logotext {
+      /* padding: 0px 0px 32px 32px; */
+      font-weight: bold;
+    }
+
+    .vertmid {
+      vertical-align: middle;
+      display: table-cell;
+    }
+
+    #menubox {
+      background: #ffffff;
+      padding: 3px;
+      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
+      font-size: large;
+      font-variant: small-caps;
+      border: 1px solid #000000;
+    }
+
+    #menuact {
+      color: #ffffff;
+      background: #3300FF;
+      padding: 0px 6px 0px 6px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+
+    #menulink {
+      color: #660000;
+      background: #cccccc;
+      padding: 0px 24px 0px 6px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      margin: 3px 3px 3px 3px;
+    }
+
+    div.screenshot {
+      position: relative;
+      float: left;
+      width: 33.33333333%;
+      height: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    div.screenshot_all {
+      float: left;
+      width: 100%;
+      height: auto;
+      margin-left: auto;
+      margin-right: auto;
+      clear: both;
+      text-align: center;
+    }

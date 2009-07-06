@@ -1,0 +1,110 @@
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="BKOStylesteet.css" />
+ 
+    <title>boot.kernel.org(BKO)</title>
+  </head>
+  <body>
+    <div id="logo">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td valign="middle" align="center">
+        <img src="boot.png" width="367" height="261">
+      </td>
+      <td valign="middle" align="left">
+        <span id="logotext">
+        <p>
+        boot.kernel.org(BKO) : Booting your machine over HTTP
+        </p>
+        </span>
+      </td>
+    </tr>
+    </table>
+    </div>
+    <div id="menubox">
+      <span id="menulink">
+        <a href="index.html">Home</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#download">Downloads</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#screenshots">Screenshots</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#howtouse">How to Use</a>
+      </span>
+      <span id="menulink">
+        Developer
+      </span>
+      <span id="menulink">
+        <a href="FAQ.html">FAQ</a>      
+      </span>
+      <span id="menuact">
+      Troubleshooting
+      </span>
+      <span id="menulink">
+        <a href="index.html#contactus">Contact US</a>
+      </span>
+    </div>
+
+    <center><h1>Troubleshooting</h1></center>    
+  <hr/>
+  This page is still under development.   We are looking forward for feedback from our
+  users which will give us good picture about the problems that one may face in booting with BKO. <br>
+  
+  We have tried to cover most of the problems that user may face in <a href="FAQ.html">FAQ</a> page.
+  <br/>
+  <a name="customizedGpxe">
+  <h2>Customized gpxe images</h2>
+  You can create your own customized gpxe images tailered for your network card and
+   also add embedded script
+  which will use BKO for booting.  
+  This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
+  embedd any gpxe script.
+   Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
+  BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
+  You can follow the <u>Configure</u> option which will let you add your own gpxe script.
+  
+  We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
+  <br/>
+  <b>Script for DHCP networking</b>
+<pre>
+#!gpxe
+echo "Hi, We will be using PXEKnife from URL http://rom.etherboot.org/BKO"
+echo "It is assumed that you have dhcp networking"
+ifopen net0
+dhcp net0
+set 209:string pxelinux.cfg/default
+set 210:string http://rom.etherboot.org/BKO/
+echo "Here we go"
+chain http://rom.etherboot.org/BKO/pxelinux.0
+echo "PxeKnife booting cancelled, using local disk instead.."
+ </pre>  
+  <hr/>
+  <br/>
+  <b>Script for static networking</b>
+  <pre>
+#!gpxe
+echo "As you dont have DHCP, you need to give details about network configuration"
+echo "Soon, you will be presented with interface to provide details about network configuration"
+echo "Please provide, IP address, Netmask, Gateway and Router"
+ifopen net0
+set net0/ip 10.0.2.15
+set net0/netmask 255.255.255.0
+set net0/gateway 10.0.2.2
+set net0/dns 10.0.2.3
+sleep 3
+config
+set 209:string pxelinux.cfg/default
+set 210:string http://rom.etherboot.org/BKO/
+echo "Here we go"
+chain http://rom.etherboot.org/BKO/pxelinux.0
+echo "PxeKnife booting cancelled, using local disk instead.."
+</pre>
+ <hr/>
+  
+  <hr/>
+  </body>
+</html>
+    

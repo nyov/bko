@@ -1,99 +1,7 @@
 <html>
   <head>
-    <style type="text/css">
-
-    #download3 {
-      background: #fff;
-      padding: 3px;
-      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
-      font-size: large;
-      font-variant: small-caps;
-      border: 1px solid #000000;
-      
-    }
-    #download4 {
-      color: #ffffff;
-      background: #3300FF;
-      padding: 0px 6px 0px 6px;
-      -moz-border-radius: 8px;
-      -webkit-border-radius: 8px;
-      border-radius: 8px;
-    }
-    #download5 {
-      /* color: #660000; */
-      color: #FFFFFF;
-      /* background: #cccccc; */
-      background: #0000FF;
-      /* padding: 0px 24px 0px 6px; */
-      padding: 8px 24px 8px 24px;
-      -moz-border-radius: 8px;
-      -webkit-border-radius: 8px;
-      border-radius: 8px;
-    }
-
-    #logo {
-      font-size: x-large;
-      font-weight: bold;
-      vertical-align: middle;
-    }
-
-    #logotext {
-      /* padding: 0px 0px 32px 32px; */
-      font-weight: bold;
-    }
-
-    .vertmid {
-      vertical-align: middle;
-      display: table-cell;
-    }
-
-    #menubox {
-      background: #ffffff;
-      padding: 3px;
-      font-family: Geneva, Vera, Arial, Helvetica, sans-serif;
-      font-size: large;
-      font-variant: small-caps;
-      border: 1px solid #000000;
-    }
-
-    #menuact {
-      color: #ffffff;
-      background: #3300FF;
-      padding: 0px 6px 0px 6px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-    }
-
-    #menulink {
-      color: #660000;
-      background: #cccccc;
-      padding: 0px 24px 0px 6px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      margin: 3px 3px 3px 3px;
-    }
-
-    div.screenshot {
-      position: relative;
-      float: left;
-      width: 33.33333333%;
-      height: 200px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    div.screenshot_all {
-      float: left;
-      width: 100%;
-      height: auto;
-      margin-left: auto;
-      margin-right: auto;
-      clear: both;
-      text-align: center;
-    }
-    </style> 
+  <link rel="stylesheet" type="text/css" href="BKOStylesteet.css" />
+ 
     <title>boot.kernel.org(BKO)</title>
   </head>
   <body>
@@ -106,7 +14,7 @@
       <td valign="middle" align="left">
         <span id="logotext">
         <p>
-        boot.kernel.org(BKO):Booting your machie over HTTP
+        boot.kernel.org(BKO) : Booting your machine over HTTP
         </p>
         </span>
       </td>
@@ -115,35 +23,37 @@
     </div>
     <div id="menubox">
       <span id="menuact">
-        Home
+      Home
       </span>
       <span id="menulink">
-        <a href="#download">Download</a>
+        <a href="index.html#download">Downloads</a>
       </span>
       <span id="menulink">
-        <a href="#screenshots">Screenshots</a>
+        <a href="index.html#screenshots">Screenshots</a>
       </span>
       <span id="menulink">
-        <a href="#howtouse">How to Use</a>
+        <a href="index.html#howtouse">How to Use</a>
       </span>
       <span id="menulink">
         Developer
       </span>
       <span id="menulink">
-        FAQ
+        <a href="FAQ.html">FAQ</a>      
       </span>
       <span id="menulink">
-        Troubleshooting
+      <a href="Troubleshooting.html">Troubleshooting</a>
       </span>
       <span id="menulink">
-        <a href="#contactus">Contact US</a>
+        <a href="index.html#contactus">Contact US</a>
       </span>
     </div>
     <p>
       Our objective is to let users boot their machines with bare minimal requirements on their side,
       and we will handle most of the problem that you may face in booting. All that user needs is Internet
       connectivity and a small program (gpxe) to boot the machine. This gpxe program provides network booting facility.
-      You can download these program from our site (available at download section).
+      You can download these program from our site (available at <a href="#download">Downloads</a> section).  
+      Also, you can find a list of distributions and tools that can be booted with BKO <a href="#bootList">here</a>.
+      Your small 56KB gpxe program can boot any of these options! 
     </p>
 
     <hr/>
@@ -152,12 +62,10 @@
       <h3>Download:</h3>
     </p>
     <center>
-    <!-- <div id="download3"> -->
-      <!-- <span id="download4">Download:</span> -->
-      <span id="download5">USB Image</span>
-      <span id="download5">Floppy Image</span>
-      <span id="download5">CD ISO</span>
-    <!-- </div> -->
+      <a></a>
+      <a href="gpxe_images/gpxe.usb"><span id="download6">USB Image</span></a>
+      <a href="gpxe_images/gpxe.dsk"><span id="download6">Floppy Image</span></a>
+      <a href="gpxe_images/gpxe.iso"><span id="download6">CD ISO</span></a>
     </center>
 
     <hr/>
@@ -169,24 +77,40 @@
 
     <div class="screenshot_all">
       <div class="screenshot">
-        Screenshot 1
+        <a href="BKOScreenshots/pxeBoot.jpg">
+        	<img src="BKOScreenshots/pxeBoot.jpg" width="350" height="170"></a><br/>
+        	gpxe is booting the machine.
       </div>
 
       <div class="screenshot">
-        Screenshot 2
+        <a href="BKOScreenshots/selectingBKO.jpg">
+        	<img src="BKOScreenshots/selectingBKO.jpg" width="350" height="170"></a><br/>
+        	Menu provided by gpxe
       </div>
 
       <div class="screenshot">
-        Screenshot 3
+        <a href="BKOScreenshots/selectionList.jpg">
+        <img src="BKOScreenshots/selectionList.jpg" width="350" height="170"></a><br/>
+        Selecting which tool/distribution to boot from
       </div>
 
       <div class="screenshot">
-        Screenshot 4
+      	<a href="BKOScreenshots/selectionMirror.jpg">
+        <img src="BKOScreenshots/selectionMirror.jpg" width="350" height="170"></a><br/>
+        Finalizing mirror and other options
       </div>
 
       <div class="screenshot">
-        Screenshot 5
+      	<a href="BKOScreenshots/bootingDSL.jpg">
+        <img src="BKOScreenshots/bootingDSL.jpg" width="350" height="170"></a><br/>
+        DSL (Damm Small Linux) Booting
       </div>
+      <div class="screenshot">
+      	<a href="BKOScreenshots/runningDSL.jpg">
+        <img src="BKOScreenshots/runningDSL.jpg" width="350" height="170"></a><br/>
+        DSL Running.
+      </div>
+
     </div>
 
     <div style="width: 100%;">
@@ -211,107 +135,119 @@
       </tr>
       <tr>
         <td>
-          <ul>
-            <li>Make a bootable floppy:
+            Make a bootable floppy:
             <ul>
               <li>
                 <b>Linux:</b> Insert a floppy disk into a drive, use something like:<br>
-                dd if=gpxe.dsk of=&lt;/dev entry coresponding to your floppy drive&gt;
+                <pre>cat gpxe.dsk > /dev/fd0 </pre>
+                or
+                <pre>dd if=gpxe.dsk of=/dev/fd0 </pre>
+                where <u>fd0</u> is your floppy drive.
               </li>
               <li>
-                <b>Windows:</b> Insert a floppy into your drive, Use rawrite, do something similar to dd
+                <b>Windows:</b> Insert a floppy into your drive, Use rawrite, 
+                or <a href="http://www.chrysocome.net/dd">dd for windows</a>
               </li>
               <li>
                 <b>Mac:</b> Mac has floppy drives?!
               </li>
             </ul>
-          </ul>
+
         </td>
         <td>
-          <ul>
-            <li>Make a bootable CD:
+			Make a bootable CD:
             <ul>
               <li>
                 <b>Linux:</b> Insert a blank cd into a CD/DVD drive, use something like:<br>
-                cdrecord -sao 
+                cdrecord -sao <br/>
+                You can refer <a href="http://www.linuxjournal.com/article/8831"> this howto</a> for details.
               </li>
               <li>
-                <b>Windows:</b> Excitingly complicated instructions for windows goes here
+                <b>Windows:</b> You can use nero or window's inbuilt CD writer to burn the gpxe.iso on CD.
               </li>
               <li>
-                <b>Mac:</b> Just use the Finder to burn the ISO
+                <b>Mac:</b> Just use the Finder to burn the ISO.
               </li>
             </ul>
-          </ul>
         </td>
+        
         <td>
-          <ul>
-            <li>Make a bootable CD:
+            Make a bootable USB: <br/>
+            <b>Warning:</b> Backup your important data before using USB
             <ul>
               <li>
-                <b>Linux:</b> Insert a blank cd into a CD/DVD drive, use something like:<br>
-                cdrecord -sao 
+                <b>Linux:</b> Insert a USB disk, find it's device name of USB. Then use following command:<br>
+                <pre>cat gpxe.dsk > /dev/sdX </pre>
+                or
+                <pre>dd if=gpxe.dsk of=/dev/fd0 </pre>
+                where <u>sdX</u> is your usb drive.
               </li>
               <li>
-                <b>Windows:</b> Excitingly complicated instructions for windows goes here
+                <b>Windows:</b>You can use <a href="http://www.chrysocome.net/dd">dd for windows</a>
+                for Creating bootable USB disks.
               </li>
               <li>
-                <b>Mac:</b> Just use the Finder to burn the ISO
+                <b>Mac:</b> the <u>dd</u> command mentioned above for linux should also work for MAC.
               </li>
             </ul>
-          </ul>
         </td>
       </tr>
       <tr>
+      </tr>
         <td colspan="3">
+        We recommend creating <a href="FAQ.html#WhyBboUsb">BKO enabled USB</a>, which also allows you to store data, without wasting much 
+        space. You can refer <a href="FAQ.html#WhyBboUsb">why BKO enabled USB is better option</a>.
+	    </td>
+      <tr>
+        <td colspan="3">
+        	<b>Steps to follow</b>
           <ul>
             <li>copy it in floppy, USB or in CDROM (check download section for instructions)</li>
             <li>Make sure that you know what kind of network you have (Which entries will be needed) </li>
             <li>Boot from the media in which you had copied the gpxe Image</li>
             <li>In case of Static networking, you need to provide information about your connection,
-                but if you are having DHCP, it should work out of the box.</li>
-            <li>You will be presented with menu showing available options to boot from, select one of them.</li>
+                but if you are having DHCP, it should work out of the box.
+            </li>
+            <li>You will be presented with menu showing available options to boot from, 
+            	select one of them.
+            </li>
             <li>Your system should boot in the sytem you select</li>
-            <li>Once you are done with it, reboot the system and remvoe the media, you should get back your old system</li>
+            <li>Once you are done with it, reboot the system and remvoe the media, you should 
+            	get back your old system
+            </li>
+            <li>BKO is still under development.  If you encounter any problems anywhere, please refer
+               <a href="Troubleshooting.html">troubleshooting</a> and <a href="FAQ.html">FAQ</a> page 
+               for explanation.  If you don't find any solution to your problem, 
+               then feel free to <a href="index.html#contactus">contact us</a>.  
+            </li>
+            <li>If you have any interesting experience with BKO, then shoot an email 
+            	to <a href="index.html#contactus">us</a>
+            </li>
           </ul>
         </td>
       </tr>
     </table>
 
     <hr/>
+    <a name="bootList">
+    <p>
+      <h3>Tools and distributions available for boot on BKO</h3>
+      <ol>
+    	  <li>Damm Small Linux : Lightweight linux distribution with GUI.</li>
+    	  <li>Knoppix : Knoppix 5.0.1 English.</li>
+    	  <li>Fedora 11 Live CD : Currently only single user mode is working. (Working on complete live CD)</li>
+    	  <li></li>    	
+      </ol>
+    </p>
+
+
+    <hr/>
     <a name="contactus">
     <p>
       <h3>Contact US:</h3>
-    </p>
-    <h2>Downloads</h2>
-    <p><a href="gpxe_images/gpxe.dsk">gpxe image for floppy</a><br/> 
-      Once downloaded, you need to copy this image to floppy or USB with command
-      <pre>
-cat gpxe.dsk > /dev/fda
-      </pre>
-      Make sure that you backup any data that you have in your USB before using above command.<br/>
-      If you want to use your normal data-USB for BKO booting, and for data carrying as well, 
-      then follow <strong> <a href="USBBKO.html">HOWTO create BKO bootable USB</a> </strong> for more details.<br/>
+      You can contact us on email shindepravin AT gmail DOT com or warthog9 AT kernel DOT org.
+      You can also fire your questions on IRC #etherboot on irc.freenode.net.
     </p>
     <hr/>
-    <p><a href="gpxe_images/gpxe.iso">gpxe image for CD-ROM</a><br/></p>
-    <p><a href="gpxe_images/gpxe.usb">gpxe image for USB</a></p>
-    <p>
-      If you just want to test it, or get feel of it, then you can use it with qemu with following command.
-      <pre>
-qemu -fda gpxe.dsk
-      </pre>
-    </p>
-    <p>You can also try out PXE-Knife over HTTP with your existing pxe, following
-       is the example of using standard pxe with qemu for booting with PXE-Knife over
-       HTTP
-      <pre>
-qemu -fda gpxe.dsk -net nic -net user -bootp http://alien.doesntexist.org/pxeknife/pxelinux.0
-      </pre>
-    </p>
-    <hr/>
-    <a href="FAQ.html">FAQ</a> about BKO.
-    <p>Refer <a href="http://etherboot.org/wiki/wiki/pxeknifeoverhttp">Etherboot wiki</a> for more details</p>
-    <p>This system is based on <a href="http://pxeknife.erebor.org/">PXE-Knife</a></p>
   </body>
 </html>
