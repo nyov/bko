@@ -17,12 +17,6 @@ cd ..
 
 echo "coping the needed files..."
 
-cp httpfs/static/udhcpc mpoint/bin/
-chmod 777 mpoint/bin/udhcpc
-
-cp httpfs/static/udhcpc.sh mpoint/bin/
-chmod 777 mpoint/bin/udhcpc.sh
-
 
 cp httpfs/server/httpfs mpoint/bin/
 chmod 777 mpoint/bin/httpfs

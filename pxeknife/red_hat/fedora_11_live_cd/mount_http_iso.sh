@@ -21,9 +21,23 @@ insmod /modules/fuse.ko >/dev/null 2>&1
 
 ifconfig lo 127.0.0.1 up
 ifconfig eth0 up
-udhcpc -s /bin/udhcpc.sh  >/dev/null 2>&1 
+tempIP=$1
 
-ISO_PATH=$1
+
+myip=`echo $tempIP | cut -d: -f1`
+echo "Using ip address $myip"
+mynm=`echo $tempIP | cut -d: -f4`
+echo "Using Netmask $mynm"
+mygw=`echo $tempIP | cut -d: -f3`
+echo "Using gateway ip $mygw"
+ifconfig eth0 $myip netmask $mynm 2> /output
+echo "verify the ip address"
+ifconfig eth0
+
+echo "setting route"
+route add default gw $mygw 2> /outputroute
+
+ISO_PATH=$2
 echo "The location of fedora.iso is $ISO_PATH"
 echo "mounting CDROM"
 mkdir /iso

@@ -36,6 +36,7 @@ live_locale=""
 live_dir="LiveOS"
 overlay="off"
 HTTPFS=""
+given_ip=""
 
 # Parse kernel commandline options
 #
@@ -82,6 +83,9 @@ for o in `cat /proc/cmdline` ; do
         ;;
     check)
         check_iso=1
+        ;;
+    ip=*)
+        given_ip=${o#ip=}
         ;;
     httpfs=*)
         HTTPFS=${o#httpfs=}
@@ -357,7 +361,7 @@ if [ -z ${HTTPFS} ] ; then
     RES=$?
 else
     echo " mounting httpfs filesystem from ${HTTPFS}"
-    mount_http_iso.sh ${HTTPFS}
+    mount_http_iso.sh ${given_ip} ${HTTPFS}
     RES=$?
 fi
 

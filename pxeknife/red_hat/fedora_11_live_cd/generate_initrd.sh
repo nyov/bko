@@ -18,11 +18,6 @@ cd ..
 
 echo "coping the needed tools..."
 
-cp httpfs/static/udhcpc mpoint/bin/
-chmod 777 mpoint/bin/udhcpc
-
-cp httpfs/static/udhcpc.sh mpoint/bin/
-chmod 777 mpoint/bin/udhcpc.sh
 
 cp mount_http_iso.sh mpoint/bin/
 chmod 777 mpoint/bin/mount_http_iso.sh

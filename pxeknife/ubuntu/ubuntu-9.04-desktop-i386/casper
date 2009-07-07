@@ -225,7 +225,6 @@ do_httpfsmount() {
     rc=1
 
     echo "HTTP Boot: inserting network modules" >> /status
-#    insmod /modules/crc32c.ko >/dev/null 2>&1  
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/8390.ko  
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/mii.ko   
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/ne2k-pci.ko 
@@ -236,21 +235,31 @@ do_httpfsmount() {
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/sis900.ko 
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/via-rhine.ko 
     insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/8139too.ko   
-#    insmod /modules/af_packet.ko  
-#    insmod /modules/loop.ko >/dev/null 2>&1 
 
 	ifconfig lo 127.0.0.1 up
 	ifconfig eth0 up
-	udhcpc -s /bin/udhcpc.sh  >/dev/null 2>&1 
+    echo "The ip configuration is $ip"
+    myip=`echo $ip | cut -d: -f1`
+    echo "Using ip address $myip"
+    mynm=`echo $ip | cut -d: -f4`
+    echo "Using Netmask $mynm"
+    mygw=`echo $ip | cut -d: -f3`
+    echo "Using gateway ip $mygw"
+    ifconfig eth0 $myip netmask $mynm 2> /output
+    echo "verify the ip address"
+    ifconfig eth0
+
+    echo "setting route"
+    route add default gw $mygw 2> /outputroute
+
+
 	echo  "passed on path is ${HTTPFS}" >> status
 	ISO_PATH="${HTTPFS}"
-#	ISO_PATH="http://192.168.0.1/ubuntu-9.04-desktop-i386.iso"
 	echo "The location of ubuntu iso  is $ISO_PATH" >> status
 	echo "mounting CDROM" >> status
 	mkdir /iso
 	httpfs $ISO_PATH /iso
 	FILEPATH=`ls /iso/*.iso`
-#	FILEPATH="/iso/ubuntu-9.04-desktop-i386.iso"
 	echo  "File path is $FILEPATH" >> status
 	losetup -r /dev/loop0 $FILEPATH
 	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro

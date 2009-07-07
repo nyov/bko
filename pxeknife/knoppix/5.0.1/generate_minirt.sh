@@ -16,8 +16,6 @@ mount minirt -o loop mpoint/
 
 echo "coping the needed files..."
 cp modules/* mpoint/modules/
-cp httpfs/static/udhcpc mpoint/static/
-cp httpfs/static/udhcpc.sh mpoint/static/
 cp busybox mpoint/static/
 
 cp httpfs/server/httpfs mpoint/static/
@@ -50,6 +48,7 @@ ln -s busybox dmesg
 ln -s busybox dd 
 ln -s busybox mount
 ln -s busybox umount
+ln -s busybox cut 
 
 cd ..
 cd ..
