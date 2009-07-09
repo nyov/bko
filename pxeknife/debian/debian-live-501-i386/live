@@ -84,6 +84,7 @@ Arguments ()
 			httpfs=*)
 				HTTPFS="${ARGUMENT#httpfs=}"
 				export HTTPFS
+                echo "found argument httpfs here ${HTTPFS}"
 				;;
 
 			hostname=*)
@@ -726,12 +727,15 @@ do_netmount ()
 		NFSROOT=${ROOTSERVER}:${ROOTPATH}
 	fi
     
-    echo "I am here 729"
+    echo "I am here 729 and httpfs is --- ${HTTPFS} ---"
+
 	if ( [ -n "${FETCH}" ] || [ -n "${HTTPFS}" ] || [ -n "${FTPFS}" ] ) && do_httpmount
 	then
+        echo "do_httpmount successful"
 		rc=0
 		return ${rc}
 	fi
+    echo "do_httpmount failed..."
 
 	if [ "${NFSROOT#*:}" = "${NFSROOT}" ] && [ "$NETBOOT" != "cifs" ]
 	then
@@ -761,11 +765,31 @@ do_httpmount ()
 	mount -t ramfs ram "${mountpoint}"
 	mkdir -p "${dest}"
 
+    echo "inside httpmount"
 	for webfile in HTTPFS FTPFS FETCH
 	do
 		url="$(eval echo \"\$\{${webfile}\}\")"
 		extension="$(echo "${url}" | sed 's/\(.*\)\.\(.*\)/\2/')"
 
+        if [ "${extension}" = "iso" ] 
+        then
+            echo "Mounting iso"
+       		modprobe fuse
+            modprobe /modules/loop.ko
+            mknod /dev/loop0 b 7 0
+            mkdir /dev/iso
+            echo "trying httpfs with ${url} and ${mountpoint}"
+			httpfs "${url}" /dev/iso 
+	        FILEPATH=`ls /dev/iso/*.iso`
+	        echo  "File path is $FILEPATH" 
+	        losetup /dev/loop0 $FILEPATH
+	        mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+            return 0
+        else
+            echo "not BKO http mount, proceding in normal way"
+        fi
+
+        echo "webfile is $webfile and url is $url" 
 		if [ -n "$url" ]
 		then
 			case "${extension}" in
@@ -794,6 +818,7 @@ do_httpmount ()
 							FUSE_MOUNT="httpfs"
 						fi
 						modprobe fuse
+                        echo "trying $$FUSE_MOUNT with ${url} and ${dest}"
 						$FUSE_MOUNT "${url}" "${dest}"
 					fi
 					[ ${?} -eq 0 ] && rc=0
@@ -801,6 +826,16 @@ do_httpmount ()
 					break
 					;;
 
+				iso|ISO|Iso)
+                    echo "Mounting iso"
+					FUSE_MOUNT="httpfs"
+					modprobe fuse
+                    echo "trying $$FUSE_MOUNT with ${url} and ${dest}"
+					$FUSE_MOUNT "${url}" "${dest}"
+                    rc=${?}
+
+                  break 
+                  ;;
 				*)
 					log_begin_msg "Unrecognized archive extension for ${url}"
 					;;

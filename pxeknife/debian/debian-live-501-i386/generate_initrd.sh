@@ -29,6 +29,8 @@ chmod 0777 mpoint/init
 cp live mpoint/scripts/
 chmod 0777 mpoint/scripts/live
 
+mkdir mpoint/modules
+cp modules/* mpoint/modules/
 
 cd mpoint
 echo "creating initrd from new system filesystem"
