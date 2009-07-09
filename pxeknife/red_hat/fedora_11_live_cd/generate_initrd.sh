@@ -16,7 +16,7 @@ cd mpoint
 cpio -ivu --no-absolute-filename  < ../initrd0
 cd ..
 
-echo "coping the needed tools..."
+echo "copying the needed tools..."
 
 
 cp mount_http_iso.sh mpoint/bin/
@@ -36,6 +36,9 @@ chmod 0777 mpoint/init
 
 cp real-init mpoint/sbin/
 chmod 0777 mpoint/sbin/real-init 
+
+cp run-init mpoint/sbin/
+chmod 0777 mpoint/sbin/run-init 
 
 echo "Creating soft links"
 cd mpoint/bin

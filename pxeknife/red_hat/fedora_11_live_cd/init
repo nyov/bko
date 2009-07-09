@@ -26,7 +26,5 @@ mknod /dev/tty2 c 4 2
 
 echo "Running plymouthd"
 #daemonize --ignore-missing /bin/plymouthd
-
-echo "executing real init now"
+echo "done with it"
 exec sbin/real-init
-echo "execution of real init is failed :-("

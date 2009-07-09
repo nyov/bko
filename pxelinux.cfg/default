@@ -1,7 +1,7 @@
 DEFAULT menu.c32
     PROMPT 0
     TIMEOUT 100 #this is optional - will start the default after 10 seconds
-    MENU TITLE --== Main Menu ==--
+    MENU TITLE --== Welcome to BKO ==--
 
     #this allows you to exit the pxe stack and pass booting to the local system
     LABEL bootlocal
