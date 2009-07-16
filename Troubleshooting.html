@@ -55,56 +55,222 @@
   
   We have tried to cover most of the problems that user may face in <a href="faq.html">FAQ</a> page.
   <br/>
-  <a name="customizedGpxe">
-  <h2>Customized gpxe images</h2>
+<ul>
+<li><a href="#customizedGpxe"> Creating customized gpxe images</a><br/><br/></li>
+<li><a href="#BKODhcp"> Script for DHCP networking</a><br/><br/></li>
+<li><a href="#BKOStatic"> Script for static networking at boot time</a><br/><br/></li>
+<li><a href="#BKOStaticCompile"> script for network configuration at compile time.</a><br/><br/></li>
+</ul>
+
+<a id="customizedGpxe"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Creating customized gpxe images
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p>
   You can create your own customized gpxe images tailered for your network card and
+
    also add embedded script
+
   which will use BKO for booting.  
+
   This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
+
   embedd any gpxe script.
+
    Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
+
   BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
+
   You can follow the <u>Configure</u> option which will let you add your own gpxe script.
-  
+
   We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
-  <br/>
-  <b>Script for DHCP networking</b>
-<pre>
-#!gpxe
+
+  </p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="BKODhcp"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Script for DHCP networking
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p> This gpxe script make sure that machine will boot with DHCP networking.	
+<pre>#!gpxe
+
 echo "Hi, We will be using PXEKnife from URL http://rom.etherboot.org/BKO"
+
 echo "It is assumed that you have dhcp networking"
+
 ifopen net0
+
 dhcp net0
+
 set 209:string pxelinux.cfg/default
+
 set 210:string http://rom.etherboot.org/BKO/
+
 echo "Here we go"
+
 chain http://rom.etherboot.org/BKO/pxelinux.0
+
 echo "PxeKnife booting cancelled, using local disk instead.."
+
  </pre>  
-  <hr/>
-  <br/>
-  <b>Script for static networking</b>
-  <pre>
-#!gpxe
-echo "As you dont have DHCP, you need to give details about network configuration"
-echo "Soon, you will be presented with interface to provide details about network configuration"
-echo "Please provide, IP address, Netmask, Gateway and Router"
+
+</p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="BKOStatic"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Script for static networking at boot time
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> Following script provides you an interface at boot time, where you can provide the network configuration. 
+<pre>#!gpxe
+
+echo As you dont have DHCP, you need to give details about network configuration
+
+echo Soon, you will be presented with interface to provide details about network configuration
+
+echo Please provide, IP address, Netmask, Gateway and Router
+
 ifopen net0
+
 set net0/ip 10.0.2.15
+
 set net0/netmask 255.255.255.0
+
 set net0/gateway 10.0.2.2
+
 set net0/dns 10.0.2.3
+
 sleep 3
-config
+
+config net0
+
 set 209:string pxelinux.cfg/default
+
 set 210:string http://rom.etherboot.org/BKO/
+
 echo "Here we go"
+
 chain http://rom.etherboot.org/BKO/pxelinux.0
-echo "PxeKnife booting cancelled, using local disk instead.."
+
+echo PxeKnife booting cancelled, using local disk instead..
+
 </pre>
- <hr/>
-  
-  <hr/>
-  </body>
+
+</p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="BKOStaticCompile"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> script for network configuration at compile time.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p>
+You can also provide your network configuration at pxe compilation time. This way
+
+it will not prompt the user at boot time.
+
+<pre>#!gpxe
+
+ifopen net0
+
+set net0/ip 10.0.2.15
+
+set net0/netmask 255.255.255.0
+
+set net0/gateway 10.0.2.2
+
+set net0/dns 10.0.2.3
+
+set 209:string pxelinux.cfg/default
+
+set 210:string http://rom.etherboot.org/BKO/
+
+echo "Here we go"
+
+chain http://rom.etherboot.org/BKO/pxelinux.0
+
+echo PxeKnife booting cancelled, using local disk instead..
+
+</pre>
+
+If you compare this script with above, we have just removed the <italic>config net0</italic> which 
+
+is responsible for providing you with user interface.
+
+<p>You can modify above scripts to suit your needs</p>
+
+</p>
+
+</div>
+</td>
+</tr>
+</table>
+</div><hr/>
+</body>
 </html>
-    
