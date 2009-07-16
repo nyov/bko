@@ -32,6 +32,7 @@ chmod 0777 mpoint/scripts/casper
 
 
 cd mpoint
+#echo 'no_static_dev=1' >> etc/udev/udev.conf
 echo "creating initrd from new system filesystem"
 
 echo "Compressing the filesystem"

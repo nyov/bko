@@ -255,20 +255,26 @@ do_httpfsmount() {
 
 	echo  "passed on path is ${HTTPFS}" >> status
 	ISO_PATH="${HTTPFS}"
-	echo "The location of ubuntu iso  is $ISO_PATH" >> status
-	echo "mounting CDROM" >> status
-	mkdir /iso
+	echo "The location of ubuntu iso  is $ISO_PATH" >> /output
+	echo "mounting CDROM" >> /output
+
+
+    mkdir /iso
 	httpfs $ISO_PATH /iso
-	FILEPATH=`ls /iso/*.iso`
-	echo  "File path is $FILEPATH" >> status
+	FILEPATH=`ls /iso/*`
+	echo  "File path is $FILEPATH\n" >> /output
 	losetup -r /dev/loop0 $FILEPATH
 	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
 	
 	
+#    mkdir ${mountpoint}/casper
+#	httpfs $ISO_PATH ${mountpoint}/casper/
+##	mount $FILEPATH -t squashfs "${mountpoint}" -o loop
+
 	# test if knoppix is there
 	if test -d /cdrom/casper
 	then
-		echo "successfully mounted the Image" >> success
+		echo "successfully mounted the Image" >> /output
 		return 0
 	fi
 	return ${rc}

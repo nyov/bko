@@ -765,7 +765,7 @@ do_httpmount ()
 	mount -t ramfs ram "${mountpoint}"
 	mkdir -p "${dest}"
 
-    echo "inside httpmount"
+    echo "inside httpmount" >> /mylogs
 	for webfile in HTTPFS FTPFS FETCH
 	do
 		url="$(eval echo \"\$\{${webfile}\}\")"
@@ -790,6 +790,7 @@ do_httpmount ()
         fi
 
         echo "webfile is $webfile and url is $url" 
+        echo "webfile is $webfile and url is $url" >> /mylogs
 		if [ -n "$url" ]
 		then
 			case "${extension}" in
@@ -818,8 +819,9 @@ do_httpmount ()
 							FUSE_MOUNT="httpfs"
 						fi
 						modprobe fuse
-                        echo "trying $$FUSE_MOUNT with ${url} and ${dest}"
+                        echo "trying $FUSE_MOUNT with ${url} and ${dest}"
 						$FUSE_MOUNT "${url}" "${dest}"
+                        echo "mount done "
 					fi
 					[ ${?} -eq 0 ] && rc=0
 					[ "${extension}" = "tgz" ] && live_dest="ram"

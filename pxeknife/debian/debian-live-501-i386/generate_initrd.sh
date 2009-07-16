@@ -33,6 +33,7 @@ mkdir mpoint/modules
 cp modules/* mpoint/modules/
 
 cd mpoint
+#echo 'no_static_dev=1' >> etc/udev/udev.conf
 echo "creating initrd from new system filesystem"
 
 echo "Compressing the filesystem"
