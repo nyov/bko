@@ -5,13 +5,20 @@ DEFAULT menu.c32
 
     #this allows you to exit the pxe stack and pass booting to the local system
     LABEL bootlocal
-        MENU LABEL Local Boot (Boot your existing OS)
+        MENU LABEL Local Boot 
+        TEXT HELP
+        Boot your existing OS from local hard-drive
+        ENDTEXT
+
         localboot 0
 
     #load BKO 
     LABEL bko 
         MENU DEFAULT
-        MENU LABEL BKO (boot.kernel.org) --->
+        MENU LABEL BKO --->
+        TEXT HELP
+        boot.kernel.org 
+        ENDTEXT
         kernel menu.c32
         append pxeknife/pxeknife.conf
 

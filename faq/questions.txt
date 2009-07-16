@@ -14,6 +14,12 @@
 	  You can do automated mass booting and automated installation for large number of workstations.
 	  This can be done by adding specific embedded script to BKO (or by having your private BKO server).
 	</li>
+      <li>
+      	BKO can be used to boot diskless machines. Our customization section will let you to download <italic>.rom</italic> image
+      	that can be burned on BIOS. This will enable machines without harddisk's can boot in any OS available on BKO.
+      	You can choose to either burn on BIOS, or use floppy image, CDROM image or USB image.  There is
+      	no requirement for having harddisk.
+      </li>
 	<li>
           Other than these, if you find any other use for BKO, then please share with us. we will be glad to hear from you.
 	</li>
@@ -75,7 +81,7 @@ Q. Why should I create BKO enabled USB?
 A.  <p>
     <ul>
       <li>
-        Creating BKO enabled USB is one-time job, once it is created, you need not worry about upgradation, as it is taken care by BKO servers.
+        Creating BKO enabled USB is one-time job, once it is created, you need not worry about upgredation, as it is taken care by BKO servers.
 	It will always let you boot with latest distributions and tools available on BKO.
       </li>
       <li>

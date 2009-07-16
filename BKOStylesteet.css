@@ -1,9 +1,4 @@
 
-	body {
-  		margin-left: 10%; margin-right: 10%;
-  		color: black; background: white;
-  		
-	}
 
 
    download3 {
@@ -111,3 +106,34 @@
       clear: both;
       text-align: center;
     }
+
+	body{margin:5%;padding:0px;background:#fff;color:#000;font-family:Sans-Serif;}
+	h1{padding:4px;text-align:center;border:4px double #000;background:#ffd;}
+	h2{padding:4px;border:1px solid #888;background:#ffd;}
+	table{border:0;margin-left:auto;margin-right:auto;margin-bottom:10px;}
+	th{background:#bbd;padding:2px;}
+	td{padding:2px;border-bottom:1px dotted #bbd;}
+	img{border:0;vertical-align: middle;}
+	blockquote{font-weight:bold;font-size:80%;}
+	.headtext{color:#889;text-align:center;}
+	#directory{text-align:center;margin-left:auto;margin-right:auto;}
+	#bandwidth{color:#889;text-align:center;font-size:75%;}
+	.bandwidth{color:#889;text-align:center;font-size:75%;}
+	#news{color:#003;}
+	#sponsors{text-align:center;margin-left:auto;margin-right:auto;}
+	#trademark{font-size:75%;text-align:center;}
+	#versions{text-align:center;}
+	.kver{text-align:center;color:#004;font-size:90%;}
+	.pvkey{color:#400;font-size:66%;}
+	p{margin:10px;}
+	.qbox{padding:4px;border:1px solid #888;background:#ffd;text-align:left;}
+	.question{text-align:center;font-size:50px;vertical-align:top;font-weight:bold;padding-right:5px;}
+	.answer{padding-left:7px;text-align:center;float:left;font-size:50px;vertical-align:top;font-weight:bold;padding-right:5px;}
+	td.qmrk{padding:0px;border-bottom:0px;vertical-align:top;}
+	td.amrk{padding:0px;border-bottom:0px;vertical-align:top;}
+	td.qtd{padding:0px;border-bottom:0px;}
+	td.atd{padding:0px;border-bottom:0px;}
+	.qtable{border:0;margin-left:5px;}
+	.atable{border:0;margin-left:5px;}
+	.responsible{font-size:smaller;color:#889;text-align:center;}
+
