@@ -1,0 +1,357 @@
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="BKOStylesteet.css" />
+ 
+    <title>boot.kernel.org(BKO)</title>
+  </head>
+  <body>
+    <div id="logo">
+    <table border="0" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td valign="middle" align="center">
+        <img src="boot.png" width="367" height="261">
+      </td>
+      <td valign="middle" align="left">
+        <span id="logotext">
+        <p>
+        boot.kernel.org(BKO) : Booting your machine over HTTP
+        </p>
+        </span>
+      </td>
+    </tr>
+    </table>
+    </div>
+    <div id="menubox">
+
+      <span id="menulink">
+        <a href="index.html">Home</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#download">Downloads</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#screenshots">Screenshots</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#howtouse">How to Use</a>
+      </span>
+      <span id="menulink">
+        Developer
+      </span>
+      <span id="menuact">
+        FAQ      
+      </span>
+      <span id="menulink">
+      <a href="Troubleshooting.html">Troubleshooting</a>
+      </span>
+      <span id="menulink">
+        <a href="index.html#contactus">Contact US</a>
+      </span>
+    </div>
+
+    <center><h1>FAQ for BKO</h1></center>
+<ul>
+<li><a href="#whySlow"> Why it is slow?</a><br/><br/></li>
+<li><a href="#privacySecurity"> What about my privacy and security?</a><br/><br/></li>
+<li><a href="#WhyBboUsb"> Why should I create BKO enabled USB?</a><br/><br/></li>
+<li><a href="#firewallBKO"> I am behind firewall, Will BKO boot me?</a><br/><br/></li>
+<li><a href="#testBKO"> I just want to test BKO, without rebooting the system, Can I do it?</a><br/><br/></li>
+</ul>
+
+ Q. When should I use BKO for booting?
+
+ A.   <p>
+
+      We envision following usage for BKO
+
+      <ol>
+
+        <li>
+
+          To experiment with different distributions available on this site, and install one which you like most.
+
+	</li>
+
+	<li>
+
+          To save your data/system when somehow your system is messed up and you want to recover it. You can use
+
+	  many of the tools available on BKO to rescue yourself.
+
+	</li>
+
+	<li>
+
+	  You can do automated mass booting and automated installation for large number of workstations.
+
+	  This can be done by adding specific embedded script to BKO (or by having your private BKO server).
+
+	</li>
+
+	<li>
+
+          Other than these, if you find any other use for BKO, then please share with us. we will be glad to hear from you.
+
+	</li>
+
+      </ol>
+
+    </p>
+
+
+
+<a id="whySlow"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Why it is slow?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply">  <p>
+    <ul>
+
+      <li>
+
+	Your entire Operating System is fetched over Internet from <i>far far away server</i> and this takes time.
+
+      </li>
+
+      <li>
+
+	The delay is mostly in booting process, once the system is booted, it should work faster.
+
+      </li>
+
+      <li>
+
+        We recommend you to choose nearby mirror, which will give you <strong>much</strong> better performance.
+
+      </li>
+
+      <li>
+
+        In most of the usage scinario's mentioned above, some delay is tolerable.
+
+      </li>
+
+      <li>
+
+        We recommend you to not to run your daily system from BKO, Please install one of the system available on BKO.
+
+      </li>
+
+    </ul>
+
+  </p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="privacySecurity"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> What about my privacy and security?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply">  <p>
+    We understand your concern, following clarifications should make matter clear for you. You are free to make any decision after that.
+
+    <ul>
+
+      <li>
+
+        Your machine will only download data from server and will never send to the server. So you need not worry about privacy.
+
+      </li>
+
+      <li>
+
+        We provide unmodified ISO's of all distributions, You are always welcome to verify the checksum with actual distribution provider.
+
+      </li>
+
+      <li>
+
+        Even better, you can provide the path of the ISO directly, and your machine will use only that ISO.
+
+      </li>
+
+      <li>
+
+        We only modify InitRAMFS, which is needed to boot over HTTPFS. This modified InitRAMFS is deleted once booting is complete.
+
+	Hence, if you trust the ISO used, you can trust the system.
+
+      </li>
+
+      <li>
+
+        This is Open Source project, you are welcome to review the code.
+
+      </li>
+
+      <li>
+
+        We also plan to support HTTPS for avoiding any data-tempering on the way.
+
+      </li>
+
+    </ul>
+
+  </p>
+
+
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="WhyBboUsb"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Why should I create BKO enabled USB?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply">  <p>
+    <ul>
+
+      <li>
+
+        Creating BKO enabled USB is one-time job, once it is created, you need not worry about upgradation, as it is taken care by BKO servers.
+
+	It will always let you boot with latest distributions and tools available on BKO.
+
+      </li>
+
+      <li>
+
+        You do not waste your USB as there is way to create BKO enabled USB which can be used as normal data storage device.
+
+	As BKO takes less than 1 MB of space, you have almost entire USB for data storage.
+
+      </li>
+
+      <li>
+
+        BKO enabled USB can be used to boot (almost) any system as long as there is Internet connectivity.<br/>
+
+	It is worth considering this ability against 1MB of space and few minutes for creation of BKO enabled USB.
+
+      </li>
+
+    </ul>
+
+  </p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="firewallBKO"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> I am behind firewall, Will BKO boot me?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p>
+    BKO is based on HTTPFS and it uses only valid HTTP requests.  It means, if you have HTTP access, you can boot with BKO.<br/>
+
+    Only problem that may occur is if you are behind HTTP proxy.  We plan to add support for HTTP proxy
+
+    in near future. Stay tuned till then.
+
+  </p>
+
+</li>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="testBKO"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> I just want to test BKO, without rebooting the system, Can I do it?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply">  <p>
+		  If you want to just test our solution without rebooting, then we will recommend you
+
+		  to download the floppy image of gpxe, and use qemu or other virtualization
+
+		  solutions to boot from gpxe you downloaded.  In case of qemu, you can use following command:
+
+		  <pre>	qemu -fda gpxe.dsk</pre>
+
+  </p>
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><hr/>
+</body>
+</html>
