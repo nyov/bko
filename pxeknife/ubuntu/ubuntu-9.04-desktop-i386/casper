@@ -259,16 +259,22 @@ do_httpfsmount() {
 	echo "mounting CDROM" >> /output
 
 
-    mkdir /iso
-	httpfs $ISO_PATH /iso
-	FILEPATH=`ls /iso/*`
-	echo  "File path is $FILEPATH\n" >> /output
-	losetup -r /dev/loop0 $FILEPATH
-	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+#    mkdir /iso
+#	httpfs $ISO_PATH /iso
+#	FILEPATH=`ls /iso/*`
+#	echo  "File path is $FILEPATH\n" >> /output
+#	losetup -r /dev/loop0 $FILEPATH
+#	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
 	
 	
-#    mkdir ${mountpoint}/casper
-#	httpfs $ISO_PATH ${mountpoint}/casper/
+    mkdir ${mountpoint}/casper
+    mkdir ${rootmnt}/tt
+    mv /bin/httpfs ${rootmnt}/tt
+    mv /bin/fusermount ${rootmnt}/tt
+
+
+    export PATH=${rootmnt}/tt/:$PATH
+	${rootmnt}/tt/httpfs $ISO_PATH ${mountpoint}/casper/
 ##	mount $FILEPATH -t squashfs "${mountpoint}" -o loop
 
 	# test if knoppix is there

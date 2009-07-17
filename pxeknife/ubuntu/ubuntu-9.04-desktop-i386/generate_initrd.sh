@@ -17,6 +17,8 @@ cd ..
 
 echo "coping the needed files..."
 
+cp run-init mpoint/bin/
+chmod 777 mpoint/bin/run-init
 
 cp httpfs/server/httpfs mpoint/bin/
 chmod 777 mpoint/bin/httpfs

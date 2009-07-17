@@ -727,7 +727,6 @@ do_netmount ()
 		NFSROOT=${ROOTSERVER}:${ROOTPATH}
 	fi
     
-    echo "I am here 729 and httpfs is --- ${HTTPFS} ---"
 
 	if ( [ -n "${FETCH}" ] || [ -n "${HTTPFS}" ] || [ -n "${FTPFS}" ] ) && do_httpmount
 	then
@@ -775,14 +774,14 @@ do_httpmount ()
         then
             echo "Mounting iso"
        		modprobe fuse
-            modprobe /modules/loop.ko
-            mknod /dev/loop0 b 7 0
-            mkdir /dev/iso
+            modprobe loop
+            mknod "${rootmnt}/dev/loop0" b 7 0
+	        mkdir -p "${rootmnt}/iso"
             echo "trying httpfs with ${url} and ${mountpoint}"
-			httpfs "${url}" /dev/iso 
-	        FILEPATH=`ls /dev/iso/*.iso`
+			httpfs "${url}" "${rootmnt}/iso" 
+	        FILEPATH=`ls "${rootmnt}"/iso/*.iso`
 	        echo  "File path is $FILEPATH" 
-	        losetup /dev/loop0 $FILEPATH
+#	        losetup "${rootmnt}/dev/loop0" $FILEPATH
 	        mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
             return 0
         else
