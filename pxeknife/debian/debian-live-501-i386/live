@@ -781,8 +781,17 @@ do_httpmount ()
 			httpfs "${url}" "${rootmnt}/iso" 
 	        FILEPATH=`ls "${rootmnt}"/iso/*.iso`
 	        echo  "File path is $FILEPATH" 
-#	        losetup "${rootmnt}/dev/loop0" $FILEPATH
+	        losetup "${rootmnt}/dev/loop0" $FILEPATH
 	        mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+            
+            modprobe iscsi_tcp
+            modprobe ib_iser
+            mkdir /var/run
+#            mkdir /etc/iscsi/nodes
+#            /sbin/iscsid
+#            iscsiadm -m discovery -t st -p 192.168.0.1
+            
+
             return 0
         else
             echo "not BKO http mount, proceding in normal way"

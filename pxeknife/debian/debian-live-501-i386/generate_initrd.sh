@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #cleanup the old mess
 echo "Removing the old files"
@@ -11,7 +12,7 @@ gunzip initrd.gz
 echo "extracting filesystem filesystem"
 mkdir mpoint
 cd mpoint 
-cpio -ivu --no-absolute-filename  < ../initrd
+cpio -ivu --no-absolute-filename  < ../initrd 2> /dev/null
 cd ..
 
 echo "coping the needed files..."
@@ -19,6 +20,17 @@ echo "coping the needed files..."
 
 cp run-init mpoint/bin/
 chmod 777 mpoint/bin/run-init
+
+echo "copying iscsi related files..."
+mkdir mpoint/etc/iscsi
+cp iscsi/iscsid.conf mpoint/etc/iscsi/
+cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
+cp iscsi/tools/* mpoint/sbin/
+cp strace mpoint/sbin/
+cp passwd mpoint/etc/
+cp group mpoint/etc/
+cp a.out mpoint/bin/
+
 
 cp httpfs/server/httpfs mpoint/bin/
 chmod 777 mpoint/bin/httpfs

@@ -34,20 +34,23 @@ ifconfig eth0 $myip netmask $mynm 2> /output
 echo "verify the ip address"
 ifconfig eth0
 
+insmod /modules/sunrpc.ko
+insmod /modules/lockd.ko
+insmod /modules/auth_rpcgss.ko
+insmod /modules/nfs_acl.ko
+insmod /modules/nfs.ko
+
 echo "setting route"
 route add default gw $mygw 2> /outputroute
 
-ISO_PATH=$2
-echo "The location of fedora.iso is $ISO_PATH"
-echo "The location of fedora.iso is $ISO_PATH\n" >> /output
-echo "" >> /output
-echo "mounting CDROM"
+NFS_PATH=$2
+echo "The NFS mount location is $NFS_PATH"
+echo "mounting NFS"
 mkdir /iso
-echo "httpfs $ISO_PATH /iso"
-mknod /dev/fuse c 10 229
-httpfs "$ISO_PATH" /iso
+echo "nfs mounting $NFS_PATH /iso"
+mount "$NFS_PATH" /iso -o nolock
     
-FILEPATH=`ls /iso/*.iso`
+FILEPATH="/iso/Fedora-11-i686-Live.iso"
 mount -t iso9660 $FILEPATH /sysroot -o loop -o ro
 echo "FILEPATH is $FILEPATH and URL is $ISO_PATH"
 

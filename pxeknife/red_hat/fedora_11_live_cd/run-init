@@ -1,0 +1,9 @@
+#!/sbin/nash
+setquiet
+echo "Doing setuproot"
+setuproot
+echo "Loading policy"
+loadpolicy
+echo "Switching to new root..."
+plymouth --newroot=/sysroot
+switchroot

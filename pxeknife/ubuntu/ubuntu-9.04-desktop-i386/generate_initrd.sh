@@ -7,15 +7,17 @@ rm -rf initrd.gz initrd mpoint
 # create a copy of image to modify
 cp initrd.gz_orig initrd.gz
 gunzip initrd.gz
-mkdir mpoint
 
 echo "extracting filesystem filesystem"
 mkdir mpoint
 cd mpoint 
-cpio -ivu --no-absolute-filename  < ../initrd
+cpio -ivu --no-absolute-filename  < ../initrd 2> /dev/null
 cd ..
 
 echo "coping the needed files..."
+
+#rm mpoint/lib/modules/2.6.28-11-generic/kernel/ubuntu/squashfs/squashfs.ko
+#cp squashfs.ko mpoint/lib/modules/2.6.28-11-generic/kernel/ubuntu/squashfs/
 
 cp run-init mpoint/bin/
 chmod 777 mpoint/bin/run-init

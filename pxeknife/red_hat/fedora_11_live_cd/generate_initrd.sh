@@ -13,20 +13,25 @@ mkdir mpoint
 
 echo "extracting filesystem filesystem"
 cd mpoint 
-cpio -ivu --no-absolute-filename  < ../initrd0
+cpio -ivu --no-absolute-filename  < ../initrd0 2> /dev/null
+
 cd ..
 
 echo "copying the needed tools..."
 
 
 cp mount_http_iso.sh mpoint/bin/
+cp mount_nfs_iso.sh mpoint/bin/
 chmod 777 mpoint/bin/mount_http_iso.sh
+chmod 777 mpoint/bin/mount_nfs_iso.sh
 
 cp httpfs/server/httpfs mpoint/bin/
 chmod 777 mpoint/bin/httpfs
 
 cp httpfs/server/fusermount mpoint/bin/
 chmod 777 mpoint/bin/fusermount
+
+cp mount.nfs mpoint/sbin/
 
 cp busybox mpoint/bin/
 chmod 777 mpoint/bin/busybox

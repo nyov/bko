@@ -87,6 +87,9 @@ for o in `cat /proc/cmdline` ; do
     ip=*)
         given_ip=${o#ip=}
         ;;
+    nfs=*)
+        NFS=${o#nfs=}
+        ;;
     httpfs=*)
         HTTPFS=${o#httpfs=}
         ;;
@@ -356,11 +359,20 @@ else
 fi
 
 if [ -z ${HTTPFS} ] ; then
-    echo " no httpfs provided, booting normal filesystem"
-    mount -n -t $rootfstype $mountoptions $thingtomount /sysroot
-    RES=$?
+    if [ -z ${NFS} ] ; then
+        echo " no httpfs and nfs provided, booting normal filesystem"
+        mount -n -t $rootfstype $mountoptions $thingtomount /sysroot
+        RES=$?
+    else
+        echo " mounting httpfs filesystem from ${HTTPFS}"
+        mount_nfs_iso.sh ${given_ip} ${NFS}
+        RES=$?
+
+    fi
 else
     echo " mounting httpfs filesystem from ${HTTPFS}"
+    echo " mounting httpfs filesystem from ${HTTPFS}" > /output
+    echo "\n" > /output
     mount_http_iso.sh ${given_ip} ${HTTPFS}
     RES=$?
 fi
