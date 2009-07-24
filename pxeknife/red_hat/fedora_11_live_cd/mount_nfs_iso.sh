@@ -46,14 +46,18 @@ route add default gw $mygw 2> /outputroute
 NFS_PATH=$2
 echo "The NFS mount location is $NFS_PATH"
 echo "mounting NFS"
+
+# mounting ISO
 mkdir /iso
 echo "nfs mounting $NFS_PATH /iso"
 mount "$NFS_PATH" /iso -o nolock
-    
 FILEPATH="/iso/Fedora-11-i686-Live.iso"
 mount -t iso9660 $FILEPATH /sysroot -o loop -o ro
 echo "FILEPATH is $FILEPATH and URL is $ISO_PATH"
 
+
+# mounting the squashfs directly
+# mount "$NFS_PATH" /sysroot -o nolock
 
 # test if fedora is there
 if test -f /sysroot/LiveOS/squashfs.img

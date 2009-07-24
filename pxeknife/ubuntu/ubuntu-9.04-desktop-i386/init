@@ -131,6 +131,9 @@ for x in $(cat /proc/cmdline); do
 	httpfs=*)
 		HTTPFS="${x#httpfs=}"
 		;;
+	iscsifs=*)
+		ISCSIFS="${x#iscsifs=}"
+		;;
 	netboot=*)
 		NETBOOT="${x#netboot=}"
 		;;

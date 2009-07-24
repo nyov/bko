@@ -24,7 +24,7 @@ mknod /dev/tty0 c 4 0
 mknod /dev/tty1 c 4 1
 mknod /dev/tty2 c 4 2
 
-echo "Running plymouthd"
+#echo "Running plymouthd"
 #daemonize --ignore-missing /bin/plymouthd
-echo "done with it"
+#echo "done with it"
 exec sbin/real-init

@@ -26,10 +26,9 @@ mkdir mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
-cp strace mpoint/sbin/
-cp passwd mpoint/etc/
-cp group mpoint/etc/
-cp a.out mpoint/bin/
+
+mkdir mpoint/modules
+cp modules/* mpoint/modules/
 
 
 cp httpfs/server/httpfs mpoint/bin/

@@ -87,6 +87,20 @@ Arguments ()
                 echo "found argument httpfs here ${HTTPFS}"
 				;;
 
+			iscsifs=*)
+				ISCSIFS="${ARGUMENT#iscsifs=}"
+				export ISCSIFS
+                echo "found argument iscsifs here ${ISCSIFS}"
+				;;
+
+
+			target=*)
+				TARGET="${ARGUMENT#target=}"
+				export TARGET 
+                echo "found argument target here ${TARGET}"
+				;;
+
+
 			hostname=*)
 				HOSTNAME="${ARGUMENT#hostname=}"
 				LIVECONF="changed"
@@ -728,6 +742,16 @@ do_netmount ()
 	fi
     
 
+	if ( [ -n "${ISCSIFS}" ] ) && do_iscsimount
+	then
+        echo "do_iscsimount successful"
+		rc=0
+		return ${rc}
+	fi
+    echo "do_iscsimount failed..."
+
+
+
 	if ( [ -n "${FETCH}" ] || [ -n "${HTTPFS}" ] || [ -n "${FTPFS}" ] ) && do_httpmount
 	then
         echo "do_httpmount successful"
@@ -757,6 +781,30 @@ do_netmount ()
 	return ${rc}
 }
 
+do_iscsimount ()
+{
+	rc=1
+	dest="${mountpoint}/${LIVE_MEDIA_PATH}"
+	mount -t ramfs ram "${mountpoint}"
+	mkdir -p "${dest}"
+
+    echo "inside iscsimount" 
+            
+    insmod /modules/libcrc32c.ko
+    insmod /modules/crc32c.ko
+    modprobe iscsi_tcp
+    modprobe ib_iser
+    mkdir /var/run
+    /sbin/iscsid
+    iscsiadm -m discovery -t st -p "${ISCSIFS}"
+    targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
+    iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
+    sleep 2
+    mount -t iso9660 /dev/sda "${mountpoint}"
+    rc=${?}
+    return $rc
+}
+
 do_httpmount ()
 {
 	rc=1
@@ -764,7 +812,7 @@ do_httpmount ()
 	mount -t ramfs ram "${mountpoint}"
 	mkdir -p "${dest}"
 
-    echo "inside httpmount" >> /mylogs
+    echo "inside httpmount" 
 	for webfile in HTTPFS FTPFS FETCH
 	do
 		url="$(eval echo \"\$\{${webfile}\}\")"
@@ -783,16 +831,8 @@ do_httpmount ()
 	        echo  "File path is $FILEPATH" 
 	        losetup "${rootmnt}/dev/loop0" $FILEPATH
 	        mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
-            
-            modprobe iscsi_tcp
-            modprobe ib_iser
-            mkdir /var/run
-#            mkdir /etc/iscsi/nodes
-#            /sbin/iscsid
-#            iscsiadm -m discovery -t st -p 192.168.0.1
-            
-
-            return 0
+            rc=${?}
+            return $rc
         else
             echo "not BKO http mount, proceding in normal way"
         fi

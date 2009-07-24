@@ -3,7 +3,7 @@
 echo "ok, inside real init"
 emergency_shell()
 {
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "Bug in initramfs /init detected. Dropping to a shell. Good luck!"
     echo
     bash < /dev/console
@@ -225,7 +225,7 @@ echo "ACTION==\"add\", SUBSYSTEM==\"scsi_device\", SYSFS{type}==\"0|7|14\", RUN+
 echo "ACTION==\"add\", SUBSYSTEM==\"scsi_device\", SYSFS{type}==\"[45]\", RUN+=\"/sbin/modprobe sr_mod\"" >> /etc/udev/rules.d/10-modprobe.rules
 echo "SUBSYSTEM==\"mmc\", RUN+=\"/sbin/modprobe mmc_block\"" >> /etc/udev/rules.d/10-modprobe.rules
 
-echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb[0-9]*\", RUN+=\"/bin/plymouth --show-splash\"" > /etc/udev/rules.d/20-show-plymouth.rules
+#echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb[0-9]*\", RUN+=\"/bin/plymouth --show-splash\"" > /etc/udev/rules.d/20-show-plymouth.rules
 
 # FIXME: hack since sr_mod seems to fail to get loaded sometimes (#239657)
 /sbin/modprobe sr_mod 2>/dev/null || :
@@ -243,11 +243,11 @@ fi
 /sbin/udevadm trigger
 
 if [ "$shell" == "1" ] ; then
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "Shell requested on kernel commandline. Exit to continue booting."
     echo
     bash < /dev/console
-    plymouth --show-splash || :
+#    plymouth --show-splash || :
 fi
 
 # don't wait for "mtd0" as no device file will appear
@@ -257,7 +257,7 @@ if [ "$root" != "mtd0" -a -z ${HTTPFS} -a ! -f "$thingtomount" ] ; then
     # If we don't have the /dev/root link.. ask the user to create..
     if [ "$waitforsymlink" != "1" ] ; then
         if [ ! -L /dev/root ] ; then
-            plymouth --hide-splash || :
+#            plymouth --hide-splash || :
             echo
             echo "--------------------------------------"
             echo "WARNING: Cannot find root file system!"
@@ -267,7 +267,7 @@ if [ "$root" != "mtd0" -a -z ${HTTPFS} -a ! -f "$thingtomount" ] ; then
             echo "the boot sequence."
             echo
             bash < /dev/console
-            plymouth --show-splash || :
+#            plymouth --show-splash || :
         fi
     fi
 
@@ -296,7 +296,7 @@ if [ "$root" != "mtd0" -a -z ${HTTPFS} -a ! -f "$thingtomount" ] ; then
     fi
 
     if [ ! -b /dev/root ] ; then
-        plymouth --hide-splash || :
+#        plymouth --hide-splash || :
         echo
         echo "--------------------------------------"
         echo "WARNING: Cannot find root file system!"
@@ -306,7 +306,7 @@ if [ "$root" != "mtd0" -a -z ${HTTPFS} -a ! -f "$thingtomount" ] ; then
         echo "the boot sequence."
         echo
         bash < /dev/console
-        plymouth --show-splash || :
+#        plymouth --show-splash || :
     fi
 
     if [ "$quiet" != "1" ] ; then
@@ -324,7 +324,7 @@ fi
 [ -e /dev/root ] && fs=$(/lib/udev/vol_id -t /dev/root)
 if [ "x$fs" == "xiso9660" -o "x$fs" == "xudf" ]; then checkfs=1 ; fi
 if [ "x$check_iso" == "x1" -a -x /bin/checkisomd5 -a "x$checkfs" == "x1" ]; then
-   plymouth --hide-splash || :
+#   plymouth --hide-splash || :
    echo "Verifying ISO image..."
    /bin/checkisomd5 --verbose /dev/root
    if [ $? -ne 0 ]; then
@@ -332,7 +332,7 @@ if [ "x$check_iso" == "x1" -a -x /bin/checkisomd5 -a "x$checkfs" == "x1" ]; then
        echo "Press Enter to continue or ctrl-alt-del to reboot."
        read < /dev/console
    fi
-   plymouth --show-splash || :
+#   plymouth --show-splash || :
 fi
 
 
@@ -379,7 +379,7 @@ fi
 
 
 if [ "$RES" != "0" ] ; then
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "---------------------------------"
     echo "WARNING: Cannot mount rootfs!"
     echo "---------------------------------"
@@ -388,7 +388,7 @@ if [ "$RES" != "0" ] ; then
     echo "Mount rootfs at /sysroot and exit shell to continue. Good luck!"
     echo
     bash < /dev/console
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
 fi
 
 # Now get ready to leave the initramfs
@@ -621,12 +621,12 @@ if [ -b "$OSMIN_LOOPDEV" ]; then
 fi
 
 if [ "$eshell" == "1" ] ; then
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "Shell requested on kernel commandline."
     echo "Rootfs is mounted ro on /sysroot. Exit to continue booting."
     echo
     bash < /dev/console
-    plymouth --show-splash || :
+#    plymouth --show-splash || :
 fi
 
 
@@ -640,10 +640,10 @@ if [ -x /sysroot$init ] ; then
     
     # If the udev rule doesn't get triggered make sure to
     # show a splash
-    plymouth --show-splash || :
+#    plymouth --show-splash || :
     exec /sbin/run-init
 
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "---------------------------------"
     echo "WARNING: Error switching to real rootfs!"
     echo "---------------------------------"
@@ -652,7 +652,7 @@ if [ -x /sysroot$init ] ; then
     echo
     bash < /dev/console
 else
-    plymouth --hide-splash || :
+#    plymouth --hide-splash || :
     echo "---------------------------------------------------------"
     echo "WARNING: Requested $init binary does not exist on rootfs."
     echo "---------------------------------------------------------"
