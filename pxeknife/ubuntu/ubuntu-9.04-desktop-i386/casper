@@ -186,7 +186,7 @@ do_netmount() {
 
     if [ "${NETBOOT}" == "http" ] && do_httpfsmount ; then
         rc=0
-    elif [ "${NETBOOT}" != "iscsi" ] && do_iscsimount ; then
+    elif [ "${NETBOOT}" == "iscsi" ] && do_iscsifsmount ; then
         rc=0
     elif [ "${NETBOOT}" != "nfs" ] && do_cifsmount ; then
         rc=0
@@ -218,33 +218,33 @@ do_nfsmount() {
     return ${rc}
 }
 
-do_httpfsmount() {
+do_iscsifsmount() {
     # objectives: 
     # Setup networking.
     # Find the location from which we need to get the ISO.
     # Mount the ISO.
     rc=1
 
-	ifconfig lo 127.0.0.1 up
-	ifconfig eth0 up
-    echo "The ip configuration is $ip"
-    myip=`echo $ip | cut -d: -f1`
-    echo "Using ip address $myip"
-    mynm=`echo $ip | cut -d: -f4`
-    echo "Using Netmask $mynm"
-    mygw=`echo $ip | cut -d: -f3`
-    echo "Using gateway ip $mygw"
-    ifconfig eth0 $myip netmask $mynm 
-    echo "verify the ip address"
-    ifconfig eth0
+#	ifconfig lo 127.0.0.1 up
+#	ifconfig eth0 up
+#    echo "The ip configuration is $ip"
+#    myip=`echo $ip | cut -d: -f1`
+#    echo "Using ip address $myip"
+#    mynm=`echo $ip | cut -d: -f4`
+#    echo "Using Netmask $mynm"
+#    mygw=`echo $ip | cut -d: -f3`
+#    echo "Using gateway ip $mygw"
+#    ifconfig eth0 $myip netmask $mynm 
+#    echo "verify the ip address"
+#    ifconfig eth0
 
-    echo "setting route"
-    route add default gw $mygw 
+#    echo "setting route"
+#    route add default gw $mygw 
 
 
 	echo  "passed on path is ${ISCSIFS}" 
-	echo "The location of ubuntu iso  is $ISO_PATH" >> /output
-	echo "mounting CDROM" >> /output
+	echo "The location of ubuntu iso  is $ISO_PATH" 
+	echo "mounting CDROM" 
 
 
 #	losetup -r /dev/loop0 $FILEPATH
@@ -252,20 +252,21 @@ do_httpfsmount() {
 
     echo "inside iscsimount" 
             
+
+    modprobe scsi_transport_iscsi
+    modprobe libiscsi
+    modprobe iscsi_tcp
     insmod /modules/libcrc32c.ko
     insmod /modules/crc32c.ko
-    modprobe iscsi_tcp
-    modprobe ib_iser
+    insmod /modules/ib_iser.ko
     mkdir /var/run
     /sbin/iscsid
     iscsiadm -m discovery -t st -p "${ISCSIFS}"
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
     iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
     sleep 2
-    mount -t iso9660 /dev/sda "${mountpoint}"
+    mount -t iso9660 /dev/sdb "${mountpoint}"
     rc=${?}
-    return $rc
-
 
 	# test if knoppix is there
 	if test -d /cdrom/casper

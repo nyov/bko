@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #cleanup the old mess
 echo "Removing the old files"
@@ -16,9 +17,6 @@ cd ..
 
 echo "coping the needed files..."
 
-#rm mpoint/lib/modules/2.6.28-11-generic/kernel/ubuntu/squashfs/squashfs.ko
-#cp squashfs.ko mpoint/lib/modules/2.6.28-11-generic/kernel/ubuntu/squashfs/
-
 cp run-init mpoint/bin/
 chmod 777 mpoint/bin/run-init
 
@@ -34,9 +32,18 @@ chmod 0777 mpoint/init
 cp casper mpoint/scripts/
 chmod 0777 mpoint/scripts/casper
 
+echo "copying iscsi related files..."
+mkdir mpoint/etc/iscsi
+cp iscsi/iscsid.conf mpoint/etc/iscsi/
+cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
+cp iscsi/tools/* mpoint/sbin/
+
+mkdir mpoint/modules
+cp modules/* mpoint/modules/
+
+
 
 cd mpoint
-#echo 'no_static_dev=1' >> etc/udev/udev.conf
 echo "creating initrd from new system filesystem"
 
 echo "Compressing the filesystem"
@@ -44,6 +51,5 @@ find . | cpio -oH newc | gzip -9 > ../initrd.gz
 cd ..
 
 rm -rf mpoint initrd
-
 
 echo "Done, you can use initrd.gz"
