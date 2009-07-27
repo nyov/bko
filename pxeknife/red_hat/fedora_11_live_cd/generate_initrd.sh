@@ -1,8 +1,9 @@
 #!/bin/bash
+set -e
 
 #cleanup the old mess
 echo "Removing the old files"
-rm -rf initrd0 initrd0.img initrd0.gz mpoint
+sudo rm -rf initrd0 initrd0.img initrd0.gz mpoint
 
 
 
@@ -60,15 +61,16 @@ echo "copying kernel modules"
 mkdir mpoint/modules
 cp modules/* mpoint/modules/
 
+sudo chown -R root.root mpoint
 
 cd mpoint
 echo "creating initrd from new system filesystem"
 
 echo "Compressing the filesystem"
-find . | cpio -oH newc | gzip -9 > ../initrd0.img
+sudo find . |sudo cpio -oH newc | gzip -9 > ../initrd0.img
 cd ..
 
-rm -rf mpoint initrd0
+sudo rm -rf mpoint initrd0
 
 
 echo "Done, you can use initrd0.gz"

@@ -11,6 +11,26 @@ LABEL rootmenu
 	kernel menu.c32
 	append pxeknife/pxeknife.conf
 
+label debian-live-501-rom-iso
+	MENU LABEL Debian live 501 i386 - iso (for US)
+    TEXT HELP
+	    Use rom.etherboot.org for downloading the ISO 
+        Good option of American subcontinent
+    ENDTEXT
+	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
+	append  netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_US/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+    IPAPPEND 3
+
+
+label debian-live-501-local
+	MENU LABEL Debian live 501 i386 - iso (for localhost)
+    TEXT HELP
+	    Used by me for development and testing 
+        Dont select it
+    ENDTEXT
+	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
+	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+    IPAPPEND 3
 
 label debian-live-501-rom
 	MENU LABEL Debian live 501 i386 (for US)
@@ -32,26 +52,6 @@ label debian-live-501-local
 	append  netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/filesystem.squashfs  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 
-label debian-live-501-rom-iso
-	MENU LABEL Debian live 501 i386 - iso (for US)
-    TEXT HELP
-	    Use rom.etherboot.org for downloading the ISO 
-        Good option of American subcontinent
-    ENDTEXT
-	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append  netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_US/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
-    IPAPPEND 3
-
-
-label debian-live-501-local
-	MENU LABEL Debian live 501 i386 - iso (for localhost)
-    TEXT HELP
-	    Used by me for development and testing 
-        Dont select it
-    ENDTEXT
-	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
-    IPAPPEND 3
 
 label debian-live-501-local-iscsi
 	MENU LABEL Debian live 501 i386 - iscsi ( localhost)

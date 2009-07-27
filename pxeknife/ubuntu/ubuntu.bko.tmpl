@@ -12,6 +12,7 @@ LABEL rootmenu
 	append pxeknife/pxeknife.conf
 
 label ubuntu904desktopi386-rom-squash
+    MENU DEFAULT
 	MENU LABEL Ubuntu 9.04 Desktop i386 - US (squash)
     TEXT HELP
 	    Use rom.etherboot.org for downloading filesystem.squashfs 
@@ -32,7 +33,6 @@ label ubuntu904desktopi386-laptop-squash
     IPAPPEND 3
 
 label ubuntu904desktopi386-noppix502-rom
-    MENU DEFAULT
 	MENU LABEL Ubuntu 9.04 Desktop i386 (for US)
     TEXT HELP
 	    Use rom.etherboot.org for downloading ISO

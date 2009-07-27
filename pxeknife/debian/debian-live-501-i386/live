@@ -868,6 +868,7 @@ do_httpmount ()
 						fi
 						modprobe fuse
                         echo "trying $FUSE_MOUNT with ${url} and ${dest}"
+                        sleep 2
 						$FUSE_MOUNT "${url}" "${dest}"
                         echo "mount done "
 					fi
@@ -876,16 +877,6 @@ do_httpmount ()
 					break
 					;;
 
-				iso|ISO|Iso)
-                    echo "Mounting iso"
-					FUSE_MOUNT="httpfs"
-					modprobe fuse
-                    echo "trying $$FUSE_MOUNT with ${url} and ${dest}"
-					$FUSE_MOUNT "${url}" "${dest}"
-                    rc=${?}
-
-                  break 
-                  ;;
 				*)
 					log_begin_msg "Unrecognized archive extension for ${url}"
 					;;

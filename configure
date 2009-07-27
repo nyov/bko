@@ -1,44 +1,30 @@
 #!/bin/bash
 #set -e
 
+########################################################################
+################ BEGIN CUSTOMIZE ####################
+
+# modify the paths as per your need.
+
+# Location of gpxe git
+GPXE_GIT_LOCATION="../gpxe"
+
+# URL to be used for embedding into compiled gpxe for downloading images.
+BOOT_URL="http:\/\/192.168.111.11\/pxeknife\/"
+
+# HTTP location on local server where all iso images are kept.
 ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/"
-ISO_LOCATION_US="http:\/\/140.211.167.171\/share\/pravin\/"
-ISO_LOCATION_EU="http:\/\/192.168.111.11\/"
+
+################# Optional ####################
+
+# IP and Port for iscsi for local server
 ISCSI_LOCATION_LOCAL="192.168.111.11:3260"
 
-remove_temp () {
-    rm -f temp1 temp2 tempcopy
-}
+# Location of HTTP mirror in US
+ISO_LOCATION_US="http:\/\/140.211.167.171\/share\/pravin\/"
 
-replace_placeholder_with_data ()
-{
-    mystr=`echo "s/$1/$2/g"`
-    echo "Substituting $1 URL by [$mystr]..."
-    for line in `cat ./temp2` 
-    do
-        echo "Processing file $line"
-        perl -p -i -e "$mystr" $line
-    done
-}
+# Location of HTTP mirrors in Europe
+ISO_LOCATION_EU="http:\/\/192.168.111.11\/"
+################# END CUSTOMIZATION #################
+#######################################################################
 
-remove_temp
-echo "Finding files to process"
-find ./ -name "*.bko.tmpl" 2> /dev/null 1> ./temp1
-cp temp1 temp2
-echo "processing files"
-perl -p -i -e 's/.bko.tmpl/.conf/g' temp2
-paste temp1 temp2 -d'|' > tempcopy
-
-echo "copying files..."
-for line in `cat ./tempcopy` 
-do
-#    echo "line is [$line]"
-    cp -f `echo $line | cut -d'|' -f1` `echo $line | cut -d'|' -f2`
-done
-
-replace_placeholder_with_data "P_ISO_LOCATION_LOCAL" $ISO_LOCATION_LOCAL 
-replace_placeholder_with_data "P_ISO_LOCATION_US" $ISO_LOCATION_US
-replace_placeholder_with_data "P_ISO_LOCATION_EU" $ISO_LOCATION_EU
-replace_placeholder_with_data "P_ISCSI_LOCATION_LOCAL" $ISCSI_LOCATION_LOCAL
-
-remove_temp

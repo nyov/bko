@@ -3,7 +3,7 @@ set -e
 
 #cleanup the old mess
 echo "Removing the old files"
-rm -rf initrd.gz initrd mpoint
+sudo rm -rf initrd.gz initrd mpoint
 
 # create a copy of image to modify
 cp initrd.gz_orig initrd.gz
@@ -43,13 +43,13 @@ cp modules/* mpoint/modules/
 
 
 
+sudo chown -R root.root mpoint
 cd mpoint
 echo "creating initrd from new system filesystem"
-
 echo "Compressing the filesystem"
-find . | cpio -oH newc | gzip -9 > ../initrd.gz
+sudo find . | sudo cpio -oH newc | gzip -9 > ../initrd.gz
 cd ..
 
-rm -rf mpoint initrd
+sudo rm -rf mpoint initrd
 
 echo "Done, you can use initrd.gz"

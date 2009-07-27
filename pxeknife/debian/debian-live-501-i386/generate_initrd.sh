@@ -3,7 +3,7 @@ set -e
 
 #cleanup the old mess
 echo "Removing the old files"
-rm -rf initrd.gz initrd mpoint
+sudo rm -rf initrd.gz initrd1.img initrd mpoint
 
 # create a copy of image to modify
 cp initrd1.img_orig initrd.gz
@@ -44,15 +44,15 @@ cp live mpoint/scripts/
 chmod 0777 mpoint/scripts/live
 
 
+sudo chown -R root.root mpoint
 cd mpoint
-#echo 'no_static_dev=1' >> etc/udev/udev.conf
 echo "creating initrd from new system filesystem"
 
 echo "Compressing the filesystem"
-find . | cpio -oH newc | gzip -9 > ../initrd1.img
+sudo find . |sudo cpio -oH newc | gzip -9 > ../initrd1.img
 cd ..
 
-rm -rf mpoint initrd
+sudo rm -rf mpoint initrd
 
 
 echo "Done, you can use initrd1.img"
