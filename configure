@@ -13,7 +13,7 @@ GPXE_GIT_LOCATION="../gpxe"
 BOOT_URL="http:\/\/192.168.111.11\/BKO\/"
 
 # HTTP location on local server where all iso images are kept.
-ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/"
+ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
 
 ################# Optional ####################
 

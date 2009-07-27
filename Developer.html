@@ -89,6 +89,11 @@ cd BKO/install_help
         <strong>BOOT_URL</strong>: gpxe will contact this URL for initial boot. It should point to the BKO folder which is created by <i>setup.sh</i> script. 
         and it must be HTTP URL and not linux path.
     </li>
+    <li>
+        <strong>ISO_LOCATION_LOCAL</strong> : The HTTP path where all ISO's will be downloaded. the script <i>download_ISO.sh</i> will download them in folder
+        named <i>ISO</i> in the same location where <i>setup.sh</i> was executed. For example, if you have executed setup.sh in topmost directory (ie var/www/)
+        then BOOT_URL=http://your-ip-address/BKO/ and ISO_LOCATION_LOCAL=http://your-ip-address/ISO/
+    </li>
   </ol>
 </p>
 </div>
