@@ -20,7 +20,7 @@ label fedora_11_live_cd_rom
         Good option of American subcontinent
     ENDTEXT
 	kernel pxeknife/red_hat/fedora_11_live_cd/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live httpfs=http://140.211.167.171/share/pravin//Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single
+	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_US/Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single
     IPAPPEND 3
 
 label fedora_11_live_cd_local
@@ -30,7 +30,7 @@ label fedora_11_live_cd_local
         Uses web-server on localhost
     ENDTEXT
 	kernel pxeknife/red_hat/fedora_11_live_cd/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live httpfs=http://192.168.111.11//Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single 
+	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_LOCAL/Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single 
     IPAPPEND 3
 
 label fedora_11_live_cd_nfs

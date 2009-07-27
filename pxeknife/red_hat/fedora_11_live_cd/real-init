@@ -637,7 +637,7 @@ if [ -x /sysroot$init ] ; then
     if [ "$quiet" != "1" ] ; then
         echo "transfering control to $init"
     fi
-    
+
     # If the udev rule doesn't get triggered make sure to
     # show a splash
 #    plymouth --show-splash || :

@@ -18,7 +18,7 @@ LABEL dsl-http-rom
 	    Use rom.etherboot.org for downloading ISO
         Good option of American subcontinent
     ENDTEXT
-	KERNEL pxeknife/dsl/linux24 httpfs=http://140.211.167.171/share/pravin//dsl.iso
+	KERNEL pxeknife/dsl/linux24 httpfs=P_ISO_LOCATION_US/dsl.iso
 	APPEND ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 initrd=pxeknife/dsl/minirt24.gz nomce noapic quiet BOOT_IMAGE=knoppix
     IPAPPEND 3
 
@@ -28,7 +28,7 @@ LABEL dsl-http-localhost
 	    Used for testing only
         Uses web-server on localhost
     ENDTEXT
-	KERNEL pxeknife/dsl/linux24 httpfs=http://192.168.111.11//dsl.iso
+	KERNEL pxeknife/dsl/linux24 httpfs=P_ISO_LOCATION_LOCAL/dsl.iso
 	APPEND ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 initrd=pxeknife/dsl/minirt24.gz nomce noapic quiet BOOT_IMAGE=knoppix
     IPAPPEND 3
 

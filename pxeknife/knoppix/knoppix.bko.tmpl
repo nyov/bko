@@ -17,7 +17,7 @@ label knoppix502-rom
 	    Use rom.etherboot.org for downloading ISO
         Good option of American subcontinent
     ENDTEXT
-	kernel pxeknife/knoppix/5.0.1/linux httpfs=http://140.211.167.171/share/pravin//KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
+	kernel pxeknife/knoppix/5.0.1/linux httpfs=P_ISO_LOCATION_US/KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
 	append nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=pxeknife/knoppix/5.0.1/minirt.gz quiet BOOT_IMAGE=knoppix
     IPAPPEND 3
 
@@ -28,7 +28,7 @@ label knoppix502-local
 	    Used by me for development and testing 
         Dont select it
     ENDTEXT
-	kernel pxeknife/knoppix/5.0.1/linux httpfs=http://192.168.111.11//KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
+	kernel pxeknife/knoppix/5.0.1/linux httpfs=P_ISO_LOCATION_LOCAL/KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
 	append nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=pxeknife/knoppix/5.0.1/minirt.gz quiet BOOT_IMAGE=knoppix
     IPAPPEND 3
 

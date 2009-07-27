@@ -263,11 +263,13 @@ if [ -n ${debug} ]; then
 	unset debug
 fi
 
-rm /root/etc/rc3.d/S50NetworkManager
-rm /root/etc/rc5.d/S50NetworkManager
-rm /root/etc/rc5.d/S50NetworkManager
-mv /root/etc/init.d/networking /root/etc/init.d/dnetworking
-mv /root/etc/init.d/gdm /root/etc/init.d/dgdm
+#rm /root/etc/rc3.d/S50NetworkManager
+#rm /root/etc/rc5.d/S50NetworkManager
+#rm /root/etc/rc5.d/S50NetworkManager
+#mv /root/etc/init.d/networking /root/etc/init.d/dnetworking
+#mv /root/etc/init.d/gdm /root/etc/init.d/dgdm
+rm /root/etc/init.d/NetworkManager
+rm /root/etc/init.d/networking
 
 #/bin/sh
 # Chain to real filesystem

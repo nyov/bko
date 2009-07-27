@@ -1,0 +1,12 @@
+MENU TITLE --== BKO - Random ==--
+
+LABEL hdmenu
+	MENU LABEL <---- BKO Menu
+	kernel menu.c32
+	append pxeknife/pxeknife.conf
+
+LABEL madboot
+	MENU LABEL MADBoot
+	kernel memdisk
+	append initrd=pxeknife/random_utils/madboot.igz
+

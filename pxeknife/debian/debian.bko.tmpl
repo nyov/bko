@@ -19,7 +19,7 @@ label debian-live-501-rom
         Good option of American subcontinent
     ENDTEXT
 	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append netboot=http boot=live union=aufs httpfs=http://140.211.167.171/share/pravin//filesystem.squashfs initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_US/filesystem.squashfs initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 
 label debian-live-501-local
@@ -29,7 +29,7 @@ label debian-live-501-local
         Uses web-server on localhost
     ENDTEXT
 	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append  netboot=http boot=live union=aufs httpfs=http://192.168.111.11//filesystem.squashfs  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+	append  netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/filesystem.squashfs  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 
 label debian-live-501-rom-iso
@@ -39,7 +39,7 @@ label debian-live-501-rom-iso
         Good option of American subcontinent
     ENDTEXT
 	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append  netboot=http boot=live union=aufs httpfs=http://140.211.167.171/share/pravin//debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+	append  netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_US/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 
 
@@ -50,7 +50,7 @@ label debian-live-501-local
         Dont select it
     ENDTEXT
 	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append netboot=http boot=live union=aufs httpfs=http://192.168.111.11//debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/debian-live-501-i386-gnome-desktop.iso  initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 
 label debian-live-501-local-iscsi
@@ -60,6 +60,6 @@ label debian-live-501-local-iscsi
         Dont select it
     ENDTEXT
 	kernel pxeknife/debian/debian-live-501-i386/vmlinuz1
-	append netboot=http boot=live union=aufs iscsifs=192.168.111.11:3260 target=debian.iso initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
+	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.iso initrd=pxeknife/debian/debian-live-501-i386/initrd1.img
     IPAPPEND 3
 

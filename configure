@@ -1,0 +1,44 @@
+#!/bin/bash
+#set -e
+
+ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/"
+ISO_LOCATION_US="http:\/\/140.211.167.171\/share\/pravin\/"
+ISO_LOCATION_EU="http:\/\/192.168.111.11\/"
+ISCSI_LOCATION_LOCAL="192.168.111.11:3260"
+
+remove_temp () {
+    rm -f temp1 temp2 tempcopy
+}
+
+replace_placeholder_with_data ()
+{
+    mystr=`echo "s/$1/$2/g"`
+    echo "Substituting $1 URL by [$mystr]..."
+    for line in `cat ./temp2` 
+    do
+        echo "Processing file $line"
+        perl -p -i -e "$mystr" $line
+    done
+}
+
+remove_temp
+echo "Finding files to process"
+find ./ -name "*.bko.tmpl" 2> /dev/null 1> ./temp1
+cp temp1 temp2
+echo "processing files"
+perl -p -i -e 's/.bko.tmpl/.conf/g' temp2
+paste temp1 temp2 -d'|' > tempcopy
+
+echo "copying files..."
+for line in `cat ./tempcopy` 
+do
+#    echo "line is [$line]"
+    cp -f `echo $line | cut -d'|' -f1` `echo $line | cut -d'|' -f2`
+done
+
+replace_placeholder_with_data "P_ISO_LOCATION_LOCAL" $ISO_LOCATION_LOCAL 
+replace_placeholder_with_data "P_ISO_LOCATION_US" $ISO_LOCATION_US
+replace_placeholder_with_data "P_ISO_LOCATION_EU" $ISO_LOCATION_EU
+replace_placeholder_with_data "P_ISCSI_LOCATION_LOCAL" $ISCSI_LOCATION_LOCAL
+
+remove_temp

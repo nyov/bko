@@ -1,0 +1,119 @@
+MENU TITLE --== BKO (boot.kernel.org) ==--
+PROMPT 0
+TIMEOUT 100 #this is optional - will start the default after 10 seconds
+
+LABEL rootmenu
+	MENU LABEL <---- Root Menu
+    TEXT HELP
+        Go back to boot time menu
+        You can boot from local hard-disk from there.
+    ENDTEXT
+    kernel menu.c32
+	append pxelinux.cfg/default
+
+LABEL pxeknife-DSL
+    MENU DEFAULT
+	MENU LABEL Damm small linux --->
+    TEXT HELP
+        Boot Damm Small Linux
+        This is 50MB linux with GUI and most common softwares.
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/dsl/dsl.conf
+
+LABEL pxeknife-knoppix
+	MENU LABEL Knoppix --->
+	TEXT HELP
+        Boot Knoppix 
+        This is full fledged 700MB linux distribution 
+        with (almost) everything included.
+    ENDTEXT
+    kernel menu.c32
+	append pxeknife/knoppix/knoppix.conf
+
+LABEL pxeknife-debian
+	MENU LABEL debian --->
+	TEXT HELP
+        Boot Debian live CD 
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/debian/debian.conf
+
+
+LABEL pxeknife-red-hat
+	MENU LABEL Red Hat --->
+	TEXT HELP
+        Boot fedora live CD 
+        Currently, fedora 11 live cd boots only in single user mode.
+    ENDTEXT
+	kernel menu.c32
+	append default
+	append pxeknife/red_hat/red_hat.conf
+
+LABEL pxeknife-ubuntu
+	MENU LABEL Ubuntu --->
+	TEXT HELP
+        Boot Ubuntu
+        Does not work correctly, some problem with squashfs
+        So, boot it on your own risk
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/ubuntu/ubuntu.conf
+
+LABEL pxeknife-hd
+	MENU LABEL Harddrive Utils --->
+	TEXT HELP
+        Utilities for hard disk cloning, diagnosis and wiping
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/hard_drive_utils/hd.conf
+
+LABEL pxeknife-linux_boot_disks
+	MENU LABEL Linux Boot Disks --->
+	TEXT HELP
+        Boot disks like Trinux, Tom's boot disk, 
+        recovary is possible, BasicLinux etc.
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/linux_boot_disks/linux_boot_disks.conf
+
+LABEL pxeknife-memory_test
+    MENU LABEL Memory Tests --->
+	TEXT HELP
+        tools to perform memory tests, RAM diagnosis,
+        Windows memory diagnosis and Memtest86
+        Need more description here
+    ENDTEXT
+    kernel menu.c32
+    append pxeknife/memory_test/memory_test.conf
+
+LABEL pxeknife-boot_managers
+	MENU LABEL Boot Managers --->
+	TEXT HELP
+        boot managers like super grub disk 
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/boot_managers/boot_managers.conf
+
+LABEL pxeknife-ntfs_tools
+	MENU LABEL NTFS / Windows Tools --->
+	TEXT HELP
+        NTFS for DOS, offline NT Password and 
+        registry recovary tool 
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/ntfs_tools/ntfs_tools.conf
+
+LABEL pxeknife-random_utils
+	MENU LABEL Random Utils --->
+	TEXT HELP
+        Random tools like madboot
+    ENDTEXT
+	kernel menu.c32
+	append pxeknife/random_utils/random_utils.conf
+
+LABEL pxeknife-system_information
+	MENU LABEL System Information --->
+	kernel menu.c32
+	append pxeknife/system_information/system_information.conf
+

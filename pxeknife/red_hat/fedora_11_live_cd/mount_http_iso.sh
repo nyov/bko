@@ -46,7 +46,8 @@ mkdir /iso
 echo "httpfs $ISO_PATH /iso"
 mknod /dev/fuse c 10 229
 httpfs "$ISO_PATH" /iso
-    
+echo "sleeping for some time..."
+sleep 5
 FILEPATH=`ls /iso/*.iso`
 mount -t iso9660 $FILEPATH /sysroot -o loop -o ro
 echo "FILEPATH is $FILEPATH and URL is $ISO_PATH"

@@ -1,0 +1,17 @@
+MENU TITLE --== BKO - NTFS Tools ==--
+
+LABEL hdmenu
+	MENU LABEL <---- BKO Menu
+	kernel menu.c32
+	append pxeknife/pxeknife.conf
+
+LABEL ntfs4dos
+	MENU LABEL NTFS4DOS
+	kernel memdisk
+	append initrd=pxeknife/ntfs_tools/ntfs4dos.img
+
+LABEL offline
+	MENU LABEL Offline NT Password & Registry Editor
+	kernel pxeknife/ntfs_tools/offline_nt/cd060213/vmlinuz
+	append initrd=pxeknife/ntfs_tools/offline_nt/cd060213/initrd.cgz,pxeknife/ntfs_tools/offline_nt/cd060213/scsi.cgz
+

@@ -1,0 +1,12 @@
+MENU TITLE --== BKO - Boot Managers ==--
+
+LABEL rootmenu
+	MENU LABEL <---- BKo Menu
+	kernel menu.c32
+	append pxeknife/pxeknife.conf
+
+LABEL sgd
+	MENU LABEL Super Grub Disk
+	kernel memdisk
+	append initrd=pxeknife/boot_managers/sgd_0.9450_english.img
+

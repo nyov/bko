@@ -18,7 +18,7 @@ label ubuntu904desktopi386-rom-squash
         Good option of American subcontinent
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=http://140.211.167.171/share/pravin//U/filesystem.squashfs initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
+	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_US/U/filesystem.squashfs initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
     IPAPPEND 3
 
 label ubuntu904desktopi386-laptop-squash
@@ -28,7 +28,7 @@ label ubuntu904desktopi386-laptop-squash
         Dont select it
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=http://192.168.111.11//U/filesystem.squashfs  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
+	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_LOCAL/U/filesystem.squashfs  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
     IPAPPEND 3
 
 label ubuntu904desktopi386-noppix502-rom
@@ -39,7 +39,7 @@ label ubuntu904desktopi386-noppix502-rom
         Good option of American subcontinent
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=http://140.211.167.171/share/pravin//ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
+	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_US/ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
     IPAPPEND 3
 
 label ubuntu904desktopi386-laptop
@@ -49,7 +49,7 @@ label ubuntu904desktopi386-laptop
         Dont select it
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=http://192.168.111.11//ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz init=/bin/sh
+	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_LOCAL/ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz init=/bin/sh
     IPAPPEND 3
 
 
@@ -60,6 +60,6 @@ label ubuntu904desktopi386-laptop-iscsi
         Dont select it
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=iscsi boot=casper iscsifs=192.168.111.11:3260   target=ubuntu.iso initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
+	append  file=/cdrom/preseed/ubuntu.seed netboot=iscsi boot=casper iscsifs=P_ISCSI_LOCATION_LOCAL   target=ubuntu.iso initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
     IPAPPEND 3
 
