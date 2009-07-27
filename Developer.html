@@ -58,18 +58,39 @@
 Get the BKO.git and gpxe repositories.  You can use the script <a href="install_help/setup.sh">setup.sh</a> for this work.
 </li>
 <li>
-Go to <strong>BKO.git</strong> and edit the <strong>configure</strong>.
+Edit the <strong>BKO/configure</strong> to suit your needs.  It can be done with any text editor
+<pre>
+vi BKO/configure
+</pre>
+Make sure that you provide proper values for atleast <strong>GPXE_GIT_LOCATION, BOOT_URL and ISO_LOCATION_LOCAL </strong>
+Other entries are optional, you can leave them untouched. Please refer bellow for more details on the meaning of the configuration variables.
 </li>
 <li>
 Follow the following instructions
 <pre>
-cd BKO.git/install_help
+cd BKO/install_help
 ./deploy.sh
 ./download_ISO.sh
 </pre>
 </li>
 </ol>
-
+<hr/>
+</div>
+<a name="parameters">
+<div>
+<h3>Details about configuration parameters</h3>
+<p>
+  <ol>
+    <li>
+        <strong>GPXE_GIT_LOCATION</strong>: path to the place where gpxe git is placed.  If you have used the setup.sh script, then this path
+        should be <i>../gpxe</i>. the gpxe folder can be moved anywhere as long as the path is given properly.
+    </li>
+    <li>
+        <strong>BOOT_URL</strong>: gpxe will contact this URL for initial boot. It should point to the BKO folder which is created by <i>setup.sh</i> script. 
+        and it must be HTTP URL and not linux path.
+    </li>
+  </ol>
+</p>
 </div>
 
 <hr/>
