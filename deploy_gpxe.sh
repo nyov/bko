@@ -9,6 +9,7 @@ echo "Compiling gpxe..."
 cd $gpxePATH/src
 echo "Generating custom script files"
 cp pxeDHCP.bko.tmpl pxeDHCP.gpxe
+cp pxeSTATIC.bko.tmpl pxeSTATIC.gpxe
 regular_expression=`echo "s/P_BOOT_URL/$BOOT_PATH/g"`
 perl -p -i -e "$regular_expression" pxeDHCP.gpxe 
 perl -p -i -e "$regular_expression" pxeSTATIC.gpxe 
