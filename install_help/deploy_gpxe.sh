@@ -23,7 +23,9 @@ perl -p -i -e "$regular_expression" pxeSTATIC.gpxe
 ./custom_make.sh
 echo "removing old gpxe images..."
 cd $BKOPATH
-rm -rf ./gpxe_images/*
+rm -rf ./gpxe_images
+mkdir ./gpxe_images
+
 echo "copying gpxe images..."
 cp $gpxePATH/src/bin/gpxe.dsk ./gpxe_images/
 cp $gpxePATH/src/bin/gpxe.usb ./gpxe_images/

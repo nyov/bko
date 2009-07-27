@@ -10,7 +10,7 @@
 GPXE_GIT_LOCATION="../gpxe"
 
 # URL to be used for embedding into compiled gpxe for downloading images.
-BOOT_URL="http:\/\/192.168.111.11\/pxeknife\/"
+BOOT_URL="http:\/\/192.168.111.11\/BKO\/"
 
 # HTTP location on local server where all iso images are kept.
 ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/"
