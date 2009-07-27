@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+cd ../..
 mkdir ISO
 cd ISO
 

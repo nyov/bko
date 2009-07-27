@@ -25,6 +25,11 @@ ISO_LOCATION_US="http:\/\/140.211.167.171\/share\/pravin\/ISO\/"
 
 # Location of HTTP mirrors in Europe
 ISO_LOCATION_EU="http:\/\/192.168.111.11\/"
+
+# Location from where initramfs files will be downloaded 
+# (ie. in case you dont compile on your machine )
+REMOTE_INITRAMFS_DOWNLOAD_LOCATION=http://rom.etherboot.org/share/pravin/BKO/
+
 ################# END CUSTOMIZATION #################
 #######################################################################
 

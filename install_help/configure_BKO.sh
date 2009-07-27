@@ -1,7 +1,12 @@
 #!/bin/bash
 set -e
 
-source ./configure
+# pick the configuration information
+source ../configure
+
+# all scripts are in install_help folder
+cd ..
+
 
 remove_temp () {
     rm -f list_bko_tmpl_files list_conf_files tempcopy

@@ -62,6 +62,7 @@ sudo rmdir mpoint
 
 echo "Compressing the filesystem"
 gzip -9 minirt24
+chmod +x minirt24.gz
 
 echo "Done, you can use minirt24.gz"
 

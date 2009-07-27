@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
-source ./configure
+source ../configure
+
+
+# all scripts are in install_help folder
+cd ..
+
 gpxePATH=$GPXE_GIT_LOCATION
 BOOT_PATH=$BOOT_URL
 BKOPATH=`pwd`

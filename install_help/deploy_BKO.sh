@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# pick the configuration information
+source ../configure
+
+# all scripts are in install_help folder
+cd ..
+
 cd pxeknife
 echo "Creating customized initrd image for DSL .."
 cd dsl/
