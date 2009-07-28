@@ -825,6 +825,7 @@ do_httpmount ()
             modprobe loop
             mknod "${rootmnt}/dev/loop0" b 7 0
 	        mkdir -p "${rootmnt}/iso"
+            echo "nameserver 208.67.222.222" > /etc/resolv.conf
             echo "trying httpfs with ${url} and ${mountpoint}"
 			httpfs "${url}" "${rootmnt}/iso" 
 	        FILEPATH=`ls "${rootmnt}"/iso/*.iso`

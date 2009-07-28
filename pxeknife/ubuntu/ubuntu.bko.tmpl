@@ -11,53 +11,32 @@ LABEL rootmenu
 	kernel menu.c32
 	append pxeknife/pxeknife.conf
 
-label ubuntu904desktopi386-rom-squash
+label ubuntu904desktopi386-squash
     MENU DEFAULT
-	MENU LABEL Ubuntu 9.04 Desktop i386 - US (squash)
+	MENU LABEL Ubuntu 9.04 Desktop i386 - squash
     TEXT HELP
-	    Use rom.etherboot.org for downloading filesystem.squashfs 
-        Good option of American subcontinent
-    ENDTEXT
-	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_US/U/filesystem.squashfs initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
-    IPAPPEND 3
-
-label ubuntu904desktopi386-laptop-squash
-	MENU LABEL Ubuntu 9.04 Desktop i386 - local server (squash)
-    TEXT HELP
-	    Used by me for development and testing 
-        Dont select it
+       Boot ubuntu 9.04 Desktop 
+       It uses squashfs instead of iso, so it may be faster
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
 	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_LOCAL/U/filesystem.squashfs  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
     IPAPPEND 3
 
-label ubuntu904desktopi386-noppix502-rom
-	MENU LABEL Ubuntu 9.04 Desktop i386 (for US)
+label ubuntu904desktopi386-iso
+	MENU LABEL Ubuntu 9.04 Desktop i386 - iso 
     TEXT HELP
-	    Use rom.etherboot.org for downloading ISO
-        Good option of American subcontinent
-    ENDTEXT
-	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_US/ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz
-    IPAPPEND 3
-
-label ubuntu904desktopi386-laptop
-	MENU LABEL Ubuntu 9.04 Desktop i386 (local webserver)
-    TEXT HELP
-	    Used by me for development and testing 
-        Dont select it
+       Boot ubuntu 9.04 Desktop 
+       It uses iso for booting
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
 	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_LOCAL/ubuntu-9.04-desktop-i386.iso  initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz init=/bin/sh
     IPAPPEND 3
 
-
-label ubuntu904desktopi386-laptop-iscsi
-	MENU LABEL Ubuntu 9.04 Desktop i386 - local iscsi
+label ubuntu904desktopi386-iscsi
+	MENU LABEL Ubuntu 9.04 Desktop i386 - iscsi
     TEXT HELP
-	    Used by me for development and testing iscsi 
-        Dont select it
+       Boot ubuntu 9.04 Desktop 
+       It uses iscsi for booting
     ENDTEXT
 	kernel pxeknife/ubuntu/ubuntu-9.04-desktop-i386/vmlinuz
 	append  file=/cdrom/preseed/ubuntu.seed netboot=iscsi boot=casper iscsifs=P_ISCSI_LOCATION_LOCAL   target=ubuntu.iso initrd=pxeknife/ubuntu/ubuntu-9.04-desktop-i386/initrd.gz

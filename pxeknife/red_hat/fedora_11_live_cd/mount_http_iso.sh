@@ -6,6 +6,8 @@
 # Find the location from which we need to get the ISO.
 # Mount the ISO.
 
+echo "nameserver 208.67.222.222" > /etc/resolv.conf
+
 echo "HTTP Boot: inserting network modules"
 insmod /modules/8390.ko >/dev/null 2>&1  
 insmod /modules/mii.ko >/dev/null 2>&1 

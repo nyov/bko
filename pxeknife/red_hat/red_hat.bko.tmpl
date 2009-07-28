@@ -10,24 +10,11 @@ LABEL rootmenu
 	kernel menu.c32
 	append pxeknife/pxeknife.conf
 
-
-label fedora_11_live_cd_rom
+label fedora_11_live_cd
     MENU DEFAULT
-	MENU LABEL Fedora 11 Live CD - from rom (US Mirror)
+	MENU LABEL Fedora 11 Live CD  
     TEXT HELP
         currently work only in single user mode
-	    Use rom.etherboot.org for downloading ISO
-        Good option of American subcontinent
-    ENDTEXT
-	kernel pxeknife/red_hat/fedora_11_live_cd/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_US/Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single
-    IPAPPEND 3
-
-label fedora_11_live_cd_local
-	MENU LABEL Fedora 11 Live CD - (Testing)
-    TEXT HELP
-	    Used for testing only
-        Uses web-server on localhost
     ENDTEXT
 	kernel pxeknife/red_hat/fedora_11_live_cd/vmlinuz0
 	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_LOCAL/Fedora-11-i686-Live.iso initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 single 
@@ -37,7 +24,7 @@ label fedora_11_live_cd_nfs
 	MENU LABEL Fedora 11 Live CD - (nfs)
     TEXT HELP
 	    Used for testing only
-        Uses nfs server on localhost
+        Uses nfs server instead of httpfs for accessing iso image
     ENDTEXT
 	kernel pxeknife/red_hat/fedora_11_live_cd/vmlinuz0
 	append root=CDLABEL=Fedora-11-i686-Live nfs=192.168.111.11:/var/www/ initrd=pxeknife/red_hat/fedora_11_live_cd/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 3  

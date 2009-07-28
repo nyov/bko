@@ -10,21 +10,15 @@
 GPXE_GIT_LOCATION="../gpxe"
 
 # URL to be used for embedding into compiled gpxe for downloading images.
-BOOT_URL="http:\/\/192.168.111.11\/BKO\/"
+BOOT_URL="http:\/\/rom.etherboot.org\/share\/pravin\/BKO\/"
 
 # HTTP location on local server where all iso images are kept.
-ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
+ISO_LOCATION_LOCAL="http:\/\/rom.etherboot.org\/share\/pravin\/ISO\/"
 
 ################# Optional ####################
 
 # IP and Port for iscsi for local server
-ISCSI_LOCATION_LOCAL="192.168.111.11:3260"
-
-# Location of HTTP mirror in US
-ISO_LOCATION_US="http:\/\/140.211.167.171\/share\/pravin\/ISO\/"
-
-# Location of HTTP mirrors in Europe
-ISO_LOCATION_EU="http:\/\/192.168.111.11\/"
+ISCSI_LOCATION_LOCAL="boot.kernel.org:3260"
 
 # Location from where initramfs files will be downloaded 
 # (ie. in case you dont compile on your machine )

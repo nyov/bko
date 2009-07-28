@@ -287,58 +287,45 @@ do_httpfsmount() {
     # Mount the ISO.
     rc=1
 
-    echo "HTTP Boot: inserting network modules" >> /status
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/8390.ko  
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/mii.ko   
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/ne2k-pci.ko 
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/pcnet32.ko  
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/r8169.ko  
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/e100.ko   
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/e1000/e1000.ko 
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/sis900.ko 
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/via-rhine.ko 
-    insmod /lib/modules/2.6.28-11-generic/kernel/drivers/net/8139too.ko   
+#	ifconfig lo 127.0.0.1 up
+#	ifconfig eth0 up
+#    echo "The ip configuration is $ip"
+#    myip=`echo $ip | cut -d: -f1`
+#    echo "Using ip address $myip"
+#    mynm=`echo $ip | cut -d: -f4`
+#    echo "Using Netmask $mynm"
+#    mygw=`echo $ip | cut -d: -f3`
+#    echo "Using gateway ip $mygw"
+#    ifconfig eth0 $myip netmask $mynm 2> /output
+#    echo "verify the ip address"
+#    ifconfig eth0
 
-	ifconfig lo 127.0.0.1 up
-	ifconfig eth0 up
-    echo "The ip configuration is $ip"
-    myip=`echo $ip | cut -d: -f1`
-    echo "Using ip address $myip"
-    mynm=`echo $ip | cut -d: -f4`
-    echo "Using Netmask $mynm"
-    mygw=`echo $ip | cut -d: -f3`
-    echo "Using gateway ip $mygw"
-    ifconfig eth0 $myip netmask $mynm 2> /output
-    echo "verify the ip address"
-    ifconfig eth0
+#    echo "setting route"
+#    route add default gw $mygw 2> /outputroute
 
-    echo "setting route"
-    route add default gw $mygw 2> /outputroute
-
+    echo "nameserver 208.67.222.222" > /etc/resolv.conf
 
 	echo  "passed on path is ${HTTPFS}" >> status
 	ISO_PATH="${HTTPFS}"
 	echo "The location of ubuntu iso  is $ISO_PATH" >> /output
 	echo "mounting CDROM" >> /output
 
+    issquash=`echo "$ISO_PATH" | grep "filesystem.squashfs"`
+    mytest=${?}
+    if [ "${mytest}" = "0" ]
+    then 
+        mkdir -p ${mountpoint}/casper/
+	    httpfs $ISO_PATH ${mountpoint}/casper/
+    else
 
-#    mkdir /iso
-#	httpfs $ISO_PATH /iso
-#	FILEPATH=`ls /iso/*`
-#	echo  "File path is $FILEPATH\n" >> /output
-#	losetup -r /dev/loop0 $FILEPATH
-#	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
-	
-	
-    mkdir ${mountpoint}/casper
-    mkdir ${rootmnt}/tt
-    mv /bin/httpfs ${rootmnt}/tt
-    mv /bin/fusermount ${rootmnt}/tt
+        mkdir /iso
+	    httpfs $ISO_PATH /iso
+	    FILEPATH=`ls /iso/*`
+	    echo  "File path is $FILEPATH\n" >> /output
+	    losetup -r /dev/loop0 $FILEPATH
+	    mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+	fi
 
-
-    export PATH=${rootmnt}/tt/:$PATH
-	${rootmnt}/tt/httpfs $ISO_PATH ${mountpoint}/casper/
-##	mount $FILEPATH -t squashfs "${mountpoint}" -o loop
 
 	# test if knoppix is there
 	if test -d /cdrom/casper

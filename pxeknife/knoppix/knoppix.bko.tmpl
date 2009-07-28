@@ -10,25 +10,13 @@ LABEL rootmenu
 	kernel menu.c32
 	append pxeknife/pxeknife.conf
 
-label knoppix502-rom
-    MENU DEFAULT
-	MENU LABEL Knoppix 5.0.1 - from rom (US Mirror)
-    TEXT HELP
-	    Use rom.etherboot.org for downloading ISO
-        Good option of American subcontinent
-    ENDTEXT
-	kernel pxeknife/knoppix/5.0.1/linux httpfs=P_ISO_LOCATION_US/KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
-	append nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=pxeknife/knoppix/5.0.1/minirt.gz quiet BOOT_IMAGE=knoppix
-    IPAPPEND 3
-
-
 label knoppix502-local
-	MENU LABEL Knoppix 5.0.1 - local webserver
+    MENU DEFAULT
+	MENU LABEL Knoppix 5.0.1 
     TEXT HELP
-	    Used by me for development and testing 
-        Dont select it
+        Boots Knoppix-5.0.1
     ENDTEXT
-	kernel pxeknife/knoppix/5.0.1/linux httpfs=P_ISO_LOCATION_LOCAL/KNOPPIX_V5.1.1CD-2007-01-04-EN.iso
+	kernel pxeknife/knoppix/5.0.1/linux httpfs=P_ISO_LOCATION_LOCAL/KNOPPIX_V5.1.1CD-2007-01-04-EN.iso 
 	append nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=pxeknife/knoppix/5.0.1/minirt.gz quiet BOOT_IMAGE=knoppix
     IPAPPEND 3
 

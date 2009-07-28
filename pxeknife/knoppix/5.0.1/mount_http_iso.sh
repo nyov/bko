@@ -6,6 +6,8 @@
 # Find the location from which we need to get the ISO.
 # Mount the ISO.
 
+echo "nameserver 208.67.222.222" > /etc/resolv.conf
+
 echo "HTTP Boot: inserting network modules"
 insmod /modules/crc32c.ko >/dev/null 2>&1  
 insmod /modules/8390.ko  >/dev/null 2>&1 
@@ -32,6 +34,7 @@ echo "Using gateway ip $mygw"
 ifconfig eth0 $myip netmask $mynm 2> /output
 echo "verify the ip address"
 ifconfig eth0
+
 
 echo "setting route"
 route add default gw $mygw 2> /outputroute
