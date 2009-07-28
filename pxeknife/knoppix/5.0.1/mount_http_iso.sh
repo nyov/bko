@@ -6,7 +6,9 @@
 # Find the location from which we need to get the ISO.
 # Mount the ISO.
 
-echo "nameserver 208.67.222.222" > /etc/resolv.conf
+echo "nameserver 4.2.2.2
+nameserver 128.255.1.3" > /etc/resolv.conf
+
 
 echo "HTTP Boot: inserting network modules"
 insmod /modules/crc32c.ko >/dev/null 2>&1  

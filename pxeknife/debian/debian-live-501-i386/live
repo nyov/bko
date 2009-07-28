@@ -736,6 +736,10 @@ do_netmount ()
 		panic "No supported network device found, maybe a non-mainline driver is required."
 	fi
 
+echo "nameserver 4.2.2.2
+nameserver 128.255.1.3" > /etc/resolv.conf
+
+
 	if [ "${NFSROOT}" = "auto" ]
 	then
 		NFSROOT=${ROOTSERVER}:${ROOTPATH}
@@ -825,7 +829,6 @@ do_httpmount ()
             modprobe loop
             mknod "${rootmnt}/dev/loop0" b 7 0
 	        mkdir -p "${rootmnt}/iso"
-            echo "nameserver 208.67.222.222" > /etc/resolv.conf
             echo "trying httpfs with ${url} and ${mountpoint}"
 			httpfs "${url}" "${rootmnt}/iso" 
 	        FILEPATH=`ls "${rootmnt}"/iso/*.iso`

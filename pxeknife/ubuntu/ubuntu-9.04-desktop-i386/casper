@@ -303,7 +303,10 @@ do_httpfsmount() {
 #    echo "setting route"
 #    route add default gw $mygw 2> /outputroute
 
-    echo "nameserver 208.67.222.222" > /etc/resolv.conf
+echo "nameserver 4.2.2.2
+nameserver 128.255.1.3" > /etc/resolv.conf
+
+
 
 	echo  "passed on path is ${HTTPFS}" >> status
 	ISO_PATH="${HTTPFS}"
