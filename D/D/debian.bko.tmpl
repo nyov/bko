@@ -1,0 +1,45 @@
+MENU TITLE --== Debian ==--
+PROMPT 0
+TIMEOUT 100 #this is optional - will start the default after 10 seconds
+
+LABEL rootmenu
+	MENU LABEL <---- BKO 
+    TEXT HELP
+	    Back to BKO menu 
+        You can select another distribution from there 
+    ENDTEXT
+	kernel menu.c32
+	append D/D.conf
+
+label debian-live-501-iso
+    MENU DEFAULT
+	MENU LABEL Debian live 501 i386 - iso
+    TEXT HELP
+        Boots the debian live-5.0.1 for i386
+        It uses the ISO on server for booting
+    ENDTEXT
+	kernel D/D/DL/vmlinuz1
+	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/d5.iso  initrd=D/D/DL/initrd1.img
+    IPAPPEND 3
+
+label debian-live-501-squash
+	MENU LABEL Debian live 501 i386 ( squashfs )
+    TEXT HELP
+        Boots the debian live-5.0.1 for i386
+        It uses the ISO on server for booting
+    ENDTEXT
+	kernel D/D/DL/vmlinuz1
+	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/filesystem.squashfs  initrd=D/D/DL/initrd1.img
+    IPAPPEND 3
+
+
+label debian-live-501-local-iscsi
+	MENU LABEL Debian live 501 i386 - iscsi 
+    TEXT HELP
+        Boots the debian live-5.0.1 for i386
+        It uses the iscsi and uploads ISO for booting
+    ENDTEXT
+	kernel D/D/DL/vmlinuz1
+	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.iso initrd=D/D/DL/initrd1.img
+    IPAPPEND 3
+

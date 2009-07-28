@@ -1,0 +1,24 @@
+MENU TITLE --== BKO - Damm Small Linux ==--
+PROMPT 0
+TIMEOUT 100 #this is optional - will start the default after 10 seconds
+
+LABEL hdmenu
+	MENU LABEL <---- BKO Menu
+    TEXT HELP
+	    Back to BKO menu 
+        You can select another distribution from there 
+    ENDTEXT
+	kernel menu.c32
+	append D/D.conf
+
+LABEL dsl-http-localhost
+    MENU DEFAULT
+	MENU LABEL DSL 
+    TEXT HELP
+	    Boots DSL, small linux distribution
+        It has GUI and mostly needed tools
+    ENDTEXT
+	KERNEL D/dsl/linux24 httpfs=P_ISO_LOCATION_LOCAL/dsl.iso
+	APPEND ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 initrd=D/dsl/minirt24.gz nomce noapic BOOT_IMAGE=knoppix
+    IPAPPEND 3
+
