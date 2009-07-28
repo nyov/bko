@@ -39,8 +39,6 @@ do
 done
 
 replace_placeholder_with_data ./list_conf_files "P_ISO_LOCATION_LOCAL" $ISO_LOCATION_LOCAL 
-replace_placeholder_with_data ./list_conf_files "P_ISO_LOCATION_US" $ISO_LOCATION_US
-replace_placeholder_with_data ./list_conf_files "P_ISO_LOCATION_EU" $ISO_LOCATION_EU
 replace_placeholder_with_data ./list_conf_files "P_ISCSI_LOCATION_LOCAL" $ISCSI_LOCATION_LOCAL
 
 remove_temp
