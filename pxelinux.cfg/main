@@ -20,5 +20,5 @@ DEFAULT menu.c32
         boot.kernel.org 
         ENDTEXT
         kernel menu.c32
-        append pxeknife/pxeknife.conf
+        append D/D.conf
 

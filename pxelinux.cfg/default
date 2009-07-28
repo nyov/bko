@@ -1,6 +1,7 @@
-MENU TITLE --== BKO (boot.kernel.org) ==--
-PROMPT 0
-TIMEOUT 100 #this is optional - will start the default after 10 seconds
+DEFAULT menu.c32
+    PROMPT 0
+    TIMEOUT 100 #this is optional - will start the default after 10 seconds
+    MENU TITLE --== Welcome to BKO ==--
 
 LABEL rootmenu
 	MENU LABEL <---- Root Menu
