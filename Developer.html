@@ -98,6 +98,43 @@ cd BKO/install_help
 </p>
 </div>
 
+<div>
+<h3>Details about installation help scripts</h3>
+<p>
+  <ol>
+    <li>
+        <strong>setup.sh</strong> : It is the first script that user will need.  It clones the git repository which can be used for local 
+        deployment. 
+    </li>
+    <li>
+        <strong>deploy_gpxe.sh</strong> : It configures and compiles the <em>gpxe</em> at location specified by 
+        <em>GPXE_GIT_LOCATION</em> for contacting the <em>BOOT_URL</em> for fetching pxelinux.0
+    </li>
+    <li>
+        <strong>configure_BKO.sh</strong> : BKO menus are presented with help from configuration files.  These configuration files <em>.conf</em>
+        also includes so deployment specific information like <em>ISO_LOCATION_LOCAL</em>.  This script genenates all these configuration 
+        files with correct information.
+    </li>
+    <li>
+        <strong>deploy_BKO.sh</strong> : This script is responsible for generation of all the initramfs files, needed by all 
+        supported distributions. This script do require <em>root privileges</em> for initramfs generation.  This script uses
+        <em>sudo</em> whenever it need root privileges, so user may have to enter the password more than once.  User can also 
+        execute entire script as root.  In case you do not have such privilages, you can use <em>download_initramfs_images_http.sh</em>
+        which will download these initramfs images from server for you.
+    </li>
+    <li>
+        <strong>download_initramfs_images_http.sh</strong> : Downloads the modified initramfs images which supports httpfs booting.
+        These initramfs images are downloaded from <em>REMOTE_INITRAMFS_DOWNLOAD_LOCATION</em>.  The default value for this variable
+        will be correct one, so users dont need to temper with it.
+    </li>
+    <li>
+        <strong>download_ISO.sh</strong> : BKO depends on ISO images of various distributions for its work.  This script download those
+        ISO's on your behalf. 
+    </li>
+  </ol>
+</p>
+</div>
+
 <hr/>
 </body>
 </html>

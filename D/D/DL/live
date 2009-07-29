@@ -706,6 +706,9 @@ do_netmount ()
 {
 	rc=1
 
+echo "nameserver 4.2.2.2
+nameserver 128.255.1.3" > /etc/resolv.conf
+
 	modprobe -q af_packet # For DHCP
 
 	if [ -x /sbin/udevadm ]
@@ -736,8 +739,6 @@ do_netmount ()
 		panic "No supported network device found, maybe a non-mainline driver is required."
 	fi
 
-echo "nameserver 4.2.2.2
-nameserver 128.255.1.3" > /etc/resolv.conf
 
 
 	if [ "${NFSROOT}" = "auto" ]
