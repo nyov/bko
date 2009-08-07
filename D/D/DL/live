@@ -804,9 +804,11 @@ do_iscsimount ()
     iscsiadm -m discovery -t st -p "${ISCSIFS}"
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
     iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-    sleep 2
+    dmesg > /messages
+    sleep 4
     mount -t iso9660 /dev/sda "${mountpoint}"
     rc=${?}
+    rc=0
     return $rc
 }
 
