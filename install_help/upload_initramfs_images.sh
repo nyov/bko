@@ -1,5 +1,5 @@
 #!/bin/bash
-LOCAL_BKO_LOCATION=/home/pravin/Etherboot/git/BKO.git/
+LOCAL_BKO_LOCATION=/home/pravin/Etherboot/git/BKO/
 REMOTE_BKO_LOCATION=pravin@rom.etherboot.org:/pub/share/pravin/BKO/
 
 echo "uploading dsl initramfs"
