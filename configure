@@ -18,8 +18,8 @@ ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
 ################# Optional ####################
 
 # IP and Port for iscsi for local server
-ISCSI_LOCATION_LOCAL="boot.kernel.org:3260"
-
+#ISCSI_LOCATION_LOCAL="192.168.111.11:3260"
+ISCSI_LOCATION_LOCAL="140.211.167.194:3260"
 # Location from where initramfs files will be downloaded 
 # (ie. in case you dont compile on your machine )
 REMOTE_INITRAMFS_DOWNLOAD_LOCATION=http://rom.etherboot.org/share/pravin/BKO/

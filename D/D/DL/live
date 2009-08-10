@@ -801,11 +801,23 @@ do_iscsimount ()
     modprobe ib_iser
     mkdir /var/run
     /sbin/iscsid
+    sleep 4
     iscsiadm -m discovery -t st -p "${ISCSIFS}"
+    sleep 4
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
     iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-    dmesg > /messages
-    sleep 4
+#    dmesg > /messages
+    sync
+ 	i=0
+	while [ "$i" -lt 160 ]
+	do
+        ls -l /dev/sda && break
+		i="$(($i + 1))"
+        echo "waiting for iscsi disk to appear $i"
+		sleep 1
+        sync
+	done
+
     mount -t iso9660 /dev/sda "${mountpoint}"
     rc=${?}
     rc=0
