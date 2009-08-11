@@ -809,17 +809,22 @@ do_iscsimount ()
 #    dmesg > /messages
     sync
  	i=0
+#   iscsiadm -m session -P 3 | grep "attached scsi disk"
+#    export iscsidevice="/dev/disk/by-id/scsi-1494554000000000000000000010000000500c9000000d00f"
+    export iscsidevice=/dev/disk/by-label/Debian\\x20lenny\\x2020090614-09\:11 
 	while [ "$i" -lt 160 ]
 	do
-        ls -l /dev/sda && break
+        ls -l "${iscsidevice}" && break
 		i="$(($i + 1))"
         echo "waiting for iscsi disk to appear $i"
 		sleep 1
         sync
 	done
-
-    mount -t iso9660 /dev/sda "${mountpoint}"
+#   export iscsidevice=`fdisk -l 2> /dev/null | grep "724 MB" | cut -d' ' -f2 | cut -d':' -f1`
+#   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
     rc=${?}
+    sync
+    sleep 2
     rc=0
     return $rc
 }
