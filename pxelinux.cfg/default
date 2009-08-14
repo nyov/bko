@@ -12,14 +12,24 @@ LABEL rootmenu
     kernel menu.c32
 	append pxelinux.cfg/main
 
-LABEL D-DSL
-	MENU LABEL Damm small linux --->
-    TEXT HELP
-        Boot Damm Small Linux
-        This is 50MB linux with GUI and most common softwares.
+LABEL D-debian
+    MENU DEFAULT
+	MENU LABEL debian --->
+	TEXT HELP
+        Boot Debian live CD 
     ENDTEXT
 	kernel menu.c32
-	append D/dsl/dsl.conf
+	append D/D/debian.conf
+
+LABEL D-ubuntu
+	MENU LABEL Ubuntu --->
+	TEXT HELP
+        Boot Ubuntu
+        Does not work correctly, some problem with squashfs
+        So, boot it on your own risk
+    ENDTEXT
+	kernel menu.c32
+	append D/U/ubuntu.conf
 
 LABEL D-knoppix
 	MENU LABEL Knoppix --->
@@ -31,14 +41,15 @@ LABEL D-knoppix
     kernel menu.c32
 	append D/K/knoppix.conf
 
-LABEL D-debian
-    MENU DEFAULT
-	MENU LABEL debian --->
-	TEXT HELP
-        Boot Debian live CD 
+
+LABEL D-DSL
+	MENU LABEL Damm small linux --->
+    TEXT HELP
+        Boot Damm Small Linux
+        This is 50MB linux with GUI and most common softwares.
     ENDTEXT
 	kernel menu.c32
-	append D/D/debian.conf
+	append D/dsl/dsl.conf
 
 
 LABEL D-red-hat
@@ -51,13 +62,14 @@ LABEL D-red-hat
 	append default
 	append D/R/red_hat.conf
 
-LABEL D-ubuntu
-	MENU LABEL Ubuntu --->
+
+LABEL pxeknife 
+	MENU LABEL pxeknife --->
 	TEXT HELP
-        Boot Ubuntu
-        Does not work correctly, some problem with squashfs
-        So, boot it on your own risk
+        utilities from pxeknife for memory tests, hard drive utils
+        ntfs tools and meny more...
     ENDTEXT
 	kernel menu.c32
-	append D/U/ubuntu.conf
+	append default
+	append D/pxeknife/pxeknife.conf
 

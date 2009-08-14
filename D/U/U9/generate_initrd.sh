@@ -17,6 +17,8 @@ cd ..
 
 echo "coping the needed files..."
 
+cp strace mpoint/bin/
+
 cp run-init mpoint/bin/
 chmod 777 mpoint/bin/run-init
 
@@ -37,11 +39,10 @@ mkdir mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
+cp fdisk mpoint/sbin/
 
 mkdir mpoint/modules
 cp modules/* mpoint/modules/
-
-
 
 sudo chown -R root.root mpoint
 cd mpoint

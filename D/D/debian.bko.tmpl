@@ -43,3 +43,13 @@ label debian-live-501-local-iscsi
 	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 initrd=D/D/DL/initrd1.img
     IPAPPEND 3
 
+label DL5-local-iscsi-rescue
+	MENU LABEL Debian live 501 i386 - iscsi - rescue 
+    TEXT HELP
+        Boots the debian live-5.0.1 for i386
+        It uses the iscsi and uploads ISO for booting and gives rescue shell
+    ENDTEXT
+	kernel D/D/DL/vmlinuz1
+	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 initrd=D/D/DL/initrd1.img rescuebreak
+    IPAPPEND 3
+

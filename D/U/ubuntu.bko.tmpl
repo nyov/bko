@@ -42,3 +42,13 @@ label ubuntu904desktopi386-iscsi
 	append file=/cdrom/preseed/ubuntu.seed netboot=iscsi boot=casper iscsifs=P_ISCSI_LOCATION_LOCAL target=ubuntu.iso initrd=D/U/U9/initrd.gz
     IPAPPEND 3
 
+label ubuntu904desktopi386-iscsi-rescue
+	MENU LABEL Ubuntu 9.04 Desktop i386 - iscsi - rescue
+    TEXT HELP
+       Boot ubuntu 9.04 Desktop 
+       It uses iscsi for booting also gives rescue shell
+    ENDTEXT
+	kernel D/U/U9/vmlinuz
+	append file=/cdrom/preseed/ubuntu.seed netboot=iscsi boot=casper iscsifs=P_ISCSI_LOCATION_LOCAL target=ubuntu.iso initrd=D/U/U9/initrd.gz rescuebreak
+    IPAPPEND 3
+

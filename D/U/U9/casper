@@ -10,6 +10,7 @@ root_persistence="casper-rw"
 home_persistence="home-rw"
 root_snapshot_label="casper-sn"
 home_snapshot_label="home-sn"
+export RESCUEBREAK="No"
 
 USERNAME=casper
 USERFULLNAME="Live session user"
@@ -36,6 +37,8 @@ parse_cmdline() {
                 export PERSISTENT="Yes" ;;
             nopersistent)
                 export PERSISTENT="" ;;
+            rescuebreak)
+                export RESCUEBREAK="Yes" ;;
             union=*)
                 export UNIONFS="${x#union=}";;
             ip*)
@@ -200,6 +203,9 @@ do_netmount() {
     fi
 
     [ "$quiet" != "y" ] && log_end_msg
+
+    echo "Giving rescue shell.... type exit when finished"
+    /bin/bash
     return ${rc}
 }
 
@@ -221,64 +227,43 @@ do_nfsmount() {
     return ${rc}
 }
 
-do_iscsifsmount() {
-    # objectives: 
-    # Setup networking.
-    # Find the location from which we need to get the ISO.
-    # Mount the ISO.
-    rc=1
-
-#	ifconfig lo 127.0.0.1 up
-#	ifconfig eth0 up
-#    echo "The ip configuration is $ip"
-#    myip=`echo $ip | cut -d: -f1`
-#    echo "Using ip address $myip"
-#    mynm=`echo $ip | cut -d: -f4`
-#    echo "Using Netmask $mynm"
-#    mygw=`echo $ip | cut -d: -f3`
-#    echo "Using gateway ip $mygw"
-#    ifconfig eth0 $myip netmask $mynm 
-#    echo "verify the ip address"
-#    ifconfig eth0
-
-#    echo "setting route"
-#    route add default gw $mygw 
-
-
-	echo  "passed on path is ${ISCSIFS}" 
-	echo "The location of ubuntu iso  is $ISO_PATH" 
-	echo "mounting CDROM" 
-
-
-#	losetup -r /dev/loop0 $FILEPATH
-#	busybox mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+do_iscsifsmount ()
+{
+	rc=1
 
     echo "inside iscsimount" 
             
-
-    modprobe scsi_transport_iscsi
-    modprobe libiscsi
-    modprobe iscsi_tcp
     insmod /modules/libcrc32c.ko
     insmod /modules/crc32c.ko
-    insmod /modules/ib_iser.ko
+    modprobe scsi-transport-iscsi
+    modprobe libiscsi
+    modprobe iscsi_tcp
     mkdir /var/run
     /sbin/iscsid
+    sleep 4
     iscsiadm -m discovery -t st -p "${ISCSIFS}"
+    sleep 4
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
     iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-    sleep 2
-    mount -t iso9660 /dev/sdb "${mountpoint}"
+#    dmesg > /messages
+    sync
+ 	i=0
+#   iscsiadm -m session -P 3 | grep "attached scsi disk"
+    export iscsidevice=/dev/disk/by-label/Ubuntu\\x209.04\\x20i386
+	while [ "$i" -lt 160 ]
+	do
+        ls -l "${iscsidevice}" && break
+		i="$(($i + 1))"
+        echo "waiting for iscsi disk to appear $i"
+		sleep 1
+        sync
+	done
+   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
     rc=${?}
-
-	# test if knoppix is there
-	if test -d /cdrom/casper
-	then
-		echo "successfully mounted the Image" >> /output
-		return 0
-	fi
-	return ${rc}
-
+    sync
+    sleep 2
+    rc=0
+    return $rc
 }
 
 
@@ -696,6 +681,13 @@ mountroot() {
         done
     fi
 
+    if [ "${RESCUEBREAK}" = "Yes" ]; then
+        echo "#################################################################"
+        echo "#### giving rescue shell, you can execute any commands here #####"
+        echo "#### When done, type exit, boot process will resume :-)     #####"
+        echo "#################################################################"
+        /bin/sh
+    fi
     if [ -z "${livefs_root}" ]; then
         panic "Unable to find a medium containing a live file system"
     fi

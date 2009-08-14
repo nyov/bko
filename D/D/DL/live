@@ -19,6 +19,9 @@ USERNAME="user"
 USERFULLNAME="Live user"
 HOSTNAME="host"
 
+export RESCUEBREAK="No"
+
+
 mkdir -p "${mountpoint}"
 
 # Create /etc/mtab for debug purpose and future syncs
@@ -93,6 +96,9 @@ Arguments ()
                 echo "found argument iscsifs here ${ISCSIFS}"
 				;;
 
+            rescuebreak)
+                export RESCUEBREAK="Yes" 
+                ;;
 
 			target=*)
 				TARGET="${ARGUMENT#target=}"
@@ -782,6 +788,8 @@ nameserver 128.255.1.3" > /etc/resolv.conf
 		rc=0
 	fi
 
+    echo "Giving rescue shell.... type exit when finished"
+    /bin/bash
 	log_end_msg
 	return ${rc}
 }
@@ -821,7 +829,7 @@ do_iscsimount ()
         sync
 	done
 #   export iscsidevice=`fdisk -l 2> /dev/null | grep "724 MB" | cut -d' ' -f2 | cut -d':' -f1`
-#   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
+   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
     rc=${?}
     sync
     sleep 2
@@ -1685,6 +1693,13 @@ mountroot ()
 		fi
 	fi
 
+    if [ "${RESCUEBREAK}" = "Yes" ]; then
+        echo "#################################################################"
+        echo "#### giving rescue shell, you can execute any commands here #####"
+        echo "#### When done, type exit, boot process will resume :-)     #####"
+        echo "#################################################################"
+        /bin/sh
+    fi
 	if [ -z "${livefs_root}" ]
 	then
 		panic "Unable to find a medium containing a live file system"
