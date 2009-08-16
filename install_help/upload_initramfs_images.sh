@@ -10,6 +10,10 @@ echo "uploading knoppix initramfs"
 FILE_TO_COPY=/D/K/K5/minirt.gz
 scp $LOCAL_BKO_LOCATION/$FILE_TO_COPY $REMOTE_BKO_LOCATION/$FILE_TO_COPY
 
+echo "uploading knoppix6 initramfs"
+FILE_TO_COPY=/D/K/K6/minirt.gz
+scp $LOCAL_BKO_LOCATION/$FILE_TO_COPY $REMOTE_BKO_LOCATION/$FILE_TO_COPY
+
 echo "uploading fedora initramfs"
 FILE_TO_COPY=/D/R/F/initrd0.img 
 scp $LOCAL_BKO_LOCATION/$FILE_TO_COPY $REMOTE_BKO_LOCATION/$FILE_TO_COPY
