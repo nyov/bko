@@ -10,10 +10,10 @@ LABEL rootmenu
 	append D/D.conf
 
 label knoppix502-local
-    MENU DEFAULT
 	MENU LABEL Knoppix 5.0.1 
     TEXT HELP
         Boots Knoppix-5.0.1
+        It uses httpfs for loading root filesystem
     ENDTEXT
 	kernel D/K/K5/linux  
 	append httpfs=P_ISO_LOCATION_LOCAL/K5.iso nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=D/K/K5/minirt.gz BOOT_IMAGE=knoppix
@@ -24,6 +24,7 @@ label knoppix601-local
 	MENU LABEL Knoppix 6.0.1 
     TEXT HELP
         Boots Knoppix-6.0.1
+        It uses httpfs for loading root filesystem
     ENDTEXT
 	kernel D/K/K6/linux 
     append httpfs=P_ISO_LOCATION_LOCAL/K6.iso ramdisk_size=100000 lang=en vt.default_utf8=0 apm=power-off vga=0x311 initrd=D/K/K6/minirt.gz nomce loglevel=0 nolapic_timer

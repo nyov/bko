@@ -102,13 +102,26 @@ A. <p>
     Only problem that may occur is if you are behind HTTP proxy.  We plan to add support for HTTP proxy
     in near future. Stay tuned till then.
   </p>
+  <p>
+    It is expected that you can use <b>Public DNS</b> system as BKO is configured to use Public dns servers instead of the servers
+    provided by user or DHCP.  We will be soon fixing this problem.  Till then, you are expected to have public DNS access.
+  </p>
 </li>
+
 
 #testBKO
 Q. I just want to test BKO, without rebooting the system, Can I do it?
 A.  <p>
 		  If you want to just test our solution without rebooting, then we will recommend you
-		  to download the floppy image of gpxe, and use qemu or other virtualization
+		  to download the floppy image of gpxe, and use vmware, qemu or other virtualization
 		  solutions to boot from gpxe you downloaded.  In case of qemu, you can use following command:
 		  <pre>	qemu -fda gpxe.dsk</pre>
+          Certain older version of qemu do not work properly with gpxe, so we recommend vmware or latest qemu.
   </p>
+
+#iscsiSupport
+Q. Any other protocols are supported?
+A. <p>
+      We are working on booting over iscsi protocol.  iscsi gives better performance compared to httpfs, which makes it more
+      desirable.  We have working implementation ready and soon they will be deployed on BKO.
+   </p>

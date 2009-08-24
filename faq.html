@@ -56,6 +56,7 @@
 <li><a href="#WhyBboUsb"> Why should I create BKO enabled USB?</a><br/><br/></li>
 <li><a href="#firewallBKO"> I am behind firewall, Will BKO boot me?</a><br/><br/></li>
 <li><a href="#testBKO"> I just want to test BKO, without rebooting the system, Can I do it?</a><br/><br/></li>
+<li><a href="#iscsiSupport"> Any other protocols are supported?</a><br/><br/></li>
 </ul>
 
  Q. When should I use BKO for booting?
@@ -265,7 +266,7 @@
 
       <li>
 
-        Creating BKO enabled USB is one-time job, once it is created, you need not worry about upgradation, as it is taken care by BKO servers.
+        Creating BKO enabled USB is one-time job, once it is created, you need not worry about upgredation, as it is taken care by BKO servers.
 
 	It will always let you boot with latest distributions and tools available on BKO.
 
@@ -323,7 +324,17 @@
 
   </p>
 
+  <p>
+
+    It is expected that you can use <b>Public DNS</b> system as BKO is configured to use Public dns servers instead of the servers
+
+    provided by user or DHCP.  We will be soon fixing this problem.  Till then, you are expected to have public DNS access.
+
+  </p>
+
 </li>
+
+
 
 
 
@@ -351,13 +362,45 @@
 <div class="reply">  <p>
 		  If you want to just test our solution without rebooting, then we will recommend you
 
-		  to download the floppy image of gpxe, and use qemu or other virtualization
+		  to download the floppy image of gpxe, and use vmware, qemu or other virtualization
 
 		  solutions to boot from gpxe you downloaded.  In case of qemu, you can use following command:
 
 		  <pre>	qemu -fda gpxe.dsk</pre>
 
+          Certain older version of qemu do not work properly with gpxe, so we recommend vmware or latest qemu.
+
   </p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="iscsiSupport"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Any other protocols are supported?
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p>
+      We are working on booting over iscsi protocol.  iscsi gives better performance compared to httpfs, which makes it more
+
+      desirable.  We have working implementation ready and soon they will be deployed on BKO.
+
+   </p>
 
 
 </div>
