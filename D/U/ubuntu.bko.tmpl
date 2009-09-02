@@ -11,16 +11,6 @@ LABEL rootmenu
 	kernel menu.c32
 	append D/D.conf
 
-label ubuntu904desktopi386-squash
-    MENU DEFAULT
-	MENU LABEL Ubuntu 9.04 Desktop i386 - squash
-    TEXT HELP
-       Boot ubuntu 9.04 Desktop 
-       It uses squashfs instead of iso, so it may be faster
-    ENDTEXT
-	kernel D/U/U9/vmlinuz
-	append  file=/cdrom/preseed/ubuntu.seed netboot=http boot=casper httpfs=P_ISO_LOCATION_LOCAL/U/filesystem.squashfs  initrd=D/U/U9/initrd.gz
-    IPAPPEND 3
 
 label ubuntu904desktopi386-iso
 	MENU LABEL Ubuntu 9.04 Desktop i386 - iso 

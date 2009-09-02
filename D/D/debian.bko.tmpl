@@ -22,17 +22,6 @@ label debian-live-501-iso
 	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/d5.iso  initrd=D/D/DL/initrd1.img
     IPAPPEND 3
 
-label debian-live-501-squash
-	MENU LABEL Debian live 501 i386 ( squashfs )
-    TEXT HELP
-        Boots the debian live-5.0.1 for i386
-        It uses the ISO on server for booting
-    ENDTEXT
-	kernel D/D/DL/vmlinuz1
-	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/filesystem.squashfs  initrd=D/D/DL/initrd1.img
-    IPAPPEND 3
-
-
 label debian-live-501-local-iscsi
 	MENU LABEL Debian live 501 i386 - iscsi 
     TEXT HELP
