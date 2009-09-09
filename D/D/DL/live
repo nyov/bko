@@ -8,6 +8,7 @@ echo "/root/lib" >> /etc/ld.so.conf
 echo "/root/usr/lib" >> /etc/ld.so.conf
 
 mountpoint="/live/image"
+ext_mountpoint="/ext_volume"
 LIVE_MEDIA_PATH="live"
 
 root_persistence="live-rw"
@@ -87,25 +88,36 @@ Arguments ()
 			httpfs=*)
 				HTTPFS="${ARGUMENT#httpfs=}"
 				export HTTPFS
-                echo "found argument httpfs here ${HTTPFS}"
 				;;
 
 			iscsifs=*)
 				ISCSIFS="${ARGUMENT#iscsifs=}"
 				export ISCSIFS
-                echo "found argument iscsifs here ${ISCSIFS}"
 				;;
 
-            rescuebreak)
-                export RESCUEBREAK="Yes" 
-                ;;
+			iname=*)
+				ISCSINAME="${ARGUMENT#iname=}"
+				export ISCSINAME 
+				;;
 
 			target=*)
 				TARGET="${ARGUMENT#target=}"
 				export TARGET 
-                echo "found argument target here ${TARGET}"
 				;;
 
+			dnsip=*)
+				DNSIP="${ARGUMENT#dnsip=}"
+				export DNSIP 
+				;;
+
+			ip=*)
+				BOOTIP="${ARGUMENT#ip=}"
+				export BOOTIP
+				;;
+
+            		rescuebreak)
+                		export RESCUEBREAK="Yes" 
+                		;;
 
 			hostname=*)
 				HOSTNAME="${ARGUMENT#hostname=}"
@@ -708,12 +720,44 @@ copy_live_to ()
 	return 0
 }
 
+add_ip_to_resolv_conf ()
+{
+	if [ ! -z ${1} ]
+	then
+		echo "nameserver $1" >> /etc/resolv.conf
+	fi
+}
+
+setup_static_ip ()
+{
+	ifconfig lo 127.0.0.1 up
+	ifconfig "${DEVICE}" up
+	local myip=`echo ${BOOTIP} | cut -d: -f1`
+	local mynm=`echo ${BOOTIP} | cut -d: -f4`
+	local mygw=`echo ${BOOTIP} | cut -d: -f3`
+	echo "myip=${myip} mynm=${mynm} mygw=${mygw}"
+	ifconfig "${DEVICE}" "${myip}" netmask "${mynm}"  
+	ifconfig "${DEVICE}"
+    	route add default gw "${mygw}" 
+	return 0
+}
+
+setup_static_dns ()
+{
+	if [ -z ${DNSIP} ]
+	then
+		add_ip_to_resolv_conf "4.2.2.2" 
+		add_ip_to_resolv_conf "128.255.1.3" 
+	else
+		add_ip_to_resolv_conf ${DNSIP} 
+	fi
+	return 0
+}
+
 do_netmount ()
 {
 	rc=1
 
-echo "nameserver 4.2.2.2
-nameserver 128.255.1.3" > /etc/resolv.conf
 
 	modprobe -q af_packet # For DHCP
 
@@ -728,13 +772,27 @@ nameserver 128.255.1.3" > /etc/resolv.conf
 		udevsettle
 	fi
 
-	ipconfig ${DEVICE} | tee /netboot.config
+	if [ -z ${BOOTIP} ] 
+	then	
+		ipconfig ${DEVICE} | tee /netboot.config
+		# Adding DNS Entry
+		local ipconf_dnsip=`cat /netboot.config | grep dns0 | cut -d':' -f3 | cut -d' ' -f2`
+		if [ -z ${ipconf_dnsip}] || [ ${ipconf_dnsip} == '0.0.0.0']
+		then
+			setup_static_dns
+		else
+			add_ip_to_resolv_conf ${ipconf_dnsip}
+		fi
+		# source relevant ipconfig output
+		OLDHOSTNAME=${HOSTNAME}
+		. /tmp/net-${DEVICE}.conf
+		[ -z ${HOSTNAME} ] && HOSTNAME=${OLDHOSTNAME}
+		export HOSTNAME
 
-	# source relevant ipconfig output
-	OLDHOSTNAME=${HOSTNAME}
-	. /tmp/net-${DEVICE}.conf
-	[ -z ${HOSTNAME} ] && HOSTNAME=${OLDHOSTNAME}
-	export HOSTNAME
+	else
+		setup_static_ip 
+		setup_static_dns
+	fi
 
 	# Check if we have a network device at all
 	if ! ls /sys/class/net/eth0 > /dev/null 2>&1 && \
@@ -746,7 +804,6 @@ nameserver 128.255.1.3" > /etc/resolv.conf
 	fi
 
 
-
 	if [ "${NFSROOT}" = "auto" ]
 	then
 		NFSROOT=${ROOTSERVER}:${ROOTPATH}
@@ -755,21 +812,15 @@ nameserver 128.255.1.3" > /etc/resolv.conf
 
 	if ( [ -n "${ISCSIFS}" ] ) && do_iscsimount
 	then
-        echo "do_iscsimount successful"
 		rc=0
 		return ${rc}
 	fi
-    echo "do_iscsimount failed..."
-
-
 
 	if ( [ -n "${FETCH}" ] || [ -n "${HTTPFS}" ] || [ -n "${FTPFS}" ] ) && do_httpmount
 	then
-        echo "do_httpmount successful"
 		rc=0
 		return ${rc}
 	fi
-    echo "do_httpmount failed..."
 
 	if [ "${NFSROOT#*:}" = "${NFSROOT}" ] && [ "$NETBOOT" != "cifs" ]
 	then
@@ -788,93 +839,34 @@ nameserver 128.255.1.3" > /etc/resolv.conf
 		rc=0
 	fi
 
-    echo "Giving rescue shell.... type exit when finished"
-    /bin/bash
 	log_end_msg
 	return ${rc}
-}
-
-do_iscsimount ()
-{
-	rc=1
-	dest="${mountpoint}/${LIVE_MEDIA_PATH}"
-	mount -t ramfs ram "${mountpoint}"
-	mkdir -p "${dest}"
-
-    echo "inside iscsimount" 
-            
-    insmod /modules/libcrc32c.ko
-    insmod /modules/crc32c.ko
-    modprobe iscsi_tcp
-    modprobe ib_iser
-    mkdir /var/run
-    /sbin/iscsid
-    sleep 4
-    iscsiadm -m discovery -t st -p "${ISCSIFS}"
-    sleep 4
-    targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
-    iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-#    dmesg > /messages
-    sync
- 	i=0
-#   iscsiadm -m session -P 3 | grep "attached scsi disk"
-#    export iscsidevice="/dev/disk/by-id/scsi-1494554000000000000000000010000000500c9000000d00f"
-    export iscsidevice=/dev/disk/by-label/Debian\\x20lenny\\x2020090614-09\:11 
-	while [ "$i" -lt 160 ]
-	do
-        ls -l "${iscsidevice}" && break
-		i="$(($i + 1))"
-        echo "waiting for iscsi disk to appear $i"
-		sleep 1
-        sync
-	done
-#   export iscsidevice=`fdisk -l 2> /dev/null | grep "724 MB" | cut -d' ' -f2 | cut -d':' -f1`
-   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
-    rc=${?}
-    sync
-    sleep 2
-    rc=0
-    return $rc
 }
 
 do_httpmount ()
 {
 	rc=1
-	dest="${mountpoint}/${LIVE_MEDIA_PATH}"
-	mount -t ramfs ram "${mountpoint}"
-	mkdir -p "${dest}"
 
-    echo "inside httpmount" 
 	for webfile in HTTPFS FTPFS FETCH
 	do
-		url="$(eval echo \"\$\{${webfile}\}\")"
-		extension="$(echo "${url}" | sed 's/\(.*\)\.\(.*\)/\2/')"
+		local url="$(eval echo \"\$\{${webfile}\}\")"
+		local extension="$(echo "${url}" | sed 's/\(.*\)\.\(.*\)/\2/')"
 
-        if [ "${extension}" = "iso" ] 
-        then
-            echo "Mounting iso"
-       		modprobe fuse
-            modprobe loop
-            mknod "${rootmnt}/dev/loop0" b 7 0
-	        mkdir -p "${rootmnt}/iso"
-            echo "trying httpfs with ${url} and ${mountpoint}"
-			httpfs "${url}" "${rootmnt}/iso" 
-	        FILEPATH=`ls "${rootmnt}"/iso/*.iso`
-	        echo  "File path is $FILEPATH" 
-	        losetup "${rootmnt}/dev/loop0" $FILEPATH
-	        mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
-            rc=${?}
-            return $rc
-        else
-            echo "not BKO http mount, proceding in normal way"
-        fi
-
-        echo "webfile is $webfile and url is $url" 
-        echo "webfile is $webfile and url is $url" >> /mylogs
 		if [ -n "$url" ]
 		then
 			case "${extension}" in
-				squashfs|tgz|tar)
+				iso|squashfs|tgz|tar)
+					if [ "${extension}" = "iso" ]
+					then
+						mkdir -p "${ext_mountpoint}"
+						dest="${ext_mountpoint}"
+					else
+						local dest="${mountpoint}/${LIVE_MEDIA_PATH}"
+						mount -t ramfs ram "${mountpoint}"
+						mkdir -p "${dest}"
+					fi
+
+
 					if [ "${webfile}" = "FETCH" ]
 					then
 						case "$url" in
@@ -899,13 +891,19 @@ do_httpmount ()
 							FUSE_MOUNT="httpfs"
 						fi
 						modprobe fuse
-                        echo "trying $FUSE_MOUNT with ${url} and ${dest}"
-                        sleep 2
+						# sometimes /dev/fuse takes time to appear, following line will avoid that problem
+    						wait_for_device /dev/fuse 160
 						$FUSE_MOUNT "${url}" "${dest}"
-                        echo "mount done "
 					fi
 					[ ${?} -eq 0 ] && rc=0
 					[ "${extension}" = "tgz" ] && live_dest="ram"
+					if [ "${extension}" = "iso" ]
+					then
+						isoloop=$(setup_loop "${dest}/$(basename "${url}")" "loop" "/sys/block/loop*" "" '')
+						mount -t iso9660 "${isoloop}" "${mountpoint}"
+						rc=${?}
+					fi
+
 					break
 					;;
 
@@ -920,9 +918,60 @@ do_httpmount ()
 	then
 	    umount "${mountpoint}"
 	fi
-
-	return ${rc}
+	return 0
+#	return ${rc}
 }
+
+do_iscsimount ()
+{
+	rc=1
+	if [ ! -z ${ISCSINAME} ]
+	then
+		echo ${ISCSINAME} > /etc/iscsi/initiatorname.iscsi
+	fi
+
+	dest="${mountpoint}/${LIVE_MEDIA_PATH}"
+	mount -t ramfs ram "${mountpoint}"
+	mkdir -p "${dest}"
+	insmod /modules/libcrc32c.ko
+	insmod /modules/crc32c.ko
+	modprobe iscsi_tcp
+	modprobe ib_iser
+	mkdir /var/run
+	/sbin/iscsid
+	sleep 4
+	iscsiadm -m discovery -t st -p "${ISCSIFS}"
+	sleep 4
+	targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
+	iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
+	export iscsidevice=/dev/disk/by-label/Debian\\x20lenny\\x2020090614-09\:11 
+	wait_for_device ${iscsidevice} 160
+	mount -t iso9660 "${iscsidevice}" "${mountpoint}"
+	rc=${?}
+	sync
+	sleep 2
+#	rc=0
+	return $rc
+}
+
+# waits for $2 seconds to devie/file to appear on given path ($1)
+wait_for_device ()
+{
+	local device_path=${1}
+	local max_seconds=${2}
+	local i=0
+	while [ "$i" -lt ${max_seconds} ]
+	do
+        ls -l "${device_path}" && return 0 
+		i="$(($i + 1))"
+        	echo "waiting for ${device_path} to appear $i"
+		sleep 1
+        	sync
+	done
+	echo "Device did not appeared..."
+	return 1
+}
+
 
 do_nfsmount ()
 {
@@ -1632,6 +1681,21 @@ integrity_check ()
 	fi
 }
 
+rescue_break_shell ()
+{
+	if [ "${RESCUEBREAK}" = "Yes" ]; 
+	then
+		echo "#################################################################"
+		echo "#### giving rescue shell, you can execute any commands here #####"
+		echo "#### When done, type exit, boot process will resume :-)     #####"
+		echo "#################################################################"
+		/bin/sh
+		echo "#################################################################"
+		echo "####            Resuming Boot Process                       #####"
+		echo "#################################################################"
+	fi
+}
+
 mountroot ()
 {
         if [ -x /scripts/local-top/cryptroot ]; then
@@ -1692,14 +1756,7 @@ mountroot ()
 			done
 		fi
 	fi
-
-    if [ "${RESCUEBREAK}" = "Yes" ]; then
-        echo "#################################################################"
-        echo "#### giving rescue shell, you can execute any commands here #####"
-        echo "#### When done, type exit, boot process will resume :-)     #####"
-        echo "#################################################################"
-        /bin/sh
-    fi
+	rescue_break_shell
 	if [ -z "${livefs_root}" ]
 	then
 		panic "Unable to find a medium containing a live file system"
