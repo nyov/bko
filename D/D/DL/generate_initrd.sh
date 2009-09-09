@@ -18,15 +18,14 @@ cd ..
 echo "coping the needed files..."
 
 
-#cp run-init mpoint/bin/
-#chmod 777 mpoint/bin/run-init
+cp run-init mpoint/bin/
+chmod 777 mpoint/bin/run-init
 
 echo "copying iscsi related files..."
 mkdir mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
-cp fdisk mpoint/sbin/
 
 mkdir mpoint/modules
 cp modules/* mpoint/modules/
@@ -38,8 +37,6 @@ chmod 777 mpoint/bin/httpfs
 cp httpfs/server/fusermount mpoint/bin/
 chmod 777 mpoint/bin/fusermount
 
-#cp init mpoint/
-#chmod 0777 mpoint/init 
 
 cp live mpoint/scripts/
 chmod 0777 mpoint/scripts/live
