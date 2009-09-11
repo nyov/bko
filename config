@@ -1,20 +1,14 @@
-#!/bin/bash
-#set -e
-
 ########################################################################
 ################ BEGIN CUSTOMIZE ####################
 
 # modify the paths as per your need.
 
-# Location of gpxe git
-GPXE_GIT_LOCATION="../gpxe"
-
 # URL to be used for embedding into compiled gpxe for downloading images.
-BOOT_URL="http:\/\/boot.kernel.org\/"
-#BOOT_URL="http:\/\/rom.etherboot.org\/share\/pravin\/BKO\/"
-#BOOT_URL="http:\/\/192.168.111.11\/BKO\/"
+BASE_URL = http://boot.kernel.org/
+#BOOT_URL = http://rom.etherboot.org/share/pravin/BKO/
+#BOOT_URL = http://192.168.111.11/BKO/
 
-# HTTP location on local server where all iso images are kept.
+# HTTP location on server where all iso images are kept.
 ISO_LOCATION_LOCAL="http:\/\/mirrors.kernel.org\/ISO\/"
 #ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
 #ISO_LOCATION_LOCAL="http:\/\/rom.etherboot.org\/share\/pravin\/ISO\/"
@@ -24,10 +18,7 @@ ISO_LOCATION_LOCAL="http:\/\/mirrors.kernel.org\/ISO\/"
 
 # IP and Port for iscsi for local server
 #ISCSI_LOCATION_LOCAL="192.168.111.11:3260"
-ISCSI_LOCATION_LOCAL="140.211.167.194:3260"
-# Location from where initramfs files will be downloaded 
-# (ie. in case you dont compile on your machine )
-REMOTE_INITRAMFS_DOWNLOAD_LOCATION=http://rom.etherboot.org/share/pravin/BKO/
+ISCSI_SERVER = 140.211.167.194:3260
 
 ################# END CUSTOMIZATION #################
 #######################################################################

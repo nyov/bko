@@ -4,3 +4,6 @@
 [submodule "syslinux"]
 	path = syslinux
 	url = git://git.kernel.org/pub/scm/boot/syslinux/syslinux.git
+[submodule "gpxe"]
+	path = gpxe
+	url = git://git.etherboot.org/scm/people/pravin/gpxe.git
