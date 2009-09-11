@@ -1,14 +1,25 @@
-MENU TITLE --== Red Hat (Fedora Live CD) ==--
+MENU INCLUDE bko-gui.conf
 PROMPT 0
-#TIMEOUT 100 #this is optional - will start the default after 10 seconds
-LABEL rootmenu
-	MENU LABEL <---- BKO Menu 
-    TEXT HELP
-	    Back to BKO menu 
-        You can select another distribution from there 
-    ENDTEXT
-	kernel menu.c32
-	append D/D.conf
+MENU TITLE --== Red hat (Fedora Live)  ==--
+MENU LABEL ^Red hat (Fedora Live)
+
+TEXT HELP
+		Here you can boot fedora live cd
+		only http is supported.
+		Currently, Fedora live cd only boot in single user mode
+		You have to execute following commads to start GUI
+		rm /etc/init.d/network
+		rm /etc/init.d/NetworkManager
+		init 5
+		
+ENDTEXT
+
+label uplvl
+	MENU LABEL Return
+	MENU EXIT
+
+label spacer
+	MENU LABEL
 
 label fedora_11_live_cd
     MENU DEFAULT
@@ -16,17 +27,7 @@ label fedora_11_live_cd
     TEXT HELP
         currently work only in single user mode
     ENDTEXT
-	kernel D/R/F/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_LOCAL/F11.iso initrd=D/R/F/initrd0.img rootfstype=auto ro liveimg rhgb selinux=0 single 
-    IPAPPEND 3
-
-label fedora_11_live_cd_nfs
-	MENU LABEL Fedora 11 Live CD - (nfs)
-    TEXT HELP
-	    Used for testing only
-        Uses nfs server instead of httpfs for accessing iso image
-    ENDTEXT
-	kernel D/R/F/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live nfs=192.168.111.11:/var/www/ initrd=D/R/F/initrd0.img  rootfstype=auto ro liveimg rhgb selinux=0 3  
-    IPAPPEND 3
+	kernel live/fedora/f11/vmlinuz0
+	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_LOCAL/F11.iso initrd=live/fedora/f11/initrd0.img rootfstype=auto ro liveimg rhgb selinux=0 single 
+	IPAPPEND 3
 

@@ -2,7 +2,7 @@
 set -e
 
 # pick the configuration information
-source ../configure
+source ../bko/configure
 
 # all scripts are in install_help folder
 cd ..
@@ -28,6 +28,7 @@ echo "Finding files to process"
 find ./ -name "*.bko.tmpl" 2> /dev/null 1> ./list_bko_tmpl_files || :
 cp list_bko_tmpl_files list_conf_files
 echo "processing files"
+cat list_bko_tmpl_files
 perl -p -i -e 's/.bko.tmpl/.conf/g' list_conf_files
 paste list_bko_tmpl_files list_conf_files -d'|' > tempcopy
 

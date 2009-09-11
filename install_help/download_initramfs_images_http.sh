@@ -2,7 +2,7 @@
 set -e
 
 # pick the configuration information
-source ../configure
+source ../bko/configure
 
 # all scripts are in install folder
 cd ..

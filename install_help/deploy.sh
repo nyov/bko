@@ -2,10 +2,11 @@
 set -e
 
 # pick the configuration information
-source ../configure
+source ../bko/configure
 
 # all scripts are in install_help folder
 
+./deploy_syslinux.sh
 ./deploy_gpxe.sh
 
 ./configure_BKO.sh

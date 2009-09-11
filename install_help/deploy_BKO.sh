@@ -2,34 +2,37 @@
 set -e
 
 # pick the configuration information
-source ../configure
+source ../bko/configure
 
 # all scripts are in install_help folder
-cd ..
+cd ../bko/live
 
-cd D 
+
 echo "Creating customized initrd image for DSL .."
 cd dsl/
 ./generate_minirt24.sh
 cd ..
 
 echo "Creating customized initrd image for KNOPPIX .."
-cd K/K5/
+cd knoppix/5.11/
+./generate_minirt.sh
+cd ../6.0.1/
 ./generate_minirt.sh
 cd ../..
 
+
 echo "Creating customized initrd image for debian .."
-cd D/DL/
+cd debian/initmod/ 
 ./generate_initrd.sh
 cd ../..
 
 echo "Creating customized initrd image for Ubuntu .."
-cd U/U9/
+cd ubuntu/U9/
 ./generate_initrd.sh
 cd ../..
 
 echo "Creating customized initrd image for red hat .."
-cd R/F/
+cd fedora/f11/
 ./generate_initrd.sh
 cd ../..
 

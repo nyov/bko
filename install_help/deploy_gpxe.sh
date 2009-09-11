@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-source ../configure
+source ../bko/configure
 
 
 # all scripts are in install_help folder

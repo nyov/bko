@@ -1,15 +1,19 @@
-MENU TITLE --== Debian ==--
+MENU INCLUDE bko-gui.conf
 PROMPT 0
-#TIMEOUT 100 #this is optional - will start the default after 10 seconds
+MENU TITLE --== Debian Live ==--
+MENU LABEL ^Debian Live
 
-LABEL rootmenu
-	MENU LABEL <---- BKO 
-    TEXT HELP
-	    Back to BKO menu 
-        You can select another distribution from there 
-    ENDTEXT
-	kernel menu.c32
-	append D/D.conf
+TEXT HELP
+		Here you can boot debian live 5.01
+		You can choose to boot over HTTP or ISCSI.
+ENDTEXT
+
+label uplvl
+	MENU LABEL Return
+	MENU EXIT
+
+label spacer
+	MENU LABEL
 
 label debian-live-501-iso
     MENU DEFAULT
@@ -18,19 +22,19 @@ label debian-live-501-iso
         Boots the debian live-5.0.1 for i386
         It uses the ISO on server for booting
     ENDTEXT
-	kernel D/D/DL/vmlinuz1
-	append netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/d5.iso  initrd=D/D/DL/initrd1.img
-    IPAPPEND 3
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/d5.iso  
+	IPAPPEND 3
 
 label debian-live-501-local-iscsi
 	MENU LABEL Debian live 501 i386 - iscsi 
     TEXT HELP
         Boots the debian live-5.0.1 for i386
-        It uses the iscsi and uploads ISO for booting
+        It uses the iscsi for booting
     ENDTEXT
-	kernel D/D/DL/vmlinuz1
-	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 initrd=D/D/DL/initrd1.img
-    IPAPPEND 3
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs	iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 
+    	IPAPPEND 3
 
 label DL5-local-iscsi-rescue
 	MENU LABEL Debian live 501 i386 - iscsi - rescue 
@@ -38,7 +42,7 @@ label DL5-local-iscsi-rescue
         Boots the debian live-5.0.1 for i386
         It uses the iscsi and uploads ISO for booting and gives rescue shell
     ENDTEXT
-	kernel D/D/DL/vmlinuz1
-	append netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 initrd=D/D/DL/initrd1.img rescuebreak
-    IPAPPEND 3
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 rescuebreak
+    	IPAPPEND 3
 
