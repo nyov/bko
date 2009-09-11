@@ -1,6 +1,3 @@
-[submodule "gpxe.git"]
-	path = gpxe.git
-	url = git://git.etherboot.org/scm/people/pravin/gpxe.git
 [submodule "pxeknife"]
 	path = pxeknife
 	url = http://pxeknife.erebor.org/git/pxeknife.git
