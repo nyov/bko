@@ -11,13 +11,13 @@ GPXE_GIT_LOCATION="./gpxe.git"
 
 # URL to be used for embedding into compiled gpxe for downloading images.
 #BOOT_URL="http:\/\/boot.kernel.org\/"
-#BOOT_URL="http:\/\/rom.etherboot.org\/share\/pravin\/BKO\/"
-BOOT_URL="http:\/\/192.168.111.11\/BKO\/bko\/"
+BOOT_URL="http:\/\/rom.etherboot.org\/share\/pravin\/BKO\/bko/\/"
+#BOOT_URL="http:\/\/192.168.111.11\/BKO\/bko\/"
 
 # HTTP location on local server where all iso images are kept.
 #ISO_LOCATION_LOCAL="http:\/\/mirrors.kernel.org\/ISO\/"
-ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
-#ISO_LOCATION_LOCAL="http:\/\/rom.etherboot.org\/share\/pravin\/ISO\/"
+#ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
+ISO_LOCATION_LOCAL="http:\/\/rom.etherboot.org\/share\/pravin\/ISO\/"
 
 
 ################# Optional ####################
