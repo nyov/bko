@@ -1,18 +1,20 @@
 MENU INCLUDE bko/bko-gui.conf
 PROMPT 0
-MENU TITLE --== Welcome to BKO ==--
+MENU TITLE --== Welcome to boot.kernel.org ==--
 MENU LABEL ^BKO
 
-LABEL rootmenu
-	MENU LABEL <---- Root Menu
-    TEXT HELP
-        Go back to boot time menu
-        You can boot from local hard-disk from there.
-    ENDTEXT
-    kernel menu.c32
-	append default
+LABEL bootlocal
+	MENU DEFAULT
+	MENU LABEL Local Boot
+	TEXT HELP
+		This allows you to 'Exit' from boot.kernel.org and boot
+		the machine using the local disks, cd's, floppies,
+		usbsticks, or whatever other media is available to boot
+		from
+	ENDTEXT
+	localboot 0
 
 menu include bko/live/live.conf Live Images
 
-menu include pxeknife/pxeknife.conf PXE Knife
+menu include bko/pxeknife/pxeknife.conf PXE Knife
 
