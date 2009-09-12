@@ -2,7 +2,7 @@
 set -e
 
 # pick the configuration information
-source ../bko/configure
+source ../config
 
 # all scripts are in install_help folder
 cd ../bko/live
@@ -17,7 +17,7 @@ echo "Creating customized initrd image for KNOPPIX .."
 cd knoppix/5.11/
 ./generate_minirt.sh
 cd ../6.0.1/
-./generate_minirt.sh
+sudo ./generate_initrd.sh
 cd ../..
 
 

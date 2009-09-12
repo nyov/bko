@@ -12,7 +12,7 @@ echo Otherwise, we will try DHCP, and then try static-IP upon failure
 sleep 4
 dhcp net0
 set 209:string pxelinux.cfg/default
-set 210:string P_BOOT_URL
+set 210:string P_BOOT_URL/bko/
 echo Here we go!
 chain ${210:string}pxelinux.0
 echo PxeKnife booting cancelled, using local disk instead...

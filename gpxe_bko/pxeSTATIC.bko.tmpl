@@ -10,7 +10,7 @@ set net0/dns 10.0.2.3
 sleep 3
 config net0
 set 209:string pxelinux.cfg/default
-set 210:string P_BOOT_URL
+set 210:string P_BOOT_URL/bko/
 echo Here we go!
 chain ${210:string}pxelinux.0
 echo PxeKnife booting cancelled, using local disk instead...
