@@ -40,7 +40,7 @@ do
 done
 
 replace_placeholder_with_data ./list_conf_files "P_ISO_LOCATION_LOCAL" $ISO_LOCATION_LOCAL 
-replace_placeholder_with_data ./list_conf_files "P_ISCSI_LOCATION_LOCAL" $ISCSI_LOCATION_LOCAL
+replace_placeholder_with_data ./list_conf_files "P_ISCSI_LOCATION_LOCAL" $ISCSI_SERVER
 
 remove_temp
 
