@@ -11,7 +11,7 @@
 BASE_URL=http://192.168.111.11/BKO/
 
 # HTTP location on server where all iso images are kept.
-#ISO_LOCATION_LOCAL=http://mirrors.kernel.org/ISO/
+#ISO_LOCATION_LOCAL="http:\/\/mirrors.kernel.org\/ISO\/"
 ISO_LOCATION_LOCAL="http:\/\/192.168.111.11\/ISO\/"
 #ISO_LOCATION_LOCAL="http:\/\/rom.etherboot.org\/share\/pravin\/ISO\/"
 
