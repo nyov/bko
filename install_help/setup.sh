@@ -1,9 +1,9 @@
 #!/bin/bash
 git clone git://git.etherboot.org/scm/people/pravin/BKO.git
+cd BKO
 git submodule init
 git submodule update
-cd BKO
-echo "Edit the config"
+echo "Edit the config file to suit your needs"
 exit 0
 
 make
