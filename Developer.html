@@ -55,23 +55,37 @@
 
 <ol>
 <li>
-Get the BKO.git and gpxe repositories.  You can use the script <a href="install_help/setup.sh">setup.sh</a> for this work.
+You can get the code from following git repository.<br/> 
+<a href="http://git.etherboot.org/?p=people/pravin/BKO.git;a=summary">git://git.etherboot.org/scm/people/pravin/BKO.git</a><br/>
+You need to initiate submodules using following instructions before proceeding further
+<pre>
+git submodule init
+git submodule update
+</pre>
+Or you can download and run <a href="install_help/setup.sh">setup.sh</a> which will do above for you.
 </li>
 <li>
-Edit the <strong>BKO/configure</strong> to suit your needs.  It can be done with any text editor
+Edit the <strong>config</strong> to suit your needs.  It can be done with any text editor
 <pre>
 vi BKO/configure
 </pre>
-Make sure that you provide proper values for atleast <strong>GPXE_GIT_LOCATION, BOOT_URL and ISO_LOCATION_LOCAL </strong>
+Make sure that you provide proper values for atleast <strong>BASE_URL</strong> which is the http URL where BKO will be kept
+on your machine.
 Other entries are optional, you can leave them untouched. Please refer bellow for more details on the meaning of the configuration variables.
 </li>
 <li>
 Follow the following instructions
 <pre>
-cd BKO/install_help
-./deploy.sh
+make
+cd install_help
+./configure_BKO.sh
+./download_initramfs_images_http.sh
+</pre>
+and optionally you need to download the ISO images, or you can point to images on etherboot server or kernel.org server.
+<pre>
 ./download_ISO.sh
 </pre>
+
 </li>
 </ol>
 <hr/>
@@ -82,17 +96,13 @@ cd BKO/install_help
 <p>
   <ol>
     <li>
-        <strong>GPXE_GIT_LOCATION</strong>: path to the place where gpxe git is placed.  If you have used the setup.sh script, then this path
-        should be <i>../gpxe</i>. the gpxe folder can be moved anywhere as long as the path is given properly.
-    </li>
-    <li>
-        <strong>BOOT_URL</strong>: gpxe will contact this URL for initial boot. It should point to the BKO folder which is created by <i>setup.sh</i> script. 
+        <strong>BASE_URL</strong>: gpxe will contact this URL for initial boot.  
         and it must be HTTP URL and not linux path.
     </li>
     <li>
-        <strong>ISO_LOCATION_LOCAL</strong> : The HTTP path where all ISO's will be downloaded. the script <i>download_ISO.sh</i> will download them in folder
+        <strong>ISO_LOCATION_LOCAL</strong> : The HTTP path where all ISOs will be kept. the script <i>download_ISO.sh</i> will download them in folder
         named <i>ISO</i> in the same location where <i>setup.sh</i> was executed. For example, if you have executed setup.sh in topmost directory (ie var/www/)
-        then BOOT_URL=http://your-ip-address/BKO/ and ISO_LOCATION_LOCAL=http://your-ip-address/ISO/
+        then BASE_URL=http://your-ip-address/BKO/ and ISO_LOCATION_LOCAL=http://your-ip-address/ISO/
     </li>
   </ol>
 </p>
@@ -103,17 +113,14 @@ cd BKO/install_help
 <p>
   <ol>
     <li>
-        <strong>setup.sh</strong> : It is the first script that user will need.  It clones the git repository which can be used for local 
+        <strong>setup.sh</strong> : It is the first script that user will need.  It clones and initiate the git repository which can be used for local 
         deployment. 
-    </li>
-    <li>
-        <strong>deploy_gpxe.sh</strong> : It configures and compiles the <em>gpxe</em> at location specified by 
-        <em>GPXE_GIT_LOCATION</em> for contacting the <em>BOOT_URL</em> for fetching pxelinux.0
     </li>
     <li>
         <strong>configure_BKO.sh</strong> : BKO menus are presented with help from configuration files.  These configuration files <em>.conf</em>
         also includes so deployment specific information like <em>ISO_LOCATION_LOCAL</em>.  This script genenates all these configuration 
-        files with correct information.
+        files with correct information.<br/>
+	<em>Note : </em> Soon this script will be executed automatically from <em>Makefile</em>.
     </li>
     <li>
         <strong>deploy_BKO.sh</strong> : This script is responsible for generation of all the initramfs files, needed by all 
@@ -124,7 +131,7 @@ cd BKO/install_help
     </li>
     <li>
         <strong>download_initramfs_images_http.sh</strong> : Downloads the modified initramfs images which supports httpfs booting.
-        These initramfs images are downloaded from <em>REMOTE_INITRAMFS_DOWNLOAD_LOCATION</em>.  The default value for this variable
+        These initramfs images are downloaded from <em>Etherboot server</em>.  The default value for this variable
         will be correct one, so users dont need to temper with it.
     </li>
     <li>
