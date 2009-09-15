@@ -15,6 +15,16 @@ LABEL bootlocal
 	ENDTEXT
 	localboot 0
 
+label pkinstallers
+        menu label OS Installers
+        menu goto installers
+	TEXT HELP
+		This is a shortcut to the PXE Knife OS Installers
+		Menu.  From there you can network install a number
+		of operating systems including Fedora, Ubuntu, Debian
+		and a number of others.
+	ENDTEXT
+
 menu include live/live.conf Live Images
 
 menu include pxeknife/pxeknife.conf PXE Knife
