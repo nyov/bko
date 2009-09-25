@@ -73,7 +73,7 @@ $(patsubst %,%.install,$(GPXEDIR)): make_statement gpxe_images
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.lkrn
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/undionly.kpxe
 	mv $(GPXEDIR)/src/bin/gpxe.usb $(GPXEDIR)/src/bin/gpxe.dsk $(GPXEDIR)/src/bin/gpxe.iso gpxe_images/
-	mv $(GPXEDIR)/src/bin/gpxe.sdsk $(GPXEDIR)/src/bin/gpxe.pxe $(GPXEDIR)/src/bin/undionly.kpxe gpxe_images/  $(GPXEDIR)/src/bin/gpxe.lkrn gpxe_images/
+	mv $(GPXEDIR)/src/bin/gpxe.sdsk $(GPXEDIR)/src/bin/gpxe.pxe $(GPXEDIR)/src/bin/undionly.kpxe $(GPXEDIR)/src/bin/gpxe.lkrn gpxe_images/
 	
 
 $(patsubst %,%.clean,$(DIRS)):
