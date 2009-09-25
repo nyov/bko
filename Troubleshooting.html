@@ -56,18 +56,19 @@
   We have tried to cover most of the problems that user may face in <a href="faq.html">FAQ</a> page.
   <br/>
 <ul>
-<li><a href="#customizedGpxe"> Creating customized gpxe images</a><br/><br/></li>
+<li><a href="#BKODownloads"> Types of gpxe images supported.</a><br/><br/></li>
 <li><a href="#BKODhcp"> Script for DHCP networking</a><br/><br/></li>
 <li><a href="#BKOStatic"> Script for static networking at boot time</a><br/><br/></li>
 <li><a href="#BKOStaticCompile"> script for network configuration at compile time.</a><br/><br/></li>
+<li><a href="#customizedGpxe"> Creating customized gpxe images</a><br/><br/></li>
 </ul>
 
-<a id="customizedGpxe"></a><div class="qbox" >
+<a id="BKODownloads"></a><div class="qbox" >
 <table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
 <tr>
 <td class="qmrk" width="1px"><span class="question">Q.</span></td>
 <td class="qtd">
-<div class="query"> Creating customized gpxe images
+<div class="query"> Types of gpxe images supported.
 </div>
 </td>
 </tr>
@@ -78,26 +79,12 @@
 <tr>
 <td class="amrk" width="1px"><span class="answer">A.</span></td>
 <td class="atd">
-<div class="reply"> <p>
-  You can create your own customized gpxe images tailered for your network card and
+<div class="reply"> <p>Gpxe supports many types of gpxe images which can be used
+depending on your needs.  You can downaload them at <a href="http://boot.kernel.org/gpxe_images/">gpxe images</a>
 
-   also add embedded script
+</p>
 
-  which will use BKO for booting.  
 
-  This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
-
-  embedd any gpxe script.
-
-   Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
-
-  BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
-
-  You can follow the <u>Configure</u> option which will let you add your own gpxe script.
-
-  We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
-
-  </p>
 
 
 
@@ -125,7 +112,7 @@
 <div class="reply"> <p> This gpxe script make sure that machine will boot with DHCP networking.	
 <pre>#!gpxe
 
-echo "Hi, We will be using PXEKnife from URL http://rom.etherboot.org/BKO"
+echo "Hi, We will be using BKO from URL http://boot.kernel.org/"
 
 echo "It is assumed that you have dhcp networking"
 
@@ -135,11 +122,11 @@ dhcp net0
 
 set 209:string pxelinux.cfg/default
 
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 
 echo "Here we go"
 
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 
 echo "PxeKnife booting cancelled, using local disk instead.."
 
@@ -195,11 +182,11 @@ config net0
 
 set 209:string pxelinux.cfg/default
 
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 
 echo "Here we go"
 
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 
 echo PxeKnife booting cancelled, using local disk instead..
 
@@ -249,11 +236,11 @@ set net0/dns 10.0.2.3
 
 set 209:string pxelinux.cfg/default
 
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 
 echo "Here we go"
 
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 
 echo PxeKnife booting cancelled, using local disk instead..
 
@@ -266,6 +253,53 @@ is responsible for providing you with user interface.
 <p>You can modify above scripts to suit your needs</p>
 
 </p>
+
+
+
+
+</div>
+</td>
+</tr>
+</table>
+</div><a id="customizedGpxe"></a><div class="qbox" >
+<table class="qtable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="qmrk" width="1px"><span class="question">Q.</span></td>
+<td class="qtd">
+<div class="query"> Creating customized gpxe images
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="abox">
+<table class="atable" width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td class="amrk" width="1px"><span class="answer">A.</span></td>
+<td class="atd">
+<div class="reply"> <p>
+  You can create your own customized gpxe images tailered for your network card and
+
+   also add embedded script
+
+  which will use BKO for booting.  
+
+  This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
+
+  embedd any gpxe script.
+
+   Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
+
+  BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
+
+  You can follow the <u>Configure</u> option which will let you add your own gpxe script.
+
+  We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
+
+  </p>
+
+
+
 
 </div>
 </td>

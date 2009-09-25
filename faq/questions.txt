@@ -92,8 +92,33 @@ A.  <p>
         BKO enabled USB can be used to boot (almost) any system as long as there is Internet connectivity.<br/>
 	It is worth considering this ability against 1MB of space and few minutes for creation of BKO enabled USB.
       </li>
+      <li>
+      	You can use <a href="gpxe_images/gpxe.lkrn">gpxe.lkrn</a> which is linux kernel like module and can
+	boot boot.kernel.org from syslinux/grub.
+      </li>
+      <li>
+        Other simple way to create BKO enabled USB is to copy <a href="gpxe_images/gpxe.dsk">gpxe.dsk</a> image onto USB using <pre>dd</pre> command.
+        Please note that just copying into USB will not work, it has to be placed on 0 sector.
+	Few howtos that you can refer to for this way of creating BKO enabled USB.
+	<ul>
+	  <li> <a href="http://howtoforge.com/boot-linux-over-http-with-boot.kernel.org-bko">Howto for linux</a> </li>
+	  <li> <a href="http://etherboot.org/wiki/usbwithstorage">Howto for MAC</a> </li>
+	</ul>
+      </li>
     </ul>
   </p>
+
+
+#differenceDSKUSB
+Q. What is the difference between <a href="gpxe_images/gpxe.dsk">gpxe.dsk</a> and <a href="gpxe_images/gpxe.usb">gpxe.usb</a> images?
+A. <p>
+<a href="gpxe_images/gpxe.dsk">gpxe.dsk</a> are floppy disk images and can be used to boot from floppy or USB.
+there is no special disk layout for USB drives.  Either they are unpartitioned devices (e.g., treated like a floppy disk without a partition table and just a boot block and filesystem) or they are treated more like hard disk drives (that is, they contain a partition table and an MBR, and each partition potentially contains a boot block and filesystem). USB devices can be booted either as floppy units or as hard disk units (depending on whether or not they are partitioned and whether the BIOS supports one or the other.) Some BIOSes will only boot USB devices that look like a floppy and some will only boot USB devices that look like a HD.
+Depending on your system, you can use  <a href="gpxe_images/gpxe.dsk">gpxe.dsk</a> or <a href="gpxe_images/gpxe.usb">gpxe.usb</a>  
+  </p>
+</li>
+
+
 
 #firewallBKO
 Q. I am behind firewall, Will BKO boot me?
@@ -108,7 +133,6 @@ A. <p>
   </p>
 </li>
 
-
 #testBKO
 Q. I just want to test BKO, without rebooting the system, Can I do it?
 A.  <p>
@@ -117,11 +141,14 @@ A.  <p>
 		  solutions to boot from gpxe you downloaded.  In case of qemu, you can use following command:
 		  <pre>	qemu -fda gpxe.dsk</pre>
           Certain older version of qemu do not work properly with gpxe, so we recommend vmware or latest qemu.
+	  In case of vmware, you just need to provide gpxe.dsk as floopy disk attached to the hardware and big enough 
+	  RAM. You may not give any Harddisk.
   </p>
 
 #iscsiSupport
 Q. Any other protocols are supported?
 A. <p>
       We are working on booting over iscsi protocol.  iscsi gives better performance compared to httpfs, which makes it more
-      desirable.  We have working implementation ready and soon they will be deployed on BKO.
+      desirable.  We have implemented and deployed iscsi support for debian and Ubuntu on BKO.  Support for other
+      distributions is still in pipeline.
    </p>
