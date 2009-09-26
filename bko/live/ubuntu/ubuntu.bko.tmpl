@@ -34,5 +34,5 @@ label ubuntu904desktopi386-iscsi
        It uses iscsi for booting
     ENDTEXT
 	kernel live/ubuntu/U9/vmlinuz
-	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=http iscsifs=P_ISCSI_LOCATION_LOCAL target=ubuntu 
+	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=iscsi iscsifs=P_ISCSI_LOCATION_LOCAL target=ubuntu 
     	IPAPPEND 3

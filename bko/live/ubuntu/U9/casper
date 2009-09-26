@@ -170,18 +170,76 @@ copy_live_to() {
     return 0
 }
 
+add_ip_to_resolv_conf ()
+{
+	if [ ! -z ${1} ]
+	then
+		echo "nameserver $1" >> /etc/resolv.conf
+	fi
+}
+
+setup_static_ip ()
+{
+	ifconfig lo 127.0.0.1 up
+	ifconfig "${DEVICE}" up
+	local myip=`echo ${STATICIP} | cut -d: -f1`
+	local mynm=`echo ${STATICIP} | cut -d: -f4`
+	local mygw=`echo ${STATICIP} | cut -d: -f3`
+	echo "myip=${myip} mynm=${mynm} mygw=${mygw}"
+	ifconfig "${DEVICE}" "${myip}" netmask "${mynm}"  
+	ifconfig "${DEVICE}"
+    	route add default gw "${mygw}" 
+	return 0
+}
+
+setup_static_dns ()
+{
+	if [ -z ${DNSIP} ]
+	then
+		add_ip_to_resolv_conf "4.2.2.2" 
+		add_ip_to_resolv_conf "128.255.1.3" 
+	else
+		for x in $( echo "${DNS}" | sed 's/,/ /g')
+		do
+			add_ip_to_resolv_conf ${x} 
+		done
+	fi
+	return 0
+}
+
 do_netmount() {
     rc=1
 
-    echo "nameserver 4.2.2.2
-    nameserver 128.255.1.3" > /etc/resolv.conf
     
     modprobe "${MP_QUIET}" af_packet # For DHCP
 
     /sbin/udevadm trigger
     /sbin/udevadm settle
 
-    ipconfig ${DEVICE} /tmp/net-${DEVICE}.conf | tee /netboot.config
+
+	if [ -z ${BOOTIP} ] 
+	then	
+    		ipconfig ${DEVICE} /tmp/net-${DEVICE}.conf | tee /netboot.config
+		
+		# Adding DNS Entry
+		local ipconf_dnsip=`cat /netboot.config | grep dns0 | cut -d':' -f3 | cut -d' ' -f2`
+		if [ -z ${ipconf_dnsip}] || [ ${ipconf_dnsip} == '0.0.0.0']
+		then
+			setup_static_dns
+		else
+			add_ip_to_resolv_conf ${ipconf_dnsip}
+		fi
+		# source relevant ipconfig output
+		OLDHOSTNAME=${HOSTNAME}
+		. /tmp/net-${DEVICE}.conf
+		[ -z ${HOSTNAME} ] && HOSTNAME=${OLDHOSTNAME}
+		export HOSTNAME
+
+	else
+		setup_static_ip 
+		setup_static_dns
+	fi
+
 
     if [ "${NFSROOT}" = "auto" ]; then
         NFSROOT=${ROOTSERVER}:${ROOTPATH}
@@ -204,8 +262,6 @@ do_netmount() {
 
     [ "$quiet" != "y" ] && log_end_msg
 
-    echo "Giving rescue shell.... type exit when finished"
-    /bin/bash
     return ${rc}
 }
 
@@ -231,7 +287,7 @@ do_iscsifsmount ()
 {
 	rc=1
 
-    echo "inside iscsimount" 
+    echo "inside iscsimount" >> /mylogs 
             
     insmod /modules/libcrc32c.ko
     insmod /modules/crc32c.ko
@@ -245,7 +301,7 @@ do_iscsifsmount ()
     sleep 4
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
     iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-#    dmesg > /messages
+    dmesg >> /mylogs
     sync
  	i=0
 #   iscsiadm -m session -P 3 | grep "attached scsi disk"
@@ -275,25 +331,6 @@ do_httpfsmount() {
     # Mount the ISO.
     rc=1
 
-#	ifconfig lo 127.0.0.1 up
-#	ifconfig eth0 up
-#    echo "The ip configuration is $ip"
-#    myip=`echo $ip | cut -d: -f1`
-#    echo "Using ip address $myip"
-#    mynm=`echo $ip | cut -d: -f4`
-#    echo "Using Netmask $mynm"
-#    mygw=`echo $ip | cut -d: -f3`
-#    echo "Using gateway ip $mygw"
-#    ifconfig eth0 $myip netmask $mynm 2> /output
-#    echo "verify the ip address"
-#    ifconfig eth0
-
-#    echo "setting route"
-#    route add default gw $mygw 2> /outputroute
-
-
-
-
 	echo  "passed on path is ${HTTPFS}" >> status
 	ISO_PATH="${HTTPFS}"
 	echo "The location of ubuntu iso  is $ISO_PATH" >> /output
@@ -314,8 +351,6 @@ do_httpfsmount() {
 	    losetup -r /dev/loop0 $FILEPATH
 	    mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
 	fi
-#    /bin/bash
-
 
 	# test if knoppix is there
 	if test -d /cdrom/casper
@@ -644,6 +679,21 @@ set_usplash_timeout() {
     fi
 }
 
+rescue_break_shell ()
+{
+	if [ "${RESCUEBREAK}" = "Yes" ]; 
+	then
+		echo "#################################################################"
+		echo "#### giving rescue shell, you can execute any commands here #####"
+		echo "#### When done, type exit, boot process will resume :-)     #####"
+		echo "#################################################################"
+		/bin/sh -i
+		echo "#################################################################"
+		echo "####            Resuming Boot Process                       #####"
+		echo "#################################################################"
+	fi
+}
+
 mountroot() {
     exec 6>&1
     exec 7>&2
@@ -682,12 +732,9 @@ mountroot() {
     fi
 
     if [ "${RESCUEBREAK}" = "Yes" ]; then
-        echo "#################################################################"
-        echo "#### giving rescue shell, you can execute any commands here #####"
-        echo "#### When done, type exit, boot process will resume :-)     #####"
-        echo "#################################################################"
-        /bin/sh
+    	rescue_break_shell
     fi
+
     if [ -z "${livefs_root}" ]; then
         panic "Unable to find a medium containing a live file system"
     fi
