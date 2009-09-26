@@ -297,11 +297,10 @@ do_iscsifsmount ()
     mkdir /var/run
     /sbin/iscsid
     sleep 4
-    iscsiadm -m discovery -t st -p "${ISCSIFS}"
+    iscsiadm -m discovery -t st -p "${ISCSIFS}" >> /mylogs
     sleep 4
     targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
-    iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-    dmesg >> /mylogs
+    iscsiadm -m node --targetname "${targetname}" --login >> /mylogs
     sync
  	i=0
 #   iscsiadm -m session -P 3 | grep "attached scsi disk"
@@ -310,7 +309,7 @@ do_iscsifsmount ()
 	do
         ls -l "${iscsidevice}" && break
 		i="$(($i + 1))"
-        echo "waiting for iscsi disk to appear $i"
+        echo "waiting for iscsi disk to appear $i" 
 		sleep 1
         sync
 	done
