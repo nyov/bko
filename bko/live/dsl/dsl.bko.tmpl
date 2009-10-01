@@ -22,7 +22,7 @@ LABEL dsl-http-localhost
 	Boots DSL, small linux distribution
 	It has GUI and mostly needed tools
     ENDTEXT
-	KERNEL live/dsl/linux24 httpfs=P_ISO_LOCATION_LOCAL/dsl.iso
+	KERNEL live/dsl/linux24 httpfs=@DSL_HTTPFS_ISO@
 	APPEND ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 initrd=live/dsl/minirt24.gz nomce noapic BOOT_IMAGE=knoppix
     IPAPPEND 1
 
