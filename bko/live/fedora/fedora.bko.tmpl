@@ -1,7 +1,7 @@
 MENU INCLUDE bko-gui.conf
 PROMPT 0
-MENU TITLE --== Red hat (Fedora Live)  ==--
-MENU LABEL ^Red hat (Fedora Live)
+MENU TITLE --== Fedora Live  ==--
+MENU LABEL ^Fedora Live
 
 TEXT HELP
 		Here you can boot fedora live cd
@@ -28,6 +28,6 @@ label fedora_11_live_cd
         currently work only in single user mode
     ENDTEXT
 	kernel live/fedora/f11/vmlinuz0
-	append root=CDLABEL=Fedora-11-i686-Live httpfs=P_ISO_LOCATION_LOCAL/F11.iso initrd=live/fedora/f11/initrd0.img rootfstype=auto ro liveimg rhgb selinux=0 single 
+	append root=CDLABEL=Fedora-11-i686-Live httpfs=@FEDORA_HTTPFS_11_ISO@ initrd=live/fedora/f11/initrd0.img rootfstype=auto ro liveimg rhgb selinux=0 single 
 	IPAPPEND 3
 
