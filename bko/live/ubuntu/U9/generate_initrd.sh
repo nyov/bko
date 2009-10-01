@@ -10,7 +10,7 @@ cp initrd.gz_orig initrd.gz
 gunzip initrd.gz
 
 echo "extracting filesystem filesystem"
-mkdir mpoint
+mkdir -p mpoint
 cd mpoint 
 cpio -ivu --no-absolute-filename  < ../initrd 2> /dev/null
 cd ..
@@ -35,14 +35,14 @@ cp casper mpoint/scripts/
 chmod 0777 mpoint/scripts/casper
 
 echo "copying iscsi related files..."
-mkdir mpoint/etc/iscsi
+mkdir -p mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
 cp fdisk mpoint/sbin/
 rsync -avrHS --progress libs/. mpoint/lib/.
 
-mkdir mpoint/modules
+mkdir -p mpoint/modules
 cp modules/* mpoint/modules/
 
 sudo chown -R root.root mpoint

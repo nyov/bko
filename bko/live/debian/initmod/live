@@ -738,9 +738,9 @@ setup_static_ip ()
 {
 	ifconfig lo 127.0.0.1 up
 	ifconfig "${DEVICE}" up
-	local myip=`echo ${BOOTIP} | cut -d: -f1`
-	local mynm=`echo ${BOOTIP} | cut -d: -f4`
-	local mygw=`echo ${BOOTIP} | cut -d: -f3`
+	local myip=`echo ${STATICIP} | cut -d: -f1`
+	local mynm=`echo ${STATICIP} | cut -d: -f4`
+	local mygw=`echo ${STATICIP} | cut -d: -f3`
 	echo "myip=${myip} mynm=${mynm} mygw=${mygw}"
 	ifconfig "${DEVICE}" "${myip}" netmask "${mynm}"  
 	ifconfig "${DEVICE}"
@@ -755,7 +755,10 @@ setup_static_dns ()
 		add_ip_to_resolv_conf "4.2.2.2" 
 		add_ip_to_resolv_conf "128.255.1.3" 
 	else
-		add_ip_to_resolv_conf ${DNSIP} 
+		for x in $( echo "${DNS}" | sed 's/,/ /g')
+		do
+			add_ip_to_resolv_conf ${x} 
+		done
 	fi
 	return 0
 }
@@ -763,7 +766,6 @@ setup_static_dns ()
 do_netmount ()
 {
 	rc=1
-
 
 	modprobe -q af_packet # For DHCP
 
@@ -778,7 +780,7 @@ do_netmount ()
 		udevsettle
 	fi
 
-	if [ -z ${BOOTIP} ] 
+	if [ -z ${STATICIP} ] 
 	then	
 		ipconfig ${DEVICE} | tee /netboot.config
 		# Adding DNS Entry
@@ -1698,17 +1700,14 @@ integrity_check ()
 
 rescue_break_shell ()
 {
-	if [ "${RESCUEBREAK}" = "Yes" ]; 
-	then
 		echo "#################################################################"
 		echo "#### giving rescue shell, you can execute any commands here #####"
 		echo "#### When done, type exit, boot process will resume :-)     #####"
 		echo "#################################################################"
-		/bin/sh
+		/bin/sh -i
 		echo "#################################################################"
 		echo "####            Resuming Boot Process                       #####"
 		echo "#################################################################"
-	fi
 }
 
 mountroot ()
@@ -1771,7 +1770,12 @@ mountroot ()
 			done
 		fi
 	fi
-	rescue_break_shell
+
+
+    	if [ "${RESCUEBREAK}" = "Yes" ]; then
+    		rescue_break_shell
+    	fi
+
 	if [ -z "${livefs_root}" ]
 	then
 		panic "Unable to find a medium containing a live file system"
@@ -1819,3 +1823,4 @@ mountroot ()
 	kill ${tailpid}
 	[ -w "${rootmnt}/var/log/" ] && cp live.log "${rootmnt}/var/log/" 2>/dev/null
 }
+

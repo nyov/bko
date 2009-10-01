@@ -18,17 +18,20 @@ cd ..
 echo "coping the needed files..."
 
 
+cp init mpoint/
+chmod 777 mpoint/init
+
 cp run-init mpoint/bin/
 chmod 777 mpoint/bin/run-init
 
 echo "copying iscsi related files..."
-mkdir mpoint/etc/iscsi
+mkdir -p mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
 rsync -avrHS --progress libs/. mpoint/lib/.
 
-mkdir mpoint/modules
+mkdir -p mpoint/modules
 cp modules/* mpoint/modules/
 
 

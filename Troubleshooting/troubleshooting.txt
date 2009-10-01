@@ -1,29 +1,22 @@
-#customizedGpxe
-Q. Creating customized gpxe images
-A. <p>
-  You can create your own customized gpxe images tailered for your network card and
-   also add embedded script
-  which will use BKO for booting.  
-  This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
-  embedd any gpxe script.
-   Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
-  BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
-  You can follow the <u>Configure</u> option which will let you add your own gpxe script.
-  We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
-  </p>
+#BKODownloads
+Q. Types of gpxe images supported.
+A. <p>Gpxe supports many types of gpxe images which can be used
+depending on your needs.  You can downaload them at <a href="http://boot.kernel.org/gpxe_images/">gpxe images</a>
+</p>
+
 
 #BKODhcp
 Q. Script for DHCP networking
 A. <p> This gpxe script make sure that machine will boot with DHCP networking.	
 <pre>#!gpxe
-echo "Hi, We will be using PXEKnife from URL http://rom.etherboot.org/BKO"
+echo "Hi, We will be using BKO from URL http://boot.kernel.org/"
 echo "It is assumed that you have dhcp networking"
 ifopen net0
 dhcp net0
 set 209:string pxelinux.cfg/default
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 echo "Here we go"
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 echo "PxeKnife booting cancelled, using local disk instead.."
  </pre>  
 </p>
@@ -43,9 +36,9 @@ set net0/dns 10.0.2.3
 sleep 3
 config net0
 set 209:string pxelinux.cfg/default
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 echo "Here we go"
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 echo PxeKnife booting cancelled, using local disk instead..
 </pre>
 </p>
@@ -62,12 +55,27 @@ set net0/netmask 255.255.255.0
 set net0/gateway 10.0.2.2
 set net0/dns 10.0.2.3
 set 209:string pxelinux.cfg/default
-set 210:string http://rom.etherboot.org/BKO/
+set 210:string http://boot.kernel.org/bko/
 echo "Here we go"
-chain http://rom.etherboot.org/BKO/pxelinux.0
+chain http://boot.kernel.org/bko/pxelinux.0
 echo PxeKnife booting cancelled, using local disk instead..
 </pre>
 If you compare this script with above, we have just removed the <italic>config net0</italic> which 
 is responsible for providing you with user interface.
 <p>You can modify above scripts to suit your needs</p>
 </p>
+
+#customizedGpxe
+Q. Creating customized gpxe images
+A. <p>
+  You can create your own customized gpxe images tailered for your network card and
+   also add embedded script
+  which will use BKO for booting.  
+  This is extended <a href="http://rom-o-matic.net">rom-o-matic.net</a> to allow you
+  embedd any gpxe script.
+   Please visit <a href="http://rom.etherboot.org/share/pravin/rom-o-matic-BKO.net/">
+  BKO enabled rom-o-matic.net</a> for creating BKO enabled gpxe images.<br>
+  You can follow the <u>Configure</u> option which will let you add your own gpxe script.
+  We are providing few gpxe scripts here, which can be used to create customized gpxe with BKO support.
+  </p>
+

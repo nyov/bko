@@ -13,7 +13,11 @@ mount -t proc -o nodev,noexec,nosuid none /proc
 
 # Note that this only becomes /dev on the real filesystem if udev's scripts
 # are used; which they will be, but it's worth pointing out
-mount -t tmpfs -o mode=0755 udev /dev
+tmpfs_size="10M"
+if [ -e /etc/udev/udev.conf ]; then
+	. /etc/udev/udev.conf
+fi
+mount -t tmpfs -o size=$tmpfs_size,mode=0755 udev /dev
 [ -e /dev/console ] || mknod -m 0600 /dev/console c 5 1
 [ -e /dev/null ] || mknod /dev/null c 1 3
 > /dev/.initramfs-tools
@@ -41,7 +45,6 @@ export panic=
 export blacklist=
 export resume_offset=
 
-
 # Bring in the main config
 . /conf/initramfs.conf
 for conf in conf/conf.d/*; do
@@ -59,34 +62,7 @@ for x in $(cat /proc/cmdline); do
 		ROOT=${x#root=}
 		case $ROOT in
 		LABEL=*)
-			ROOT="${ROOT#LABEL=}"
-
-			# support / in LABEL= paths (escape to \x2f)
-			case "${ROOT}" in
-			*[/]*)
-			if [ -x "$(command -v sed)" ]; then
-				ROOT="$(echo ${ROOT} | sed 's,/,\\x2f,g')"
-			else
-				if [ "${ROOT}" != "${ROOT#/}" ]; then
-					ROOT="\x2f${ROOT#/}"
-				fi
-				if [ "${ROOT}" != "${ROOT%/}" ]; then
-					ROOT="${ROOT%/}\x2f"
-				fi
-				IFS='/'
-				newroot=
-				for s in $ROOT; do
-					if [ -z "${newroot}" ]; then
-						newroot="${s}"
-					else
-						newroot="${newroot}\\x2f${s}"
-					fi
-				done
-				unset IFS
-				ROOT="${newroot}"
-			fi
-			esac
-			ROOT="/dev/disk/by-label/${ROOT}"
+			ROOT="/dev/disk/by-label/${ROOT#LABEL=}"
 			;;
 		UUID=*)
 			ROOT="/dev/disk/by-uuid/${ROOT#UUID=}"
@@ -110,42 +86,8 @@ for x in $(cat /proc/cmdline); do
 			;;
 		esac
 		;;
-	resumedelay=*)
-		RESUMEDELAY="${x#resumedelay=}"
-		;;
-	loop=*)
-		LOOP="${x#loop=}"
-		;;
-	loopflags=*)
-		LOOPFLAGS="-o ${x#loopflags=}"
-		;;
-	loopfstype=*)
-		LOOPFSTYPE="${x#loopfstype=}"
-		;;
-	cryptopts=*)
-		cryptopts="${x#cryptopts=}"
-		;;
 	nfsroot=*)
 		NFSROOT="${x#nfsroot=}"
-		;;
-	httpfs=*)
-		HTTPFS="${x#httpfs=}"
-		;;
-	iscsifs=*)
-		ISCSIFS="${x#iscsifs=}"
-		;;
-	target=*)
-		TARGET="${x#target=}"
-		;;
-	iscsilabel=*)
-		ISCSILABEL="${ARGUMENT#iscsilabel=}"
-		export ISCSILABEL
-		;;
-	netboot=*)
-		NETBOOT="${x#netboot=}"
-		;;
-	dns=*)
-		DNS="${x#dns=}"
 		;;
 	ip=*)
 		IPOPTS="${x#ip=}"
@@ -211,15 +153,11 @@ fi
 depmod -a
 maybe_break top
 
-# export BOOT variable value for compcache,
-# so we know if we run from casper
-export BOOT
-
 # Don't do log messages here to avoid confusing usplash
 run_scripts /scripts/init-top
 
 maybe_break modules
-log_begin_msg "Loading essential drivers..."
+log_begin_msg "Loading essential drivers"
 load_modules
 log_end_msg
 
@@ -229,9 +167,10 @@ run_scripts /scripts/init-premount
 [ "$quiet" != "y" ] && log_end_msg
 
 maybe_break mount
-log_begin_msg "Mounting root file system..."
+log_begin_msg "Mounting root file system"
 . /scripts/${BOOT}
 parse_numeric ${ROOT}
+maybe_break mountroot
 mountroot
 log_end_msg
 
@@ -265,38 +204,28 @@ if [ ! -x "${rootmnt}${init}" ]; then
 	panic "No init found. Try passing init= bootarg."
 fi
 
-# Confuses /etc/init.d/rc
-if [ -n ${debug} ]; then
-	unset debug
-fi
+# don't leak too much of env - some init(8) don't clear it
+# (keep init, rootmnt)
+unset debug
+unset MODPROBE_OPTIONS
+unset DPKG_ARCH
+unset ROOTFLAGS
+unset ROOTFSTYPE
+unset ROOTDELAY
+unset ROOT
+unset blacklist
+unset break
+unset noresume
+unset panic
+unset quiet
+unset readonly
+unset resume
+unset resume_offset
 
-# moving Network mangager related scripts so that they will not get executed
-# these scripts do have sucidal tendency of tearing down the network 
-# thats why disabling them -- pravin
-mv /root/etc/init.d/NetworkManager /root/etc/init.d/d_NetworkManager
-mv /root/etc/init.d/networking /root/etc/init.d/d_networking
+# temporary hack.. copying the /etc/resolv.conf file -- pravin 
+cp /etc/resolv.conf ${rootmnt}/etc/resolv.conf
 
-# Modifying rc.local so that network manager scripts can be restored back.
-echo "#!/bin/sh -e
-# rc.local
-mv /etc/init.d/d_NetworkManager /etc/init.d/NetworkManager
-mv /etc/init.d/d_networking /etc/init.d/networking
-exit 0
-" > /root/etc/rc.local
-
-# because of some reasons, I dont understand, resolv.conf is not being set
-# that is why I am copying this manually into actual filesystem. -- pravin
-cp /etc/resolv.conf /root/etc/resolv.conf
-
-
-#/bin/sh
 # Chain to real filesystem
 maybe_break init
-exec run-init ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console 2>&1
-panic "Could not execute run-init."
-
-/bin/sh
-# Chain to real filesystem
-maybe_break init
-exec run-init ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console 2>&1
+exec run-init ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
 panic "Could not execute run-init."
