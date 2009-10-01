@@ -3,11 +3,11 @@ SHELL = /bin/bash
 PWD := $(shell pwd)
 
 
-ifndef CONFIG
-CONFIG=config
+ifndef BKO_CONFIG
+BKO_CONFIG=config
 endif
 
--include $(CONFIG)
+-include $(BKO_CONFIG)
 
 ABSPATH = 
 
@@ -15,16 +15,18 @@ export BKOPREFIX
 
 #.SILENT:
 
-all: make_statement
+DIRS = live
 
-bko: $(SUPPORTDIRS) $(GPXEDIR)
+all: make_statement $(DIRS)
+
+bko: $(DIRS)
 
 clean: make_statement $(patsubst %,%.clean,$(DIRS))
 
 make_statement:
 	echo "	Working on building the bko menuing system"
 
-$(patsubst %,%.build,$(DIRS)): make_statement
+$(DIRS): make_statement
 	$(MAKE) $(MFLAGS) -C $@ -f Makefile
 
 $(patsubst %,%.clean,$(DIRS)):
