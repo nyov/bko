@@ -137,8 +137,15 @@ for x in $(cat /proc/cmdline); do
 	target=*)
 		TARGET="${x#target=}"
 		;;
+	iscsilabel=*)
+		ISCSILABEL="${ARGUMENT#iscsilabel=}"
+		export ISCSILABEL
+		;;
 	netboot=*)
 		NETBOOT="${x#netboot=}"
+		;;
+	dns=*)
+		DNS="${x#dns=}"
 		;;
 	ip=*)
 		IPOPTS="${x#ip=}"
