@@ -28,7 +28,7 @@ label knoppix502-local
 	Note : Old kernel, long boot parameters *not* supported.
     ENDTEXT
 	kernel live/knoppix/5.11/linux  
-	append httpfs=P_ISO_LOCATION_LOCAL/K5.iso nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=live/knoppix/5.11/minirt.gz BOOT_IMAGE=knoppix
+	append httpfs=@KNOPPIX_HTTPFS_511_i386_ISO@ nodhcp lang=us ramdisk_size=100000 init=/etc/init apm=power-off nomce vga=791 initrd=live/knoppix/5.11/minirt.gz BOOT_IMAGE=knoppix
     IPAPPEND 1
 
 label knoppix601-local
@@ -39,6 +39,6 @@ label knoppix601-local
 	(not working perfectly)
     ENDTEXT
 	kernel live/knoppix/6.0.1/linux 
-	append httpfs=P_ISO_LOCATION_LOCAL/K6.iso ramdisk_size=100000 lang=en vt.default_utf8=0 apm=power-off vga=0x311 initrd=live/knoppix/6.0.1/minirt.gz nomce loglevel=0 nolapic_timer
+	append httpfs=@KNOPPIX_HTTPFS_601_i386_ISO@ ramdisk_size=100000 lang=en vt.default_utf8=0 apm=power-off vga=0x311 initrd=live/knoppix/6.0.1/minirt.gz nomce loglevel=0 nolapic_timer
     IPAPPEND 3
 
