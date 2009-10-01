@@ -29,3 +29,13 @@ menu include live/live.conf Live Images
 
 menu include pxeknife/pxeknife.conf PXE Knife
 
+label hdt
+	menu label Hardware Detection Tool (hdt)
+	kernel hdt.c32
+	TEXT HELP
+		This is a quick and dirty Hardware Detection Tool
+		written by Erwan Velu with help from Pierre-Alexandre Meyer
+		and contributions from H. Peter Anvin all of the Syslinux
+		project.
+	ENDTEXT
+
