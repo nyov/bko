@@ -15,34 +15,144 @@ label uplvl
 label spacer
 	MENU LABEL
 
-label debian-live-501-iso
-    MENU DEFAULT
-	MENU LABEL Debian live 501 i386 - iso
-    TEXT HELP
-        Boots the debian live-5.0.1 for i386
-        It uses the ISO on server for booting
-    ENDTEXT
+MENU BEGIN debianiscsi
+	MENU INCLUDE bko-gui.conf
+	PROMPT 0
+	MENU TITLE --== Debian Live ==--
+	MENU LABEL ^Debian Live
+
+label uplvl
+	MENU LABEL Return
+	MENU EXIT
+
+label spacer
+	MENU LABEL
+
+label debian-live-501-i386-gnome-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - Gnome - iscsi 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi for booting
+	ENDTEXT
 	kernel live/debian/initmod/vmlinuz1
-	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=P_ISO_LOCATION_LOCAL/d5.iso  
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_GNOME_ISO_HOST@ iname=@DEBIAN_ISCSI_501_GNOME_ISO_NAME@ target=@DEBIAN_ISCSI_501_GNOME_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_GNOME_ISO_LABEL@
 	IPAPPEND 3
 
-label debian-live-501-local-iscsi
-	MENU LABEL Debian live 501 i386 - iscsi 
-    TEXT HELP
-        Boots the debian live-5.0.1 for i386
-        It uses the iscsi for booting
-    ENDTEXT
+label debian-live-501-i386-kde-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - KDE - iscsi 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi for booting
+	ENDTEXT
 	kernel live/debian/initmod/vmlinuz1
-	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs	iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_KDE_ISO_HOST@ iname=@DEBIAN_ISCSI_501_KDE_ISO_NAME@ target=@DEBIAN_ISCSI_501_KDE_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_KDE_ISO_LABEL@
+	IPAPPEND 3
+
+label debian-live-501-i386-lxde-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - LXDE - iscsi 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_LXDE_ISO_HOST@ iname=@DEBIAN_ISCSI_501_LXDE_ISO_NAME@ target=@DEBIAN_ISCSI_501_LXDE_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_LXDE_ISO_LABEL@
+	IPAPPEND 3
+
+label debian-live-501-i386-xfce-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - XFCE - iscsi 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_XFCE_ISO_HOST@ iname=@DEBIAN_ISCSI_501_XFCE_ISO_NAME@ target=@DEBIAN_ISCSI_501_XFCE_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_XFCE_ISO_LABEL@
+	IPAPPEND 3
+
+label debian-live-501-i386-standard-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - Standard - iscsi 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_STANDARD_ISO_HOST@ iname=@DEBIAN_ISCSI_501_STANDARD_ISO_NAME@ target=@DEBIAN_ISCSI_501_STANDARD_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_STANDARD_ISO_LABEL@
+	IPAPPEND 3
+
+label debian-live-501-i386-rescue-iscsi
+	MENU LABEL Debian live 5.0.1 i386 - iscsi - rescue 
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the iscsi and uploads ISO for booting and gives rescue shell
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=@DEBIAN_ISCSI_501_RESCUE_ISO_HOST@ iname=@DEBIAN_ISCSI_501_RESCUE_ISO_NAME@ target=@DEBIAN_ISCSI_501_RESCUE_ISO_TARGET@ iscsilabel=@DEBIAN_ISCSI_501_RESCUE_ISO_LABEL@  rescuebreak
     	IPAPPEND 3
 
-label DL5-local-iscsi-rescue
-	MENU LABEL Debian live 501 i386 - iscsi - rescue 
-    TEXT HELP
-        Boots the debian live-5.0.1 for i386
-        It uses the iscsi and uploads ISO for booting and gives rescue shell
-    ENDTEXT
+MENU END
+
+MENU BEGIN debianhttpfs
+	MENU INCLUDE bko-gui.conf
+	PROMPT 0
+	MENU TITLE --== Debian Live - HTTPFS ==--
+	MENU LABEL ^Debian Live - HTTPFS
+
+label uplvl
+	MENU LABEL Return
+	MENU EXIT
+
+label spacer
+	MENU LABEL
+
+label debian-live-501-i386-gnome-httpfs
+	MENU DEFAULT
+	MENU LABEL Debian live 501 i386 - Gnome - httpfs - iso
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the ISO over httpfs for booting
+	ENDTEXT
 	kernel live/debian/initmod/vmlinuz1
-	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs iscsifs=P_ISCSI_LOCATION_LOCAL target=debian.5.0 rescuebreak
-    	IPAPPEND 3
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=@DEBIAN_HTTPFS_501_GNOME_ISO@
+	IPAPPEND 3
+
+label debian-live-501-i386-kde-httpfs
+	MENU LABEL Debian live 501 i386 - KDE - httpfs - iso
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the ISO over httpfs for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=@DEBIAN_HTTPFS_501_KDE_ISO@
+	IPAPPEND 3
+
+label debian-live-501-i386-lxde-httpfs
+	MENU LABEL Debian live 501 i386 - LXDE - httpfs - iso
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the ISO over httpfs for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=@DEBIAN_HTTPFS_501_LXDE_ISO@
+	IPAPPEND 3
+
+label debian-live-501-i386-xfce-httpfs
+	MENU LABEL Debian live 501 i386 - XFCE - httpfs - iso
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the ISO over httpfs for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=@DEBIAN_HTTPFS_501_XFCE_ISO@
+	IPAPPEND 3
+
+label debian-live-501-i386-standard-httpfs
+	MENU LABEL Debian live 501 i386 - Standard - httpfs - iso
+	TEXT HELP
+		Boots the debian live-5.0.1 for i386
+		It uses the ISO over httpfs for booting
+	ENDTEXT
+	kernel live/debian/initmod/vmlinuz1
+	append initrd=live/debian/initmod/initrd1.img netboot=http boot=live union=aufs httpfs=@DEBIAN_HTTPFS_501_STANDARD_ISO@
+	IPAPPEND 3
+
+MENU END
 

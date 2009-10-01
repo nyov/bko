@@ -105,6 +105,12 @@ Arguments ()
 				export TARGET 
 				;;
 
+			iscsilabel=*)
+				ISCSILABEL="${ARGUMENT#iscsilabel=}"
+				export ISCSILABEL
+				;;
+
+
 			dnsip=*)
 				DNSIP="${ARGUMENT#dnsip=}"
 				export DNSIP 
@@ -927,7 +933,7 @@ do_iscsimount ()
 	rc=1
 	if [ ! -z ${ISCSINAME} ]
 	then
-		echo ${ISCSINAME} > /etc/iscsi/initiatorname.iscsi
+		echo "InitiatorName=${ISCSINAME}" > /etc/iscsi/initiatorname.iscsi
 	fi
 
 	dest="${mountpoint}/${LIVE_MEDIA_PATH}"
@@ -943,13 +949,22 @@ do_iscsimount ()
 	iscsiadm -m discovery -t st -p "${ISCSIFS}"
 	sleep 4
 	targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
-	iscsiadm -m node --targetname "${targetname}" --portal "${ISCSIFS}" --login
-	export iscsidevice=/dev/disk/by-label/Debian\\x20lenny\\x2020090614-09\:11 
-	wait_for_device ${iscsidevice} 160
-	mount -t iso9660 "${iscsidevice}" "${mountpoint}"
+	iscsiadm -m node --targetname "${targetname}" --login
+	#/bin/sh
+	if [[ -z "${ISCSILABEL}" ]]
+	then
+		export iscsidevice=/dev/disk/by-label/Debian\\x20lenny\\x2020090614-09\:11 
+	else
+		export iscsidevice="/dev/disk/by-label/${ISCSILABEL}"
+	fi
+	sleep 20
+	#wait_for_device ${iscsidevice} 160
+	#mount -t iso9660 "${iscsidevice}" "${mountpoint}"
+	mount -t iso9660 /dev/disk/by-label/Debian* "${mountpoint}"
 	rc=${?}
 	sync
 	sleep 2
+
 #	rc=0
 	return $rc
 }

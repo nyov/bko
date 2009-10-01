@@ -26,6 +26,7 @@ mkdir mpoint/etc/iscsi
 cp iscsi/iscsid.conf mpoint/etc/iscsi/
 cp iscsi/initiatorname.iscsi mpoint/etc/iscsi/
 cp iscsi/tools/* mpoint/sbin/
+rsync -avrHS --progress libs/. mpoint/lib/.
 
 mkdir mpoint/modules
 cp modules/* mpoint/modules/
