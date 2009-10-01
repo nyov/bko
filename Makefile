@@ -25,7 +25,7 @@ GPXEIMAGESDIR = gpxe_images
 
 DIRS = $(COREDIR) $(SUPPORTDIRS)
 
-all: make_statement $(DIRS)
+all: make_statement $(DIRS) configurebko installinitrds
 
 bko: $(SUPPORTDIRS) $(GPXEDIR)
 
@@ -68,7 +68,8 @@ $(patsubst %,%.install,$(GPXEDIR)): make_statement gpxe_images
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.usb
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.dsk
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.iso
-	mv $(GPXEDIR)/src/bin/gpxe.usb $(GPXEDIR)/src/bin/gpxe.dsk $(GPXEDIR)/src/bin/gpxe.iso gpxe_images/
+	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.lkrn
+	mv $(GPXEDIR)/src/bin/gpxe.usb $(GPXEDIR)/src/bin/gpxe.dsk $(GPXEDIR)/src/bin/gpxe.iso $(GPXEDIR)/src/bin/gpxe.lkrn gpxe_images/
 	
 
 $(patsubst %,%.clean,$(DIRS)):
@@ -76,5 +77,17 @@ $(patsubst %,%.clean,$(DIRS)):
 
 $(patsubst %,%.clean,$(GPXEDIR)):
 	$(MAKE) $(MFLAGS) -C $(patsubst %.clean,%,$@)/src -f Makefile clean
+
+configurebko: make_statement
+	( \
+		cd install_help; \
+		./configure_BKO.sh; \
+	)
+
+installinitrds: make_statement configurebko
+	( \
+		cd install_help; \
+		./download_initramfs_images_http.sh; \
+	)
 
 
