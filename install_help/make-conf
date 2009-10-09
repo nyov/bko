@@ -1,0 +1,19 @@
+#!/bin/bash
+
+filebase="$1"
+configfile="$2"
+
+. "${configfile}"
+
+IFS="
+"
+cat ${filebase}.bko.tmpl > ${filebase}.conf
+
+for x in $( cat urls )
+do
+	tosub="$( echo "${x}" | awk 'BEGIN { FS="="; } ; { print $1; }' )"
+	whatsub="$( echo "${x}" | awk 'BEGIN { FS="="; } ; { print $2; }' | sed 's/\//\\\//g' )"
+	sed -i "s/@${tosub}@/${whatsub}/g" ${filebase}.conf
+done
+
+sed -i "s/@ISCSI_SERVER@/${ISCSI_SERVER}/g" ${filebase}.conf

@@ -1,0 +1,16 @@
+#!/bin/bash
+cat *.tmpl | grep "@.*@" | tr "=" "\n" | tr " " "\n" | grep "@.*@" | sed 's/\@//g' > temp.url
+if [[ -e urls ]]
+then
+	cat urls | awk 'BEGIN { FS="="; } ; { print $1; }' > temp.known.urls
+else
+	cat /dev/null > temp.known.urls
+fi
+IFS="
+"
+for x in $( cat temp.url | grep -v -f temp.known.urls )
+do
+	echo "${x}=" >> urls
+done
+
+rm -rf temp.known.urls temp.url
