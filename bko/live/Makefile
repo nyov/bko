@@ -2,6 +2,15 @@ SHELL = /bin/bash
 
 #.SILENT:
 
+ifdef BKO_CONFIG
+include $(BKO_CONFIG)
+NEWCONFIG="../$(BKO_CONFIG)"
+else
+NEWCONFIG=""
+endif
+
+-include $(BKO_CONFIG)
+
 DIRS = debian dsl fedora knoppix ubuntu
 
 configfile = MENU INCLUDE @CONFIGFILE@ @DISTRO@\n
@@ -29,11 +38,11 @@ live.conf: $(subst %,%/%.conf,$(DIRS)) live.tmpl
         done
 
 $(DIRS): make_statement
-	$(MAKE) $(MFLAGS) ABSPATH="$(ABSPATH)/$@" CONFIG="$(NEWCONFIG)" -C $@ -f Makefile
+	$(MAKE) $(MFLAGS) ABSPATH="$(ABSPATH)/$@" BKO_CONFIG="$(NEWCONFIG)" -C $@ -f Makefile
 
 clean: make_statement $(patsubst %,%.clean,$(DIRS))
 	-rm -rf *.conf
 
 $(patsubst %,%.clean,$(DIRS)):
-	$(MAKE) $(MFLAGS) ABSPATH="$(ABSPATH)/$@" CONFIG="$(NEWCONFIG)" -C $(patsubst %.clean,%,$@) -f Makefile clean
+	$(MAKE) $(MFLAGS) ABSPATH="$(ABSPATH)/$@" BKO_CONFIG="$(NEWCONFIG)" -C $(patsubst %.clean,%,$@) -f Makefile clean
 

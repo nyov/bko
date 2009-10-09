@@ -2,9 +2,11 @@ SHELL = /bin/bash
 
 PWD := $(shell pwd)
 
-
-ifndef BKO_CONFIG
-BKO_CONFIG=config
+ifdef BKO_CONFIG
+include $(BKO_CONFIG)
+NEWCONFIG="../$(BKO_CONFIG)"
+else
+NEWCONFIG=""
 endif
 
 -include $(BKO_CONFIG)
@@ -27,12 +29,12 @@ make_statement:
 	echo "	Working on building the bko menuing system"
 
 $(DIRS): make_statement
-	$(MAKE) $(MFLAGS) -C $@ -f Makefile
+	$(MAKE) $(MFLAGS) BKO_CONFIG="$(NEWCONFIG)" -C $@ -f Makefile
 
 $(patsubst %,%.clean,$(DIRS)):
-	$(MAKE) $(MFLAGS) -C $(patsubst %.clean,%,$@) -f Makefile clean
+	$(MAKE) $(MFLAGS) BKO_CONFIG="$(NEWCONFIG)" -C $(patsubst %.clean,%,$@) -f Makefile clean
 
 $(patsubst %,%.clean,$(GPXEDIR)):
-	$(MAKE) $(MFLAGS) -C $(patsubst %.clean,%,$@)/src -f Makefile clean
+	$(MAKE) $(MFLAGS) BKO_CONFIG="$(NEWCONFIG)" -C $(patsubst %.clean,%,$@)/src -f Makefile clean
 
 
