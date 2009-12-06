@@ -128,6 +128,9 @@ is_nice_device() {
     if /lib/udev/path_id "${sysfs_path}" | grep -E -q "ID_PATH=(usb|pci-[^-]*-(ide|scsi|usb)|platform-orion-ehci|platform-mmc|platform-mxsdhci)"; then
         return 0
     fi
+    if echo ${sysfs_path} | grep -q "^/block/dm-"; then
+        return 0
+    fi
     return 1
 }
 
@@ -577,6 +580,12 @@ set_usplash_timeout() {
     fi
 }
 
+start_usplash_pulse() {
+    if [ -x /sbin/usplash_write ]; then
+        /sbin/usplash_write "PULSELOGO"
+    fi
+}
+
 mountroot() {
     exec 6>&1
     exec 7>&2
@@ -588,6 +597,7 @@ mountroot() {
     parse_cmdline
 
     set_usplash_timeout
+    start_usplash_pulse
     [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/casper-premount"
     run_scripts /scripts/casper-premount
     [ "$quiet" != "y" ] && log_end_msg
