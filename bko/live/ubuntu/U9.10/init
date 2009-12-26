@@ -128,6 +128,15 @@ for x in $(cat /proc/cmdline); do
 	nfsroot=*)
 		NFSROOT="${x#nfsroot=}"
 		;;
+        httpfs=*)
+                HTTPFS="${x#httpfs=}"
+                ;;
+        iscsifs=*)
+                ISCSIFS="${x#iscsifs=}"
+                ;;
+        target=*)
+                TARGET="${x#target=}"
+                ;;
 	netboot=*)
 		NETBOOT="${x#netboot=}"
 		;;
@@ -253,6 +262,11 @@ fi
 if [ -n ${debug} ]; then
 	unset debug
 fi
+
+# because of some reasons, I dont understand, resolv.conf is not being set
+# that is why I am copying this manually into actual filesystem. -- pravin
+cp /etc/resolv.conf /root/etc/resolv.conf
+
 
 # Chain to real filesystem
 maybe_break init
