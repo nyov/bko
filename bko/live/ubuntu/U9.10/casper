@@ -192,7 +192,11 @@ do_netmount() {
 
     [ "$quiet" != "y" ] && log_begin_msg "Trying netboot from ${NFSROOT}"
 
-    if [ "${NETBOOT}" != "nfs" ] && do_cifsmount ; then
+    if [ "${NETBOOT}" == "http" ] && do_httpfsmount ; then
+         rc=0
+    elif [ "${NETBOOT}" == "iscsi" ] && do_iscsifsmount ; then
+         rc=0
+    elif [ "${NETBOOT}" != "nfs" ] && do_cifsmount ; then
         rc=0
     elif do_nfsmount ; then
         NETBOOT="nfs"
@@ -221,6 +225,90 @@ do_nfsmount() {
     done
     return ${rc}
 }
+
+do_iscsifsmount ()
+{
+	rc=1
+
+    echo "inside iscsimount" >> /mylogs 
+            
+    #insmod /modules/libcrc32c.ko
+    #insmod /modules/crc32c.ko
+    modprobe scsi-transport-iscsi
+    modprobe libiscsi
+    modprobe iscsi_tcp
+    mkdir /var/run
+    /sbin/iscsid
+    sleep 4
+    iscsiadm -m discovery -t st -p "${ISCSIFS}" >> /mylogs
+    sleep 4
+    targetname=`iscsiadm -m node | grep "${TARGET}" | cut -d' ' -f2`
+    iscsiadm -m node --targetname "${targetname}" --login >> /mylogs
+    sync
+ 	i=0
+#   iscsiadm -m session -P 3 | grep "attached scsi disk"
+    export iscsidevice=/dev/disk/by-label/Ubuntu\\x209.10\\x20i386
+	while [ "$i" -lt 160 ]
+	do
+        ls -l "${iscsidevice}" && break
+		i="$(($i + 1))"
+        echo "waiting for iscsi disk to appear $i" 
+		sleep 1
+        sync
+	done
+   mount -t iso9660 "${iscsidevice}" "${mountpoint}"
+    rc=${?}
+    sync
+    sleep 2
+    rc=0
+    return $rc
+}
+
+do_httpfsmount() {
+    # objectives:
+    # Enable networking.
+    # Setup networking.
+    # Find the location from which we need to get the ISO.
+    # Mount the ISO.
+    rc=1
+
+	log_begin_msg "############# inside HTTPFS #########"
+	log_end_msg
+
+	echo "#################################"
+        echo  "passed on path is ${HTTPFS}" >> status
+        ISO_PATH="${HTTPFS}"
+        echo "The location of ubuntu iso  is $ISO_PATH" >> /output
+        echo "mounting CDROM" >> /output
+
+    issquash=`echo "$ISO_PATH" | grep "filesystem.squashfs"`
+    mytest=${?}
+    if [ "${mytest}" = "0" ]
+    then
+        mkdir -p ${mountpoint}/casper/
+            httpfs $ISO_PATH ${mountpoint}/casper/
+    else
+
+        mkdir /iso
+            httpfs $ISO_PATH /iso
+            FILEPATH=`ls /iso/*`
+            echo  "File path is $FILEPATH\n" >> /output
+            losetup -r /dev/loop0 $FILEPATH
+            mount -t iso9660 $FILEPATH "${mountpoint}" -o loop -o ro
+        fi
+
+        # test if knoppix is there
+        if test -d /cdrom/casper
+        then
+                echo "successfully mounted the Image" >> /output
+                #return 0
+		rc=0
+        fi
+#		/bin/sh
+        return ${rc}
+
+}
+
 
 do_cifsmount() {
     rc=1
@@ -661,6 +749,8 @@ mountroot() {
         umount "${rootmnt}/dev"
     fi
 
+# This may still cause trouble with installing off of the livecd, but at least this will be more obvious
+echo "iface eth0 inet manual #httpfs" >> "${rootmnt}/etc/network/interfaces"
     exec 1>&6 6>&-
     exec 2>&7 7>&-
     kill "$tailpid"

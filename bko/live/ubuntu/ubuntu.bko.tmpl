@@ -17,6 +17,7 @@ label spacer
 	MENU LABEL
 
 
+
 label ubuntu904desktopi386-iso
 	MENU LABEL Ubuntu 9.04 Desktop i386 - iso 
     TEXT HELP
@@ -36,3 +37,14 @@ label ubuntu904desktopi386-iscsi
 	kernel live/ubuntu/U9/vmlinuz
 	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=iscsi iscsifs=P_ISCSI_LOCATION_LOCAL target=ubuntu 
     	IPAPPEND 3
+
+label ubuntu910desktopi386-iso
+	MENU LABEL Ubuntu 9.10 Desktop i386 - iso 
+    TEXT HELP
+       Boot ubuntu 9.10 Desktop 
+       It uses http for booting
+    ENDTEXT
+	kernel live/ubuntu/U9.10/vmlinuz
+	append initrd=live/ubuntu/U9.10/initrd.lz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=http httpfs=P_ISO_LOCATION_LOCAL/ubuntu-9.10-desktop-i386.iso 
+    	IPAPPEND 3
+
