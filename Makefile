@@ -25,7 +25,7 @@ GPXEIMAGESDIR = gpxe_images
 
 DIRS = $(COREDIR) $(SUPPORTDIRS)
 
-all: make_statement $(DIRS) configurebko installinitrds
+all: make_statement $(DIRS) installinitrds
 
 bko: $(SUPPORTDIRS) $(GPXEDIR)
 
@@ -80,12 +80,6 @@ $(patsubst %,%.clean,$(DIRS)):
 
 $(patsubst %,%.clean,$(GPXEDIR)):
 	$(MAKE) $(MFLAGS) -C $(patsubst %.clean,%,$@)/src -f Makefile clean
-
-configurebko: make_statement
-	( \
-		cd install_help; \
-		./configure_BKO.sh; \
-	)
 
 installinitrds: make_statement configurebko
 	( \
