@@ -1,9 +1,9 @@
 [submodule "pxeknife"]
 	path = pxeknife
-	url = http://pxeknife.erebor.org/git/pxeknife.git
+	url = git://github.com/nyov/pxeknife.git
 [submodule "syslinux"]
 	path = syslinux
 	url = git://git.kernel.org/pub/scm/boot/syslinux/syslinux.git
-[submodule "gpxe"]
+[submodule "ipxe"]
 	path = gpxe
-	url = git://git.etherboot.org/scm/people/pravin/gpxe.git
+	url = git://github.com/nyov/ipxe.git
