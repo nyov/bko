@@ -1,3 +1,4 @@
 UBUNTU_ISCSI_9_I386_HOST=@ISCSI_SERVER@
 UBUNTU_ISCSI_9_I386_TARGET=iqn.2009-08.boot.kernel.org:ubuntu.9.04.desktop.i386
 UBUNTU_HTTPFS_9_I386_ISO=http://mirrors.kernel.org/ubuntu-releases/9.04/ubuntu-9.04-desktop-i386.iso
+UBUNTU_HTTPFS_910_I386_ISO=http://mirrors.kernel.org/ubuntu-releases/9.10/ubuntu-9.10-desktop-i386.iso

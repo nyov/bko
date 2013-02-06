@@ -16,6 +16,16 @@ label uplvl
 label spacer
 	MENU LABEL
 
+label ubuntu904desktopi386-iso
+	MENU LABEL Ubuntu 9.04 Desktop i386 - iso
+	TEXT HELP
+		Boot ubuntu 9.04 Desktop
+		It uses http for booting
+	ENDTEXT
+	kernel live/ubuntu/U9/vmlinuz
+	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=http httpfs=@UBUNTU_HTTPFS_9_I386_ISO@
+	IPAPPEND 3
+
 label ubuntu904desktopi386-iscsi
 	MENU LABEL Ubuntu 9.04 Desktop i386 - iscsi
 	TEXT HELP
@@ -23,16 +33,15 @@ label ubuntu904desktopi386-iscsi
 		It uses iscsi for booting
 	ENDTEXT
 	kernel live/ubuntu/U9/vmlinuz
-	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=iscsi iscsifs=@UBUNTU_ISCSI_9_I386_HOST@ target=@UBUNTU_ISCSI_9_I386_TARGET@ 
-    	IPAPPEND 3
+	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=iscsi iscsifs=@UBUNTU_ISCSI_9_I386_HOST@ target=@UBUNTU_ISCSI_9_I386_TARGET@
+	IPAPPEND 3
 
-label ubuntu904desktopi386-iso
-	MENU LABEL Ubuntu 9.04 Desktop i386 - iso 
+label ubuntu910desktopi386-iso
+	MENU LABEL Ubuntu 9.10 Desktop i386 - iso
 	TEXT HELP
-		Boot ubuntu 9.04 Desktop 
+		Boot ubuntu 9.10 Desktop
 		It uses http for booting
 	ENDTEXT
-	kernel live/ubuntu/U9/vmlinuz
-	append initrd=live/ubuntu/U9/initrd.gz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=http httpfs=@UBUNTU_HTTPFS_9_I386_ISO@  
-    	IPAPPEND 3
-
+	kernel live/ubuntu/U9.10/vmlinuz
+	append initrd=live/ubuntu/U9.10/initrd.lz file=/cdrom/preseed/ubuntu.seed boot=casper netboot=http httpfs=@UBUNTU_HTTPFS_910_I386_ISO@
+	IPAPPEND 3
