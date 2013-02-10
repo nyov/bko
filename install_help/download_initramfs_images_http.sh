@@ -8,7 +8,7 @@ source ../config
 cd ..
 
 REMOTE_BKO_LOCATION=$REMOTE_INITRAMFS_DOWNLOAD_LOCATION
-REMOTE_BKO_LOCATION="http://rom.etherboot.org/share/pravin/BKO/"
+REMOTE_BKO_LOCATION="http://boot.rit.edu/"
 LOCAL_BKO_LOCATION=`pwd`
 
 

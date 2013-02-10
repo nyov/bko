@@ -1,5 +1,5 @@
 #!/bin/bash
-git clone git://git.etherboot.org/scm/people/pravin/BKO.git
+git clone git://github.com/nyov/bko.git
 cd BKO
 git submodule init
 git submodule update
