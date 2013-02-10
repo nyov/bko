@@ -19,15 +19,14 @@ COREDIR = bko
 GPXEDIR = gpxe
 SYSLINUXDIR = syslinux
 PXEKNIFEDIR = pxeknife
-SUPPORTDIRS = $(SYSLINUXDIR) $(PXEKNIFEDIR)
 
-GPXEIMAGESDIR = gpxe_images
+GPXEIMAGESDIR = web/gpxe_images
 
-DIRS = $(COREDIR) $(SUPPORTDIRS)
+DIRS = $(COREDIR) $(SYSLINUXDIR) $(PXEKNIFEDIR)
 
 all: make_statement $(DIRS) installinitrds
 
-bko: $(SUPPORTDIRS) $(GPXEDIR)
+bko: $(SYSLINUXDIR) $(PXEKNIFEDIR) $(GPXEDIR)
 
 clean: make_statement $(patsubst %,%.clean,$(DIRS))
 
@@ -49,7 +48,7 @@ $(patsubst %,%.build,$(GPXEDIR)): make_statement
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile
 
 gpxe_images: make_statement
-	mkdir -p gpxe_images
+	mkdir -p $(GPXEIMAGESDIR)
 
 $(patsubst %,%.install,$(SYSLINUXDIR)): make_statement
 	find \
@@ -72,8 +71,8 @@ $(patsubst %,%.install,$(GPXEDIR)): make_statement gpxe_images
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.sdsk
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/gpxe.pxe
 	$(MAKE) $(MFLAGS) EMBEDDED_IMAGE=pxeDHCP.gpxe,pxeSTATIC.gpxe -C $(GPXEDIR)/src -f Makefile bin/undionly.kpxe
-	mv $(GPXEDIR)/src/bin/gpxe.usb $(GPXEDIR)/src/bin/gpxe.dsk $(GPXEDIR)/src/bin/gpxe.iso $(GPXEDIR)/src/bin/gpxe.lkrn gpxe_images/
-	mv $(GPXEDIR)/src/bin/gpxe.sdsk $(GPXEDIR)/src/bin/gpxe.pxe $(GPXEDIR)/src/bin/undionly.kpxe gpxe_images/
+	mv $(GPXEDIR)/src/bin/gpxe.usb $(GPXEDIR)/src/bin/gpxe.dsk $(GPXEDIR)/src/bin/gpxe.iso $(GPXEDIR)/src/bin/gpxe.lkrn $(GPXEIMAGESDIR)/
+	mv $(GPXEDIR)/src/bin/gpxe.sdsk $(GPXEDIR)/src/bin/gpxe.pxe $(GPXEDIR)/src/bin/undionly.kpxe $(GPXEIMAGESDIR)/
 
 $(patsubst %,%.clean,$(DIRS)):
 	$(MAKE) $(MFLAGS) -C $(patsubst %.clean,%,$@) -f Makefile clean
@@ -86,5 +85,4 @@ installinitrds: make_statement configurebko
 		cd install_help; \
 		./download_initramfs_images_http.sh; \
 	)
-
 
